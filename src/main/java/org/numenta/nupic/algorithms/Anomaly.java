@@ -22,7 +22,6 @@
 
 package org.numenta.nupic.algorithms;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -113,7 +112,7 @@ public abstract class Anomaly implements Persistable {
     
     protected MovingAverage movingAverage;
     
-    protected boolean useMovingAverage;
+    protected final boolean useMovingAverage;
     
     /**
      * Constructs a new {@code Anomaly}

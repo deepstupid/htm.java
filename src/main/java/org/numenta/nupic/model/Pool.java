@@ -46,7 +46,7 @@ public class Pool implements Persistable {
     /** keep it simple */
     private static final long serialVersionUID = 1L;
     
-    int size;
+    final int size;
 
     /** Allows fast removal of connected synapse indexes. */
     private TIntHashSet synapseConnections = new TIntHashSet();

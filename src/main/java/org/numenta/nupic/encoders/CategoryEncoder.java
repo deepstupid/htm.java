@@ -80,8 +80,8 @@ public class CategoryEncoder extends Encoder<String> {
 
 	protected int ncategories;
 
-	protected TObjectIntMap<String> categoryToIndex = new TObjectIntHashMap<String>();
-	protected TIntObjectMap<String> indexToCategory = new TIntObjectHashMap<String>();
+	protected final TObjectIntMap<String> categoryToIndex = new TObjectIntHashMap<>();
+	protected final TIntObjectMap<String> indexToCategory = new TIntObjectHashMap<>();
 
 	protected List<String> categoryList;
 
@@ -213,7 +213,7 @@ public class CategoryEncoder extends Encoder<String> {
 		//Get the list of categories the scalar values correspond to and
 	    //  generate the description from the category name(s).
 		Map<String, RangeList> fieldRanges = result.getFields();
-		List<MinMax> outRanges = new ArrayList<MinMax>();
+		List<MinMax> outRanges = new ArrayList<>();
 		StringBuilder desc = new StringBuilder();
 		for(String descripStr : fieldRanges.keySet()) {
 			MinMax minMax = fieldRanges.get(descripStr).getRange(0);
@@ -237,7 +237,7 @@ public class CategoryEncoder extends Encoder<String> {
 			fieldName = name;
 		}
 
-		Map<String, RangeList> retVal = new HashMap<String, RangeList>();
+		Map<String, RangeList> retVal = new HashMap<>();
 		retVal.put(fieldName, new RangeList(outRanges, desc.toString()));
 
 		return new DecodeResult(retVal, Collections.singletonList(fieldName));

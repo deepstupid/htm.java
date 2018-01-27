@@ -80,9 +80,9 @@ public class GroupByTest {
         Column c1 = new Column(9, 1);
         
         // Illustrates the Cell's actual index = colIndex * cellsPerColumn + indexOfCellWithinCol
-        assertEquals(7, c0.getCell(7).getIndex());
-        assertEquals(12, c1.getCell(3).getIndex());
-        assertEquals(16, c1.getCell(7).getIndex());
+        assertEquals(7, c0.getCell(7).index);
+        assertEquals(12, c1.getCell(3).index);
+        assertEquals(16, c1.getCell(7).index);
         
         DistalDendrite dd0 = new DistalDendrite(c0.getCell(7), 0, 0, 0);
         DistalDendrite dd1 = new DistalDendrite(c1.getCell(3 /* Col 1's Cells start at 9 */), 1, 0, 1);
@@ -97,7 +97,7 @@ public class GroupByTest {
                 new Pair<DistalDendrite, Column>(dd1, c1),
                 new Pair<DistalDendrite, Column>(dd2, c1));
         
-        GroupBy<DistalDendrite, Column> grouper = GroupBy.of(l, i -> i.getParentCell().getColumn()); 
+        GroupBy<DistalDendrite, Column> grouper = GroupBy.of(l, i -> i.getParentCell().column);
         
         int i = 0;
         for(Pair<DistalDendrite, Column> p : grouper) {

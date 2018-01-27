@@ -39,9 +39,9 @@ public abstract class AbstractFlatMatrix<T> implements FlatMatrix<T>, Serializab
     private static final long serialVersionUID = 1L;
 
     protected int[] dimensions;
-    protected int[] dimensionMultiples;
-    protected boolean isColumnMajor;
-    protected int numDimensions;
+    protected final int[] dimensionMultiples;
+    protected final boolean isColumnMajor;
+    protected final int numDimensions;
 
     /**
      * Constructs a new {@link AbstractFlatMatrix} object to be configured with specified

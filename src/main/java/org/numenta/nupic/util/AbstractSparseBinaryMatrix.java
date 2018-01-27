@@ -45,7 +45,7 @@ public abstract class AbstractSparseBinaryMatrix extends AbstractSparseMatrix im
     /** keep it simple */
     private static final long serialVersionUID = 1L;
     
-    private int[] trueCounts;
+    private final int[] trueCounts;
 
     /**
      * Constructs a new {@code AbstractSparseBinaryMatrix} with the specified

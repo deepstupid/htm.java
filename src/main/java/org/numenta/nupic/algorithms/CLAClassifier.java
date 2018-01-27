@@ -99,22 +99,22 @@ public class CLAClassifier implements Persistable, Classifier {
      * these so that we can associate the current iteration's classification
      * with the activationPattern from N steps ago
      */
-    Deque<Tuple> patternNZHistory;
+    final Deque<Tuple> patternNZHistory;
     /**
      * These are the bit histories. Each one is a BitHistory instance, stored in
      * this dict, where the key is (bit, nSteps). The 'bit' is the index of the
      * bit in the activation pattern and nSteps is the number of steps of
      * prediction desired for that bit.
      */
-    Map<Tuple, BitHistory> activeBitHistory = new HashMap<Tuple, BitHistory>();
+    final Map<Tuple, BitHistory> activeBitHistory = new HashMap<>();
     /**
      * This keeps track of the actual value to use for each bucket index. We
      * start with 1 bucket, no actual value so that the first infer has something
      * to return
      */
-    List<?> actualValues = new ArrayList<Object>();
+    final List<?> actualValues = new ArrayList<>();
 
-    String g_debugPrefix = "CLAClassifier";
+    final String g_debugPrefix = "CLAClassifier";
 
 
     /**
@@ -140,7 +140,7 @@ public class CLAClassifier implements Persistable, Classifier {
         this.actValueAlpha = actValueAlpha;
         this.verbosity = verbosity;
         actualValues.add(null);
-        patternNZHistory = new Deque<Tuple>(ArrayUtils.max(steps.toArray()) + 1);
+        patternNZHistory = new Deque<>(ArrayUtils.max(steps.toArray()) + 1);
     }
 
     /**
@@ -177,7 +177,7 @@ public class CLAClassifier implements Persistable, Classifier {
      */
     @SuppressWarnings("unchecked")
     public <T> Classification<T> compute(int recordNum, Map<String, Object> classification, int[] patternNZ, boolean learn, boolean infer) {
-        Classification<T> retVal = new Classification<T>();
+        Classification<T> retVal = new Classification<>();
         List<T> actualValues = (List<T>)this.actualValues;
 
         // Save the offset between recordNum and learnIteration if this is the first

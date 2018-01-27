@@ -190,7 +190,7 @@ public class PublisherSupplier implements Persistable, Supplier<Publisher> {
     public static class Builder {
         private Network network;
         
-        private List<String> headers = new ArrayList<>();
+        private final List<String> headers = new ArrayList<>();
         
         
         /**

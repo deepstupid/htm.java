@@ -46,7 +46,7 @@ public class SerializerCore implements Persistable {
     
     protected static final Logger LOGGER = LoggerFactory.getLogger(SerializerCore.class);
     
-    private Class<?>[] classes;
+    private final Class<?>[] classes;
     
     /** Use of Fast Serialize https://github.com/RuedigerMoeller/fast-serialization */
     private transient FSTConfiguration fastSerialConfig = FSTConfiguration.createDefaultConfiguration();

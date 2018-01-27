@@ -47,9 +47,9 @@ public class ProximalDendrite extends Segment implements Persistable {
      */
     public Pool createPool(Connections c, int[] inputIndexes) {
         pool = new Pool(inputIndexes.length);
-        for(int i = 0;i < inputIndexes.length;i++) {
+        for (int inputIndexe : inputIndexes) {
             int synCount = c.getProximalSynapseCount();
-            pool.setPermanence(c, createSynapse(c, c.getSynapses(this), null, pool, synCount, inputIndexes[i]), 0);
+            pool.setPermanence(c, createSynapse(c, c.getSynapses(this), null, pool, synCount, inputIndexe), 0);
             c.setProximalSynapseCount(synCount + 1);
         }
         return pool;

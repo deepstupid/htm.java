@@ -42,17 +42,19 @@ import org.numenta.nupic.util.Tuple;
  * @author David Ray
  */
 public class SequenceMachine { 
-    private PatternMachine patternMachine;
+    private final PatternMachine patternMachine;
     
     /**
      * Represents the end of a pattern or sequence when inserted in
      * a {@link Collection}, otherwise the primitive form of "None"
      * is -1
      */
-    public static final Set<Integer> NONE = new HashSet<Integer>() {
+    public static final Set<Integer> NONE = new HashSet<>() {
         private static final long serialVersionUID = 1L;
 
-        public String toString() { return "None"; }
+        public String toString() {
+            return "None";
+        }
     };
     
     /**
@@ -106,7 +108,7 @@ public class SequenceMachine {
      * @return
      */
     public List<Set<Integer>> generateFromNumbers(List<Integer> numbers) {
-        List<Set<Integer>> sequence = new ArrayList<Set<Integer>>();
+        List<Set<Integer>> sequence = new ArrayList<>();
         for(Integer i : numbers) {
             if(i == -1) {
                 sequence.add(NONE);
@@ -127,7 +129,7 @@ public class SequenceMachine {
      * @return  Sequence with noise added to each non-empty pattern
      */
     public List<Set<Integer>> addSpatialNoise(List<Set<Integer>> sequence, double amount) {
-        List<Set<Integer>> newSequence = new ArrayList<Set<Integer>>();
+        List<Set<Integer>> newSequence = new ArrayList<>();
         
         for(Set<Integer> pattern : sequence) {
             if(!pattern.equals(NONE)) {

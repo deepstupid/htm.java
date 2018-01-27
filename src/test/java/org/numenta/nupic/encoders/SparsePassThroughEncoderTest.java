@@ -69,7 +69,7 @@ public class SparsePassThroughEncoderTest {
     }
 
     @Rule
-    public ExpectedException exception = ExpectedException.none();
+    public final ExpectedException exception = ExpectedException.none();
 
     @Test
     public void testArrayInvalidWTooBig() {

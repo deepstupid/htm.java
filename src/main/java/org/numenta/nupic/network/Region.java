@@ -67,7 +67,6 @@ import rx.Subscriber;
  *
  */
 public class Region implements Persistable {
-    private static final long serialVersionUID = 1L;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Region.class);
     
@@ -77,7 +76,7 @@ public class Region implements Persistable {
     private Layer<?> tail;
     private Layer<?> head;
     
-    private Map<String, Layer<Inference>> layers = new HashMap<>();
+    private final Map<String, Layer<Inference>> layers = new HashMap<>();
     private transient Observable<Inference> regionObservable;
         
     /** Marker flag to indicate that assembly is finished and Region initialized */
@@ -274,8 +273,8 @@ public class Region implements Persistable {
         }
         
         if(sources == null) {
-            sources = new HashSet<Layer<Inference>>();
-            sinks = new HashSet<Layer<Inference>>();
+            sources = new HashSet<>();
+            sinks = new HashSet<>();
         }
         
         // Set the sensor reference for global access.
@@ -449,17 +448,24 @@ public class Region implements Persistable {
      */
     Region connect(Region inputRegion) {
         inputRegion.observe().subscribe(new Observer<Inference>() {
-            ManualInput localInf = new ManualInput();
-            
-            @Override public void onCompleted() {
-            	tail.notifyComplete();
+            final ManualInput localInf = new ManualInput();
+
+            @Override
+            public void onCompleted() {
+                tail.notifyComplete();
             }
-            @Override public void onError(Throwable e) { e.printStackTrace(); }
+
+            @Override
+            public void onError(Throwable e) {
+                e.printStackTrace();
+            }
+
             @SuppressWarnings("unchecked")
-            @Override public void onNext(Inference i) {
+            @Override
+            public void onNext(Inference i) {
                 localInf.sdr(i.getSDR()).recordNum(i.getRecordNum()).classifierInput(i.getClassifierInput()).layerInput(i.getSDR());
-                if(i.getSDR().length > 0) {
-                    ((Layer<Inference>)tail).compute(localInf);
+                if (i.getSDR().length > 0) {
+                    ((Layer<Inference>) tail).compute(localInf);
                 }
             }
         });
@@ -558,7 +564,7 @@ public class Region implements Persistable {
      * @return
      */
     public Layer<?> lookup(String layerName) {
-        if(layerName.indexOf(":") != -1) {
+        if(layerName.contains(":")) {
             return layers.get(layerName);
         }
         return layers.get(name.concat(":").concat(layerName));
@@ -579,7 +585,7 @@ public class Region implements Persistable {
             }
             
             if(tail == null) {
-                Set<Layer<Inference>> temp = new HashSet<Layer<Inference>>(sources);
+                Set<Layer<Inference>> temp = new HashSet<>(sources);
                 temp.removeAll(sinks);
                 if(temp.size() != 1) {
                     throw new IllegalArgumentException("Detected misconfigured Region too many or too few sinks.");
@@ -588,7 +594,7 @@ public class Region implements Persistable {
             }
             
             if(head == null) {
-                Set<Layer<Inference>> temp = new HashSet<Layer<Inference>>(sinks);
+                Set<Layer<Inference>> temp = new HashSet<>(sinks);
                 temp.removeAll(sources);
                 if(temp.size() != 1) {
                     throw new IllegalArgumentException("Detected misconfigured Region too many or too few sources.");
@@ -644,14 +650,23 @@ public class Region implements Persistable {
      */
     <I extends Layer<Inference>, O extends Layer<Inference>> void connect(I in, O out) {
         out.subscribe(new Subscriber<Inference>() {
-            ManualInput localInf = new ManualInput();
-            
-            @Override public void onCompleted() { in.notifyComplete(); }
-            @Override public void onError(Throwable e) { e.printStackTrace(); }
-            @Override public void onNext(Inference i) {
-                if(layersDistinct) {
+            final ManualInput localInf = new ManualInput();
+
+            @Override
+            public void onCompleted() {
+                in.notifyComplete();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onNext(Inference i) {
+                if (layersDistinct) {
                     in.compute(i);
-                }else{
+                } else {
                     localInf.sdr(i.getSDR()).recordNum(i.getRecordNum()).layerInput(i.getSDR());
                     in.compute(localInf);
                 }

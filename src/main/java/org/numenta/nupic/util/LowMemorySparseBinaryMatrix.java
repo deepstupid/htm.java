@@ -40,7 +40,7 @@ public class LowMemorySparseBinaryMatrix extends AbstractSparseBinaryMatrix impl
     /** keep it simple */
     private static final long serialVersionUID = 1L;
     
-    private TIntSet sparseSet = new TIntHashSet();
+    private final TIntSet sparseSet = new TIntHashSet();
 
     public LowMemorySparseBinaryMatrix(int[] dimensions) {
         this(dimensions, false);

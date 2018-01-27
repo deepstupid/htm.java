@@ -38,7 +38,7 @@ public class SparseBinaryMatrix extends AbstractSparseBinaryMatrix implements Pe
     /** keep it simple */
     private static final long serialVersionUID = 1L;
     
-    private Object backingArray;
+    private final Object backingArray;
 
     /**
      * Constructs a new {@code SparseBinaryMatrix} with the specified

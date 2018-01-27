@@ -23,8 +23,6 @@
 package org.numenta.nupic.util;
 
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import org.numenta.nupic.model.Persistable;
@@ -114,11 +112,13 @@ public class Tuple implements Persistable/*, Comparable<Tuple>*/ {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		for(int i = 0;i < container.length;i++) {
+		for (Object aContainer : container) {
 			try {
-				new Double((double) container[i]);
-				sb.append(container[i]);
-			}catch(Exception e) { sb.append("'").append(container[i]).append("'");}
+				new Double((double) aContainer);
+				sb.append(aContainer);
+			} catch (Exception e) {
+				sb.append("'").append(aContainer).append("'");
+			}
 			sb.append(":");
 		}
 		sb.setLength(sb.length() - 1);

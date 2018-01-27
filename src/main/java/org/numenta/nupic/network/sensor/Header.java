@@ -217,11 +217,11 @@ public class Header implements ValueList, Serializable {
         }
         
         // Add + 1 to each to offset for Sensor insertion of sequence number in all row headers.
-        resetIndexes = rList.stream().mapToInt((Integer i) -> i.intValue() + 1).toArray();
-        seqIndexes = sList.stream().mapToInt((Integer i) -> i.intValue() + 1).toArray();
-        categoryIndexes = cList.stream().mapToInt((Integer i) -> i.intValue() + 1).toArray();
-        tsIndexes = tList.stream().mapToInt((Integer i) -> i.intValue() + 1).toArray();
-        learnIndexes = lList.stream().mapToInt((Integer i) -> i.intValue() + 1).toArray();
+        resetIndexes = rList.stream().mapToInt((Integer i) -> i + 1).toArray();
+        seqIndexes = sList.stream().mapToInt((Integer i) -> i + 1).toArray();
+        categoryIndexes = cList.stream().mapToInt((Integer i) -> i + 1).toArray();
+        tsIndexes = tList.stream().mapToInt((Integer i) -> i + 1).toArray();
+        learnIndexes = lList.stream().mapToInt((Integer i) -> i + 1).toArray();
         
         if(seqIndexes.length > 0) {
             sequenceCache = new ArrayList<>();

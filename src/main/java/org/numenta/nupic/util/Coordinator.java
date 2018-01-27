@@ -34,10 +34,10 @@ public class Coordinator implements Serializable {
     /** keep it simple */
     private static final long serialVersionUID = 1L;
 
-    protected int[] dimensions;
-    protected int[] dimensionMultiples;
-    protected boolean isColumnMajor;
-    protected int numDimensions;
+    protected final int[] dimensions;
+    protected final int[] dimensionMultiples;
+    protected final boolean isColumnMajor;
+    protected final int numDimensions;
     
     /**
      * Constructs a new {@link Coordinator} object to be configured with specified

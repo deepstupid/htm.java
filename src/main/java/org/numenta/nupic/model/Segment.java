@@ -37,12 +37,12 @@ public abstract class Segment implements Comparable<Segment>, Serializable {
     /** keep it simple */
     private static final long serialVersionUID = 1L;
     
-    protected int index;
-    protected Integer boxedIndex;
+    protected final int index;
+    protected final Integer boxedIndex;
     
     public Segment(int index) {
         this.index = index;
-        this.boxedIndex = new Integer(index);
+        this.boxedIndex = index;
     }
     
     /**

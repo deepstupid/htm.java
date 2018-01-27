@@ -19,3 +19,4 @@ gradlew*
 *.ipr
 *.iws
 out/
+hs_err_*

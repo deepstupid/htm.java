@@ -59,7 +59,7 @@ public enum SensorFlags {
     R("reset"), S("sequence"), T("timestamp"), C("category"), L("learn"), B("blank");
     
     /** Flag description */
-    private String description;
+    private final String description;
     
     SensorFlags(String desc) {
         this.description = desc;

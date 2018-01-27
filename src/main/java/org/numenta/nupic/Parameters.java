@@ -621,7 +621,7 @@ public class Parameters implements Persistable {
                     continue;
                 }
                 if(key == KEY.RANDOM) {
-                    ((Random)get(key)).setSeed(Long.valueOf(((int)get(KEY.SEED))));
+                    ((Random)get(key)).setSeed((long) ((int) get(KEY.SEED)));
                 }
                 beanUtil.setSimpleProperty(cn, key.fieldName, get(key));
             }
@@ -710,22 +710,21 @@ public class Parameters implements Persistable {
         boolean result = false;
         BeanUtil beanUtil = BeanUtil.getInstance();
         BeanUtil.PropertyInfo[] properties = beanUtil.getPropertiesInfoForBean(cn.getClass());
-        for (int i = 0; i < properties.length; i++) {
-            BeanUtil.PropertyInfo property = properties[i];
+        for (BeanUtil.PropertyInfo property : properties) {
             String fieldName = property.getName();
             KEY propKey = KEY.getKeyByFieldName(property.getName());
             if (propKey != null) {
                 Object paramValue = this.get(propKey);
                 Object cnValue = beanUtil.getSimpleProperty(cn, fieldName);
-                
+
                 // KEY.POTENTIAL_RADIUS is defined as Math.min(cn.numInputs, potentialRadius) so just log...
-                if(propKey == KEY.POTENTIAL_RADIUS) {
+                if (propKey == KEY.POTENTIAL_RADIUS) {
                     System.out.println(
-                        "Difference is OK: Property:" + fieldName + " is different - CN:" + cnValue + " | PARAM:" + paramValue);
-                }else if ((paramValue != null && !paramValue.equals(cnValue)) || (paramValue == null && cnValue != null)) {
+                            "Difference is OK: Property:" + fieldName + " is different - CN:" + cnValue + " | PARAM:" + paramValue);
+                } else if ((paramValue != null && !paramValue.equals(cnValue)) || (paramValue == null && cnValue != null)) {
                     result = true;
                     System.out.println(
-                        "Property:" + fieldName + " is different - CONNECTIONS:" + cnValue + " | PARAMETERS:" + paramValue);
+                            "Property:" + fieldName + " is different - CONNECTIONS:" + cnValue + " | PARAMETERS:" + paramValue);
                 }
             }
         }

@@ -40,7 +40,7 @@ public class RangeTuple<L extends List<MinMax>, S> extends Tuple {
 	
     private static final long serialVersionUID = 1L;
     
-    protected L l;
+    protected final L l;
 	protected String desc;
 	
 	/**

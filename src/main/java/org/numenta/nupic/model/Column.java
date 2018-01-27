@@ -24,13 +24,11 @@ package org.numenta.nupic.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
 import org.numenta.nupic.algorithms.SpatialPooler;
-import org.numenta.nupic.algorithms.TemporalMemory;
 
 /**
  * Abstraction of both an input bit and a columnal collection of
@@ -42,41 +40,34 @@ import org.numenta.nupic.algorithms.TemporalMemory;
  *
  */
 public class Column implements Comparable<Column>, Serializable {
-    /** keep it simple */
-    private static final long serialVersionUID = 1L;
+
     
     /** The flat non-topological index of this column */
-    private final int index;
-    /** Stored boxed form to eliminate need for boxing on the fly */
-    private final Integer boxedIndex;
-    /** Configuration of cell count */
-    private final int numCells;
-    /** Connects {@link SpatialPooler} input pools */
-    private ProximalDendrite proximalDendrite;
+    public final int index;
 
-    private Cell[] cells;
-    private List<Cell> cellList;
-    
+    /** Configuration of cell count */
+    public final int cellCount;
+    /** Connects {@link SpatialPooler} input pools */
+    private final ProximalDendrite proximalDendrite;
+
+    public final Cell[] cells;
+
     private final int hashcode;
 
     /**
      * Constructs a new {@code Column}
      * 
-     * @param numCells      number of cells per column
+     * @param cellCount      number of cells per column
      * @param index         the index of this column
      */
-    public Column(int numCells, int index) {
-        this.numCells = numCells;
+    public Column(int cellCount, int index) {
+        this.cellCount = cellCount;
         this.index = index;
-        this.boxedIndex = index;
         this.hashcode = hashCode();
-        cells = new Cell[numCells];
-        for(int i = 0;i < numCells;i++) {
+        cells = new Cell[cellCount];
+        for(int i = 0; i < cellCount; i++)
             cells[i] = new Cell(this, i);
-        }
-        
-        cellList = List.of(cells);
-        
+
         proximalDendrite = new ProximalDendrite(index);
     }
 
@@ -98,31 +89,6 @@ public class Column implements Comparable<Column>, Serializable {
     }
 
     /**
-     * Returns a {@link List} view of this {@code Column}'s {@link Cell}s.
-     * @return
-     */
-    public List<Cell> getCells() {
-        return cellList;
-    }
-
-    /**
-     * Returns the index of this {@code Column}
-     * @return  the index of this {@code Column}
-     */
-    public int getIndex() {
-        return index;
-    }
-
-    /**
-     * Returns the configured number of cells per column for
-     * all {@code Column} objects within the current {@link TemporalMemory}
-     * @return
-     */
-    public int getNumCellsPerColumn() {
-        return numCells;
-    }
-
-    /**
      * Returns the {@link Cell} with the least number of {@link DistalDendrite}s.
      * 
      * @param c         the connections state of the temporal memory
@@ -133,7 +99,7 @@ public class Column implements Comparable<Column>, Serializable {
         List<Cell> leastUsedCells = new ArrayList<>();
         int minNumSegments = Integer.MAX_VALUE;
 
-        for(Cell cell : cellList) {
+        for(Cell cell : cells) {
             int numSegments = cell.getSegments(c).size();
 
             if(numSegments < minNumSegments) {
@@ -212,7 +178,7 @@ public class Column implements Comparable<Column>, Serializable {
      */
     @Override
     public int compareTo(Column otherColumn) {
-        return boxedIndex.compareTo(otherColumn.boxedIndex);
+        return Integer.compare(index, otherColumn.index);
     }
 
     @Override

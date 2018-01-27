@@ -175,8 +175,8 @@ public class SparseObjectMatrixTest {
      * Test object for instantiation tests
      */
     public static class TestObject {
-        private int arg0;
-        private int arg1;
+        private final int arg0;
+        private final int arg1;
         public TestObject(int arg0, int arg1) {
             this.arg0 = arg0;
             this.arg1 = arg1;

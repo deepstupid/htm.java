@@ -83,7 +83,7 @@ public class SDR {
      * @return  the column indexes of the specified cells.
      */
     public static int[] cellsToColumns(List<Cell> cells, int cellsPerColumn) {
-        IntStream op = cells.stream().mapToInt(Cell::getIndex);
+        IntStream op = cells.stream().mapToInt(cell -> cell.index);
             
         return op.map(cellIdx -> cellIdx / cellsPerColumn).distinct().toArray();
     }
@@ -97,7 +97,7 @@ public class SDR {
      * @return  the column indexes of the specified cells.
      */
     public static int[] cellsAsColumnIndices(Set<Cell> cells, int cellsPerColumn) {
-        return cells.stream().mapToInt(Cell::getIndex)
+        return cells.stream().mapToInt(cell -> cell.index)
                    .sorted().map(cellIdx -> cellIdx / cellsPerColumn).distinct().toArray();
     }
     
@@ -109,7 +109,7 @@ public class SDR {
      * @return  sorted array of column indices.
      */
     public static int[] asColumnList(Collection<Cell> cells) {
-        return cells.stream().mapToInt(c -> c.getColumn().getIndex()).sorted().distinct().toArray();
+        return cells.stream().mapToInt(c -> c.column.index).sorted().distinct().toArray();
     }
 
     /**
@@ -125,7 +125,7 @@ public class SDR {
         // Prevent ridiculous ConcurrentModificationException since "reads" mark as modifications????
         List<Cell> newCells = new ArrayList<>(cells);
         for(Cell cell : newCells) {
-            retVal[i++] = cell.getIndex();
+            retVal[i++] = cell.index;
         }
         return retVal;
     }

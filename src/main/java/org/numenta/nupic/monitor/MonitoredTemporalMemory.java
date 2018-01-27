@@ -39,12 +39,12 @@ import org.numenta.nupic.monitor.mixin.Trace;
  *
  */
 public class MonitoredTemporalMemory implements ComputeDecorator, TemporalMemoryMonitorMixin {
-    private ComputeDecorator decorator;
+    private final ComputeDecorator decorator;
     
-    private Connections connections;
+    private final Connections connections;
     
-    private Map<String, Trace<?>> mmTraces = new HashMap<>();
-    private Map<String, Map<String, ?>> mmData = new HashMap<>();
+    private final Map<String, Trace<?>> mmTraces = new HashMap<>();
+    private final Map<String, Map<String, ?>> mmData = new HashMap<>();
     
     private String mmName;
     

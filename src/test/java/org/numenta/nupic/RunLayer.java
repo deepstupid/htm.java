@@ -53,7 +53,6 @@ import org.numenta.nupic.encoders.Encoder;
 import org.numenta.nupic.encoders.EncoderTuple;
 import org.numenta.nupic.encoders.MultiEncoder;
 import org.numenta.nupic.encoders.ScalarEncoder;
-import org.numenta.nupic.model.Cell;
 import org.numenta.nupic.model.ComputeCycle;
 import org.numenta.nupic.model.Connections;
 import org.numenta.nupic.model.SDR;
@@ -64,18 +63,18 @@ import org.numenta.nupic.util.UniversalRandom;
 
 public class RunLayer {
     private static final Pattern SPLIT = Pattern.compile("[\\s]*\\,[\\s]*");
-    public static boolean IS_VERBOSE = true;
-    public static boolean LEARN = true;
-    public static boolean TM_ONLY = true;
-    public static boolean SP_ONLY = false;
-    public static boolean NETWORK = false;
+    public static final boolean IS_VERBOSE = true;
+    public static final boolean LEARN = true;
+    public static final boolean TM_ONLY = true;
+    public static final boolean SP_ONLY = false;
+    public static final boolean NETWORK = false;
     
     public static class MakeshiftLayer {
-        private Connections connections;
-        private MultiEncoder encoder;
-        private SpatialPooler sp;
-        private TemporalMemory tm;
-        private CLAClassifier classifier;
+        private final Connections connections;
+        private final MultiEncoder encoder;
+        private final SpatialPooler sp;
+        private final TemporalMemory tm;
+        private final CLAClassifier classifier;
         @SuppressWarnings("unused")
         private Anomaly anomaly;
         
@@ -87,15 +86,15 @@ public class RunLayer {
         
 //        private static String INPUT_PATH = "/Users/cogmission/git/NAB/data/artificialNoAnomaly/art_daily_no_noise.csv";
 //        private static String readFile = "/Users/cogmission/git/NAB/data/artificialNoAnomaly/art_daily_sp_output.txt";
-        private static String INPUT_PATH = "/Users/cogmission/git/NAB/data/realTraffic/TravelTime_387.csv";
-        private static String readFile = "/Users/cogmission/git/newtm/htm.java/src/test/resources/TravelTime_sp_output.txt";
+        private static final String INPUT_PATH = "/Users/cogmission/git/NAB/data/realTraffic/TravelTime_387.csv";
+        private static final String readFile = "/Users/cogmission/git/newtm/htm.java/src/test/resources/TravelTime_sp_output.txt";
         
         private static List<int[]> input;
         private static List<String> raw;
         
         @SuppressWarnings("unused")
         private static String encFilePath = "/Users/cogmission/git/lscheinkman/NAB/art_daily_encoder_output_java.txt";
-        private PrintWriter encFile = null;
+        private final PrintWriter encFile = null;
         
         /**
          * Makeshift Layer to contain and operate on algorithmic entities
@@ -217,7 +216,7 @@ public class RunLayer {
         public Tuple tmStep(int[] sparseSPOutput, boolean learn, boolean isVerbose) {
             // Input into the Temporal Memory
             ComputeCycle cc = tm.compute(connections, sparseSPOutput, learn);
-            int[] activeCellIndices = cc.activeCells().stream().mapToInt(Cell::getIndex).sorted().toArray();
+            int[] activeCellIndices = cc.activeCells().stream().mapToInt(cell -> cell.index).sorted().toArray();
             int[] predColumnIndices = SDR.cellsAsColumnIndices(cc.predictiveCells(), connections.getCellsPerColumn());
             int[] activeColumns = Arrays.stream(activeCellIndices)
                 .map(cell -> cell / connections.getCellsPerColumn())

@@ -35,8 +35,8 @@ import java.util.List;
  * @author cogmission
  */
 public abstract class Trace<T> {
-    protected MonitorMixinBase monitor;
-    protected String title;
+    protected final MonitorMixinBase monitor;
+    protected final String title;
     
     public List<T> items;
     
@@ -49,7 +49,7 @@ public abstract class Trace<T> {
         this.monitor = monitor;
         this.title = title;
         
-        items = new ArrayList<T>();
+        items = new ArrayList<>();
     }
     
     /**

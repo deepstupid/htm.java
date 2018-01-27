@@ -271,19 +271,20 @@ public interface TemporalMemoryMonitorMixin extends MonitorMixinBase {
         List<Integer> columns = Arrays.asList(
             ArrayUtils.toBoxed(
                 ArrayUtils.range(0, cnx.getNumColumns())));
-        
+
+        List<Tuple> synapseList = new ArrayList<>();
+
         for(Integer column : columns) {
-            int[] cells = cnx.getColumn(column).getCells().
-                stream().map(Cell::getIndex).mapToInt(i->i).toArray();
+            int[] cells = Stream.of(cnx.getColumn(column).cells).map(cell1 -> cell1.index).mapToInt(i->i).toArray();
             
             for(int cell : cells) {
                 
                 Map<Integer, String> segmentDict = new HashMap<>();
                 
                 for(DistalDendrite dd : cnx.getSegments(cnx.getCell(cell))) {
-                    
-                    List<Tuple> synapseList = new ArrayList<Tuple>();
-                    
+
+                    synapseList.clear();
+
                     for(Synapse s : cnx.getSynapses(dd)) {
                         Tuple synapseData = new Tuple(s.getInputIndex(), s.getPermanence());
                         synapseList.add(synapseData);
@@ -345,7 +346,7 @@ public interface TemporalMemoryMonitorMixin extends MonitorMixinBase {
             ((Map<String, Set<Integer>>)getDataMap().get("predictedActiveCellsForSequence")).entrySet()) {
             
             Map<Integer, List<Integer>> cellsForColumn = m.getValue().stream().collect(
-                Collectors.groupingBy(cell -> getConnections().getCell(cell).getColumn().getIndex()));
+                Collectors.groupingBy(cell -> getConnections().getCell(cell).column.index));
             
             for(Integer column : cellsForColumn.keySet()) {
                 data[i] = new String[] { 
@@ -392,7 +393,7 @@ public interface TemporalMemoryMonitorMixin extends MonitorMixinBase {
         if((predActCells = (Map<String, Set<Integer>>)getDataMap()
             .get("predictedActiveCellsForSequence")) == null) {
             
-            getDataMap().put("predictedActiveCellsForSequence", predActCells = new HashMap<String, Set<Integer>>());
+            getDataMap().put("predictedActiveCellsForSequence", predActCells = new HashMap<>());
         }
         
         getTraceMap().put("predictedActiveCells", new IndicesTrace(this, "predicted => active cells (correct)"));
@@ -411,7 +412,7 @@ public interface TemporalMemoryMonitorMixin extends MonitorMixinBase {
             LinkedHashSet<Integer> predictedInactiveColumns = new LinkedHashSet<>();
             
             for(Integer predictedCell : predictedCellsTrace.items.get(i)) {
-                Integer predictedColumn = getConnections().getCell(predictedCell).getColumn().getIndex();
+                Integer predictedColumn = getConnections().getCell(predictedCell).column.index;
                 
                 if(activeColumns.contains(predictedColumn)) {
                     predictedActiveCells.add(predictedCell);
@@ -423,7 +424,7 @@ public interface TemporalMemoryMonitorMixin extends MonitorMixinBase {
                         if((sequencePredictedCells = predActCells.get(sequenceLabel)) == null) {
                             
                             predActCells.put(
-                                sequenceLabel, sequencePredictedCells = new LinkedHashSet<Integer>());
+                                sequenceLabel, sequencePredictedCells = new LinkedHashSet<>());
                         }
                         
                         sequencePredictedCells.add(predictedCell);
@@ -456,16 +457,16 @@ public interface TemporalMemoryMonitorMixin extends MonitorMixinBase {
     default ComputeCycle compute(Connections cnx, int[] activeColumns, String sequenceLabel, boolean learn) {
         // Append last cycle's predictiveCells to *predicTEDCells* trace
         ((IndicesTrace)getTraceMap().get("predictedCells")).items.add(
-            new LinkedHashSet<Integer>(Connections.asCellIndexes(cnx.getPredictiveCells())));
+                new LinkedHashSet<>(Connections.asCellIndexes(cnx.getPredictiveCells())));
         
         ComputeCycle cycle = getMonitor().compute(cnx, activeColumns, learn);
         
         // Append this cycle's predictiveCells to *predicTIVECells* trace
         ((IndicesTrace)getTraceMap().get("predictiveCells")).items.add(
-            new LinkedHashSet<Integer>(Connections.asCellIndexes(cnx.getPredictiveCells())));
+                new LinkedHashSet<>(Connections.asCellIndexes(cnx.getPredictiveCells())));
         
         ((IndicesTrace)getTraceMap().get("activeCells")).items.add(
-            new LinkedHashSet<Integer>(Connections.asCellIndexes(cnx.getActiveCells())));
+                new LinkedHashSet<>(Connections.asCellIndexes(cnx.getActiveCells())));
         ((IndicesTrace)getTraceMap().get("activeColumns")).items.add(
             Arrays.stream(activeColumns).boxed().collect(Collectors.toCollection(LinkedHashSet::new)));
         ((CountsTrace)getTraceMap().get("numSegments")).items.add(cnx.numSegments());

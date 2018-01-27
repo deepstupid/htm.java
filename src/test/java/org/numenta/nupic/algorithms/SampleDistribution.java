@@ -9,9 +9,9 @@ import java.util.Random;
  * @author David Ray
  */
 public class SampleDistribution {
-    private double mean;
-    private double variance;
-    private int size;
+    private final double mean;
+    private final double variance;
+    private final int size;
     
     public SampleDistribution(double mean, double variance, int size) {
         this.mean = mean;

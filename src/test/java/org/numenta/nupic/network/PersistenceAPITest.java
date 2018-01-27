@@ -97,7 +97,7 @@ import rx.observers.TestObserver;
 public class PersistenceAPITest extends ObservableTestBase {
     // TO TURN ON PRINTOUT: SET "TRUE" BELOW
     /** Printer to visualize DayOfWeek printouts - SET TO TRUE FOR PRINTOUT */
-    private BiFunction<Inference, Integer, Integer> dayOfWeekPrintout = createDayOfWeekInferencePrintout(false);
+    private final BiFunction<Inference, Integer, Integer> dayOfWeekPrintout = createDayOfWeekInferencePrintout(false);
     
 
     @BeforeClass
@@ -882,7 +882,7 @@ public class PersistenceAPITest extends ObservableTestBase {
      * guarantees that the output of both Networks is the same (the RNGs must be called 
      * exactly the same amount of times for this to be true).
      */
-    long[] barrierSeeds = new long[2];
+    final long[] barrierSeeds = new long[2];
     CyclicBarrier barrier;
     int runCycleCount = 0;
     @Test
@@ -973,7 +973,7 @@ public class PersistenceAPITest extends ObservableTestBase {
     @Test
     public void testRunSerializedNetworkWithFileSensor() {
         // Stores the sample comparison outputs at the indicated record numbers.
-        List<String> sampleExpectedOutput = new ArrayList<>(10);
+        List<Object[]> sampleExpectedOutput = new ArrayList<>(10);
         
         // Run the network all the way, while storing a sample of 10 outputs.
         Network net = getLoadedHotGymNetwork_FileSensor();
@@ -982,8 +982,9 @@ public class PersistenceAPITest extends ObservableTestBase {
             @Override public void onError(Throwable e) { e.printStackTrace(); }
             @Override
             public void onNext(Inference inf) {
-                if(inf.getRecordNum() > 1105 && inf.getRecordNum() <= 1115) {
-                    sampleExpectedOutput.add(inf.getRecordNum() + ":  " + Arrays.toString((int[]) inf.getLayerInput()) + ", " + inf.getAnomalyScore());
+                int n = inf.getRecordNum();
+                if(n > 1105 && n <= 1115) {
+                    sampleExpectedOutput.add(new Object[] { n, inf.getLayerInput(), inf.getAnomalyScore()} );
                 }
             }
         });
@@ -1001,18 +1002,19 @@ public class PersistenceAPITest extends ObservableTestBase {
         Network network = getLoadedHotGymNetwork_FileSensor();
         
         // Store the actual outputs and the same record number indexes for comparison across pre and post serialized networks.
-        List<String> actualOutputs = new ArrayList<>();
+        List<Object[]> actualOutputs = new ArrayList<>();
         
         network.observe().subscribe(new Observer<Inference>() { 
             @Override public void onCompleted() {}
             @Override public void onError(Throwable e) { e.printStackTrace(); }
             @Override
             public void onNext(Inference inf) {
-                if(inf.getRecordNum() > 1105 && inf.getRecordNum() <= 1115) {
-                    actualOutputs.add(inf.getRecordNum() + ":  " + Arrays.toString((int[]) inf.getLayerInput()) + ", " + inf.getAnomalyScore());
+                int n = inf.getRecordNum();
+                if(n > 1105 && n <= 1115) {
+                    actualOutputs.add(new Object[] { n, inf.getLayerInput(), inf.getAnomalyScore()} );
                 }
                 
-                if(inf.getRecordNum() == 1109) {
+                if(n == 1109) {
                     network.halt();
                 }
             }
@@ -1040,8 +1042,10 @@ public class PersistenceAPITest extends ObservableTestBase {
             @Override public void onError(Throwable e) { e.printStackTrace(); }
             @Override
             public void onNext(Inference inf) {
-                if(inf.getRecordNum() > 1105 && inf.getRecordNum() <= 1115) {
-                    actualOutputs.add(inf.getRecordNum() + ":  " + Arrays.toString((int[]) inf.getLayerInput()) + ", " + inf.getAnomalyScore());
+                int n = inf.getRecordNum();
+                if(n > 1105 && n <= 1115) {
+                    ///actualOutputs.add(inf.getRecordNum() + ":  " + Arrays.toString((int[]) inf.getLayerInput()) + ", " + inf.getAnomalyScore());
+                    actualOutputs.add(new Object[] { n, inf.getLayerInput(), inf.getAnomalyScore()} );
                 }
             }
         });
@@ -1242,7 +1246,7 @@ public class PersistenceAPITest extends ObservableTestBase {
         
         TestObserver<Inference> tester3;
         serializedNetwork2.observe().subscribe(tester3 = new TestObserver<Inference>() { 
-            int idx = 0;
+            final int idx = 0;
             @Override public void onCompleted() {}
             @Override public void onError(Throwable e) { e.printStackTrace(); }
             @Override
@@ -2127,7 +2131,7 @@ public class PersistenceAPITest extends ObservableTestBase {
         return -1;
     }
 
-    private int[][] dayMap = new int[][] { 
+    private final int[][] dayMap = new int[][] {
         new int[] { 1, 1, 0, 0, 0, 0, 0, 1 },
         new int[] { 1, 1, 1, 0, 0, 0, 0, 0 },
         new int[] { 0, 1, 1, 1, 0, 0, 0, 0 },

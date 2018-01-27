@@ -34,7 +34,7 @@ import java.util.List;
 public class CoordinateEncoder extends Encoder<Tuple> implements CoordinateOrder {
 	private static final long serialVersionUID = 1L;
     
-	private static MersenneTwister random = new MersenneTwister();
+	private static final MersenneTwister random = new MersenneTwister();
 
 	/**
 	 * Package private to encourage construction using the Builder Pattern
@@ -91,7 +91,7 @@ public class CoordinateEncoder extends Encoder<Tuple> implements CoordinateOrder
 			ranges[i] = ArrayUtils.range(coordinate[i] - (int)radius, coordinate[i] + (int)radius + 1);
 		}
 
-		List<int[]> retVal = new ArrayList<int[]>();
+		List<int[]> retVal = new ArrayList<>();
 		int len = ranges.length == 1 ? 1 : ranges[0].length;
 		for(int k = 0;k < ranges[0].length;k++) {
 			for(int j = 0;j < len;j++) {
@@ -119,7 +119,7 @@ public class CoordinateEncoder extends Encoder<Tuple> implements CoordinateOrder
 	public int[][] topWCoordinates(CoordinateOrder co, int[][] coordinates, int w) {
 		SortablePair<Double, Integer>[] pairs = new SortablePair[coordinates.length];
 		for(int i = 0; i < coordinates.length;i++) {
-		    pairs[i] = new SortablePair<Double, Integer>(co.orderForCoordinate(coordinates[i]), i);
+		    pairs[i] = new SortablePair<>(co.orderForCoordinate(coordinates[i]), i);
 		}
 
 		Arrays.sort(pairs);
@@ -170,10 +170,10 @@ public class CoordinateEncoder extends Encoder<Tuple> implements CoordinateOrder
 
 		int[][] winners = topWCoordinates(this, neighbors, w);
 
-		for(int i = 0;i < winners.length;i++) {
-			int bit = bitForCoordinate(winners[i], n);
-			output[bit] = 1;
-		}
+        for (int[] winner : winners) {
+            int bit = bitForCoordinate(winner, n);
+            output[bit] = 1;
+        }
 	}
 
 	@Override

@@ -49,7 +49,7 @@ import gnu.trove.map.hash.TIntObjectHashMap;
 public class MultiEncoder extends Encoder<Object> {
     private static final long serialVersionUID = 1L;
 
-    protected TIntObjectMap<String> indexToCategory = new TIntObjectHashMap<String>();
+    protected TIntObjectMap<String> indexToCategory = new TIntObjectHashMap<>();
 
     protected List<Tuple> categoryList;
 
@@ -124,7 +124,7 @@ public class MultiEncoder extends Encoder<Object> {
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
     public List<int[]> encodeEachField(Object input) {
-        List<int[]> encodings = new ArrayList<int[]>();
+        List<int[]> encodings = new ArrayList<>();
 
         for (EncoderTuple t : getEncoders(this)) {
             String name = t.getName();
@@ -252,7 +252,7 @@ public class MultiEncoder extends Encoder<Object> {
             case "categoryList":
                 if(value instanceof String) {
                     String strVal = (String)value;
-                    if(strVal.indexOf(CATEGORY_DELIMITER) == -1) {
+                    if(!strVal.contains(CATEGORY_DELIMITER)) {
                         throw new IllegalArgumentException("Category field not delimited with '" + CATEGORY_DELIMITER + "' character.");
                     }
                     value = Arrays.asList(strVal.split("[\\s]*\\" + CATEGORY_DELIMITER + "[\\s]*"));

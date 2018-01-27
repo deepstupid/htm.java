@@ -47,7 +47,7 @@ public class Deque<E> implements Iterable<E>, Serializable {
 	private static final long serialVersionUID = 1L;
     
 	/** Backing array list */
-	private LinkedBlockingDeque<E> backingList = new LinkedBlockingDeque<E>();
+	private final LinkedBlockingDeque<E> backingList = new LinkedBlockingDeque<>();
 	/** Originating size of this {@code Deque} */
 	private int capacity;
 	/** The internal size monitor */
@@ -340,11 +340,11 @@ public class Deque<E> implements Iterable<E>, Serializable {
 	
 	private boolean deepEquals(Deque<E> other) {
 		Iterator<E> otherIt = other.iterator();
-		for(Iterator<E> it = iterator();it.hasNext();) {
-			if(!otherIt.hasNext() || !it.next().equals(otherIt.next())) {
-				return false;
-			}
-		}
+        for (E e : this) {
+            if (!otherIt.hasNext() || !e.equals(otherIt.next())) {
+                return false;
+            }
+        }
 		return true;
 	}
 

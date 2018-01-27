@@ -49,7 +49,7 @@ import rx.Observer;
 
 
 public class PlaygroundTest {
-    private int[][] dayMap = new int[][] { 
+    private final int[][] dayMap = new int[][] {
         new int[] { 1, 1, 0, 0, 0, 0, 0, 1 },
         new int[] { 1, 1, 1, 0, 0, 0, 0, 0 },
         new int[] { 0, 1, 1, 1, 0, 0, 0, 0 },
@@ -59,7 +59,7 @@ public class PlaygroundTest {
         new int[] { 0, 0, 0, 0, 0, 1, 1, 1 },
     };
     
-    private BiFunction<Inference, Integer, Integer> dayOfWeekPrintout = createDayOfWeekInferencePrintout();
+    private final BiFunction<Inference, Integer, Integer> dayOfWeekPrintout = createDayOfWeekInferencePrintout();
 
     @Ignore
     public void testPlayground() {

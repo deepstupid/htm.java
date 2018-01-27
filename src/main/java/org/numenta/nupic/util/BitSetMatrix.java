@@ -35,7 +35,7 @@ public class BitSetMatrix extends AbstractFlatMatrix<Boolean> implements Persist
     /** keep it simple */
     private static final long serialVersionUID = 1L;
     
-    private BitSet data;
+    private final BitSet data;
 
     /**
      * @param dimensions

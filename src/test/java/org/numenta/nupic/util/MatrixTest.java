@@ -36,8 +36,8 @@ import org.junit.Test;
  */
 public class MatrixTest {
 
-    private int[] dimensions =  { 5, 2 };
-    private int[] indexes = { 0, 4, 6, 7, 8 };
+    private final int[] dimensions =  { 5, 2 };
+    private final int[] indexes = { 0, 4, 6, 7, 8 };
 
     @Test
     public void testBitSetMatrixSet() {

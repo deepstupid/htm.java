@@ -161,7 +161,6 @@ import rx.Subscriber;
  * @see NetworkAPIDemo
  */
 public class Network implements Persistable {
-    private static final long serialVersionUID = 1L;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Network.class);
 
@@ -177,7 +176,7 @@ public class Network implements Persistable {
     private volatile boolean isLearn = true;
     private volatile boolean isThreadRunning;
     
-    private List<Region> regions = new ArrayList<>();
+    private final List<Region> regions = new ArrayList<>();
     
     /** Stored check pointer function */
     private transient Function<Persistable, ?> checkPointFunction;
@@ -638,9 +637,18 @@ public class Network implements Persistable {
      */
     void addDummySubscriber() {
         observe().subscribe(new Subscriber<Inference>() {
-            @Override public void onCompleted() {}
-            @Override public void onError(Throwable e) { e.printStackTrace(); }
-            @Override public void onNext(Inference i) {}
+            @Override
+            public void onCompleted() {
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onNext(Inference i) {
+            }
         });
     }
 
@@ -706,7 +714,7 @@ public class Network implements Persistable {
      * @return
      */
     public List<Region> getRegions() {
-        return new ArrayList<Region>(regions);
+        return new ArrayList<>(regions);
     }
 
     /**
@@ -793,7 +801,7 @@ public class Network implements Persistable {
      * @param name
      */
     private static void checkName(String name) {
-        if(name.indexOf(":") != -1) {
+        if(name.contains(":")) {
             throw new IllegalArgumentException("\":\" is a reserved character.");
         }
     }

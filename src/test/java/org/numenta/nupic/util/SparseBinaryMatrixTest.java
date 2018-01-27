@@ -39,7 +39,7 @@ import org.numenta.nupic.model.Connections;
 
 public class SparseBinaryMatrixTest {
 
-    private int[] dimensions = new int[]{5, 10};
+    private final int[] dimensions = new int[]{5, 10};
 
     @Test 
     public void testBackingStoreAndSliceAccess() {

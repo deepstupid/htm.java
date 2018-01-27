@@ -10,8 +10,8 @@ public class IntGenerator implements Generator<Integer> {
     private static final long serialVersionUID = 1L;
     
     protected int _i;
-    protected int lower;
-    protected int upper;
+    protected final int lower;
+    protected final int upper;
     
     public IntGenerator(int lower, int upper) {
         this.lower = lower;

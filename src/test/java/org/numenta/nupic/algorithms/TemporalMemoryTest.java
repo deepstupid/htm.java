@@ -401,12 +401,12 @@ public class TemporalMemoryTest {
         
         Collections.sort(synapses);
         for(Synapse synapse : synapses) {
-            if(synapse.getPresynapticCell().getIndex() == 0) continue;
+            if(synapse.getPresynapticCell().index == 0) continue;
             
             assertEquals(0.21, synapse.getPermanence(), 0.01);
-            assertTrue(synapse.getPresynapticCell().getIndex() == 1 ||
-                       synapse.getPresynapticCell().getIndex() == 2 ||
-                       synapse.getPresynapticCell().getIndex() == 3);
+            assertTrue(synapse.getPresynapticCell().index == 1 ||
+                       synapse.getPresynapticCell().index == 2 ||
+                       synapse.getPresynapticCell().index == 3);
         }
     }
     
@@ -436,10 +436,10 @@ public class TemporalMemoryTest {
         
         Collections.sort(synapses);
         for(Synapse synapse : synapses) {
-            if(synapse.getPresynapticCell().getIndex() == 0) continue;
+            if(synapse.getPresynapticCell().index == 0) continue;
             
             assertEquals(0.21, synapse.getPermanence(), 0.01);
-            assertEquals(1, synapse.getPresynapticCell().getIndex());
+            assertEquals(1, synapse.getPresynapticCell().index);
         }
     }
 
@@ -574,7 +574,7 @@ public class TemporalMemoryTest {
         List<Synapse> synapses = cn.getSynapses(matchingSegment);
         assertEquals(3, synapses.size());
         Set<Cell> presynapticCells = synapses.stream().map(Synapse::getPresynapticCell).collect(Collectors.toSet());
-        assertFalse(presynapticCells.stream().mapToInt(Cell::getIndex).anyMatch(i -> i == 0));
+        assertFalse(presynapticCells.stream().mapToInt(cell -> cell.index).anyMatch(i -> i == 0));
     }
     
     @Test
@@ -748,8 +748,8 @@ public class TemporalMemoryTest {
             
             for(Synapse synapse : synapses) {
                 assertEquals(0.2, synapse.getPermanence(), 0.01);
-                
-                Column column = synapse.getPresynapticCell().getColumn();
+
+                Column column = synapse.getPresynapticCell().column;
                 assertTrue(columnCheckList.contains(column));
                 columnCheckList.remove(column);
             }
@@ -812,7 +812,7 @@ public class TemporalMemoryTest {
         cn.createSynapse(dd, cn.getCell(3), 0.3);
         
         for(int i = 0;i < 100;i++) {
-            assertEquals(1, tm.leastUsedCell(cn, cn.getColumn(0).getCells(), cn.getRandom()).getIndex());
+            assertEquals(1, tm.leastUsedCell(cn, cn.getColumn(0).cells, cn.getRandom()).index);
         }
     }
     

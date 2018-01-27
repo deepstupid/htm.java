@@ -6,7 +6,6 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -88,11 +87,11 @@ public class ConnectionsTest {
 
         DistalDendrite segment1 = connections.createSegment(cell10);
         assertEquals(0, segment1.getIndex());
-        assertEquals(10, segment1.getParentCell().getIndex());
+        assertEquals(10, segment1.getParentCell().index);
 
         DistalDendrite segment2 = connections.createSegment(cell10);
         assertEquals(1, segment2.getIndex());
-        assertEquals(10, segment2.getParentCell().getIndex());
+        assertEquals(10, segment2.getParentCell().index);
 
         List<DistalDendrite> expected = Arrays.asList(segment1, segment2);
         assertEquals(expected, connections.getSegments(cell10));
@@ -537,11 +536,11 @@ public class ConnectionsTest {
         cn.setColumnDimensions(new int[] { 2048 });
         cn.setCellsPerColumn(5);
         TemporalMemory.init(cn);
-        
-        assertEquals(0, cn.getCell(0).getColumn().getIndex());
-        assertEquals(0, cn.getCell(4).getColumn().getIndex());
-        assertEquals(1, cn.getCell(5).getColumn().getIndex());
-        assertEquals(2047, cn.getCell(10239).getColumn().getIndex());
+
+        assertEquals(0, cn.getCell(0).column.index);
+        assertEquals(0, cn.getCell(4).column.index);
+        assertEquals(1, cn.getCell(5).column.index);
+        assertEquals(2047, cn.getCell(10239).column.index);
     }
     
     @Test
@@ -550,11 +549,11 @@ public class ConnectionsTest {
         cn.setColumnDimensions(new int[] { 64, 64 });
         cn.setCellsPerColumn(4);
         TemporalMemory.init(cn);
-        
-        assertEquals(0, cn.getCell(0).getColumn().getIndex());
-        assertEquals(0, cn.getCell(3).getColumn().getIndex());
-        assertEquals(1, cn.getCell(4).getColumn().getIndex());
-        assertEquals(4095, cn.getCell(16383).getColumn().getIndex());
+
+        assertEquals(0, cn.getCell(0).column.index);
+        assertEquals(0, cn.getCell(3).column.index);
+        assertEquals(1, cn.getCell(4).column.index);
+        assertEquals(4095, cn.getCell(16383).column.index);
     }
     
     @Test
@@ -607,8 +606,8 @@ public class ConnectionsTest {
             IntStream.of(indexes).boxed().collect(Collectors.toList()));
         
         List<Cell> cells = cn.asCellObjects(idxSet);
-        for(Cell cell : cells) 
-            assertTrue(idxSet.contains(cell.getIndex()));
+        for(Cell cell : cells)
+            assertTrue(idxSet.contains(cell.index));
     }
 
     @Test
@@ -623,8 +622,8 @@ public class ConnectionsTest {
             IntStream.of(indexes).boxed().collect(Collectors.toList()));
         
         List<Column> columns = cn.asColumnObjects(idxSet);
-        for(Column column : columns) 
-            assertTrue(idxSet.contains(column.getIndex()));
+        for(Column column : columns)
+            assertTrue(idxSet.contains(column.index));
     }
     
     @Test

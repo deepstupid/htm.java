@@ -117,7 +117,7 @@ public class SpatialPooler implements Persistable {
         //Fill the sparse matrix with column objects
         for(int i = 0;i < numColumns;i++) { mem.set(i, new Column(c.getCellsPerColumn(), i)); }
 
-        c.setPotentialPools(new SparseObjectMatrix<Pool>(c.getMemory().getDimensions()));
+        c.setPotentialPools(new SparseObjectMatrix<>(c.getMemory().getDimensions()));
 
         c.setConnectedMatrix(new SparseBinaryMatrix(new int[] { numColumns, numInputs }));
 
@@ -437,9 +437,9 @@ public class SpatialPooler implements Persistable {
         Arrays.fill(maxCoord, -1);
         Arrays.fill(minCoord, ArrayUtils.max(dimensions));
         SparseMatrix<?> inputMatrix = c.getInputMatrix();
-        for(int i = 0;i < connected.length;i++) {
-            maxCoord = ArrayUtils.maxBetween(maxCoord, inputMatrix.computeCoordinates(connected[i]));
-            minCoord = ArrayUtils.minBetween(minCoord, inputMatrix.computeCoordinates(connected[i]));
+        for (int aConnected : connected) {
+            maxCoord = ArrayUtils.maxBetween(maxCoord, inputMatrix.computeCoordinates(aConnected));
+            minCoord = ArrayUtils.minBetween(minCoord, inputMatrix.computeCoordinates(aConnected));
         }
         return ArrayUtils.average(ArrayUtils.add(ArrayUtils.subtract(maxCoord, minCoord), 1));
     }
@@ -464,12 +464,12 @@ public class SpatialPooler implements Persistable {
         double[] permChanges = new double[c.getNumInputs()];
         Arrays.fill(permChanges, -1 * c.getSynPermInactiveDec());
         ArrayUtils.setIndexesTo(permChanges, inputIndices, c.getSynPermActiveInc());
-        for(int i = 0;i < activeColumns.length;i++) {
-            Pool pool = c.getPotentialPools().get(activeColumns[i]);
+        for (int activeColumn : activeColumns) {
+            Pool pool = c.getPotentialPools().get(activeColumn);
             double[] perm = pool.getDensePermanences(c);
             int[] indexes = pool.getSparsePotential();
             ArrayUtils.raiseValuesBy(permChanges, perm);
-            Column col = c.getColumn(activeColumns[i]);
+            Column col = c.getColumn(activeColumn);
             updatePermanencesForColumn(c, perm, col, indexes, true);
         }
     }
@@ -489,12 +489,12 @@ public class SpatialPooler implements Persistable {
             }
         });
 
-        for(int i = 0;i < weakColumns.length;i++) {
-            Pool pool = c.getPotentialPools().get(weakColumns[i]);
+        for (int weakColumn : weakColumns) {
+            Pool pool = c.getPotentialPools().get(weakColumn);
             double[] perm = pool.getSparsePermanences();
             ArrayUtils.raiseValuesBy(c.getSynPermBelowStimulusInc(), perm);
             int[] indexes = pool.getSparsePotential();
-            Column col = c.getColumn(weakColumns[i]);
+            Column col = c.getColumn(weakColumn);
             updatePermanencesForColumnSparse(c, perm, col, indexes, true);
         }
     }
@@ -916,10 +916,14 @@ public class SpatialPooler implements Persistable {
 	    	boostInterim = ArrayUtils.d_add(boostInterim, c.getMaxBoost());
 	    }
     	
-    	ArrayUtils.setIndexesTo(boostInterim, ArrayUtils.where(activeDutyCycles, new Condition.Adapter<Object>() {
-    		int i = 0;
-    		@Override public boolean eval(double d) { return d > minActiveDutyCycles[i++]; }
-    	}), 1.0d);
+    	ArrayUtils.setIndexesTo(boostInterim, ArrayUtils.where(activeDutyCycles, new Condition.Adapter<>() {
+            int i = 0;
+
+            @Override
+            public boolean eval(double d) {
+                return d > minActiveDutyCycles[i++];
+            }
+        }), 1.0d);
     	
     	c.setBoostFactors(boostInterim);
 //=======

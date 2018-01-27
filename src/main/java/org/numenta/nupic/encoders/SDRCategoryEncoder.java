@@ -444,8 +444,7 @@ public class SDRCategoryEncoder extends Encoder<String> {
             foundUnique = true;
             oneBits = getSortedSample(n, w);
             sdr = new int[n];
-            for (int i = 0; i < oneBits.length; i++) {
-                int oneBitInx = oneBits[i];
+            for (int oneBitInx : oneBits) {
                 sdr[oneBitInx] = 1;
             }
             for (int[] existingSdr : this.sdrByCategory.values()) {

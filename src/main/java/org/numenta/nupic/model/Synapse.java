@@ -43,14 +43,12 @@ package org.numenta.nupic.model;
  * @see Connections
  */
 public class Synapse implements Persistable, Comparable<Synapse> {
-    /** keep it simple */
-    private static final long serialVersionUID = 1L;
+
     
     private Cell sourceCell;
     private Segment segment;
     private Pool pool;
     private int synapseIndex;
-    private Integer boxedIndex;
     private int inputIndex;
     private double permanence;
     private boolean destroyed;
@@ -72,8 +70,7 @@ public class Synapse implements Persistable, Comparable<Synapse> {
         this.sourceCell = presynapticCell;
         this.segment = segment;
         this.synapseIndex = index;
-        this.boxedIndex = new Integer(index);
-        this.inputIndex = presynapticCell.getIndex();
+        this.inputIndex = presynapticCell.index;
         this.permanence = permanence;
     }
 
@@ -93,7 +90,6 @@ public class Synapse implements Persistable, Comparable<Synapse> {
         this.segment = segment;
         this.pool = pool;
         this.synapseIndex = index;
-        this.boxedIndex = new Integer(index);
         this.inputIndex = inputIndex;
     }
 
@@ -183,7 +179,7 @@ public class Synapse implements Persistable, Comparable<Synapse> {
         StringBuilder sb = new StringBuilder("synapse: [ synIdx=").append(synapseIndex).append(", inIdx=")
             .append(inputIndex).append(", sgmtIdx=").append(segment.getIndex());
         if(sourceCell != null) {
-            sb.append(", srcCellIdx=").append(sourceCell.getIndex());
+            sb.append(", srcCellIdx=").append(sourceCell.index);
         }
         sb.append(" ]");
         return sb.toString();
@@ -196,7 +192,7 @@ public class Synapse implements Persistable, Comparable<Synapse> {
      */
     @Override
     public int compareTo(Synapse arg0) {
-        return boxedIndex.compareTo(arg0.boxedIndex);
+        return Integer.compare(synapseIndex, arg0.synapseIndex);
     }
 
     /* (non-Javadoc)

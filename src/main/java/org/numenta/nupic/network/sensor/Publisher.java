@@ -98,10 +98,10 @@ public class Publisher implements Persistable {
     public static class Builder<T> {
         private ReplaySubject<String> subject;
         
-        private Consumer<Publisher> notifier;
+        private final Consumer<Publisher> notifier;
         
         // The 3 lines of the header
-        String[] lines = new String[3];
+        final String[] lines = new String[3];
         
         int cursor = 0;
         

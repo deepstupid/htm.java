@@ -41,9 +41,9 @@ import org.numenta.nupic.model.Persistable;
 public class AnomalyLikelihoodMetrics implements Persistable {
     private static final long serialVersionUID = 1L;
     
-    private AnomalyParams params;
-    private AveragedAnomalyRecordList aggRecordList;
-    private double[] likelihoods;
+    private final AnomalyParams params;
+    private final AveragedAnomalyRecordList aggRecordList;
+    private final double[] likelihoods;
     
     /**
      * Constructs a new {@code AnomalyLikelihoodMetrics}
@@ -65,7 +65,7 @@ public class AnomalyLikelihoodMetrics implements Persistable {
      * @return
      */
     public AnomalyLikelihoodMetrics copy() {
-        List<Object> vals = new ArrayList<Object>();
+        List<Object> vals = new ArrayList<>();
         for(String key : params.keys()) {
             vals.add(params.get(key));
         }

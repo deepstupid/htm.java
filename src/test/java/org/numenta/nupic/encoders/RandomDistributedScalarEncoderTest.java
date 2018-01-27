@@ -31,7 +31,7 @@ public class RandomDistributedScalarEncoderTest {
 	private RandomDistributedScalarEncoder.Builder builder;
 
 	@Rule
-	public ExpectedException exception = ExpectedException.none();
+	public final ExpectedException exception = ExpectedException.none();
 
 	/**
 	 * Test basic encoding functionality. Create encodings without crashing and

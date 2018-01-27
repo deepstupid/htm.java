@@ -310,7 +310,7 @@ public class ScalarEncoder extends Encoder<Double> {
             if(input < getMinVal()) {
                 if(clipInput() && !isPeriodic()) {
                     if(LOGGER.isTraceEnabled()) {
-                        LOGGER.info("Clipped input {}={} to minval {}", getName(), input, getMinVal());
+                        LOGGER.trace("Clipped input {}={} to minval {}", getName(), input, getMinVal());
                     }
                     input = getMinVal();
                 }else{
@@ -329,7 +329,7 @@ public class ScalarEncoder extends Encoder<Double> {
             if(input > getMaxVal()) {
                 if(clipInput()) {
                     if(LOGGER.isTraceEnabled()) {
-                        LOGGER.info("Clipped input {}={} to maxval {}", getName(), input, getMaxVal());
+                        LOGGER.trace("Clipped input {}={} to maxval {}", getName(), input, getMaxVal());
                     }
                     input = getMaxVal();
                 }else{
@@ -517,7 +517,7 @@ public class ScalarEncoder extends Encoder<Double> {
                 return n > 0;
             }
         });
-        List<Tuple> runs = new ArrayList<Tuple>(); //will be tuples of (startIdx, runLength)
+        List<Tuple> runs = new ArrayList<>(); //will be tuples of (startIdx, runLength)
         Arrays.sort(nz);
         int[] run = new int[] { nz[0], 1 };
         int i = 1;
@@ -551,7 +551,7 @@ public class ScalarEncoder extends Encoder<Double> {
         // the center position of the group.
         int left = 0;
         int right = 0;
-        List<MinMax> ranges = new ArrayList<MinMax>();
+        List<MinMax> ranges = new ArrayList<>();
         for(Tuple tupleRun : runs) {
             int start = (Integer)tupleRun.get(0);
             int runLen = (Integer)tupleRun.get(1);
@@ -613,7 +613,7 @@ public class ScalarEncoder extends Encoder<Double> {
         }
 
         RangeList inner = new RangeList(ranges, desc);
-        Map<String, RangeList> fieldsDict = new HashMap<String, RangeList>();
+        Map<String, RangeList> fieldsDict = new HashMap<>();
         fieldsDict.put(fieldName, inner);
 
         return new DecodeResult(fieldsDict, Collections.singletonList(fieldName));
@@ -669,8 +669,8 @@ public class ScalarEncoder extends Encoder<Double> {
         int numCategories = getTopDownValues().length;
         SparseObjectMatrix<int[]> topDownMapping;
         setTopDownMapping(
-                topDownMapping = new SparseObjectMatrix<int[]>(
-                        new int[] { numCategories }));
+                topDownMapping = new SparseObjectMatrix<>(
+                        new int[]{numCategories}));
 
         double[] topDownValues = getTopDownValues();
         int[] outputSpace = new int[getN()];
@@ -773,7 +773,7 @@ public class ScalarEncoder extends Encoder<Double> {
      * @return	a list of {@link Tuple}s
      */
     public List<Tuple> dict() {
-        List<Tuple> l = new ArrayList<Tuple>();
+        List<Tuple> l = new ArrayList<>();
         l.add(new Tuple("maxval", getMaxVal()));
         l.add(new Tuple("bucketValues", getBucketValues(Double.class)));
         l.add(new Tuple("nInternal", getNInternal()));

@@ -35,7 +35,7 @@ public class AdaptiveScalarEncoder extends ScalarEncoder {
     public int recordNum = 0;
     public boolean learningEnabled = true;
     public Double[] slidingWindow = new Double[0];
-    public int windowSize = 300;
+    public final int windowSize = 300;
     public Double bucketValues;
 
     /**
@@ -105,7 +105,7 @@ public class AdaptiveScalarEncoder extends ScalarEncoder {
     @Override
     public List<Encoding> topDownCompute(int[] encoded) {
         if (this.getMinVal() == 0 || this.getMaxVal() == 0) {
-            List<Encoding> res = new ArrayList<Encoding>();
+            List<Encoding> res = new ArrayList<>();
             int[] enArray = new int[this.getN()];
             Arrays.fill(enArray, 0);
             Encoding ecResult = new Encoding(0, 0, enArray);
@@ -206,7 +206,7 @@ public class AdaptiveScalarEncoder extends ScalarEncoder {
         if (!this.encLearningEnabled) {
             learn = true;
         }
-        if ((Double.isNaN(input)) && (Double.valueOf(input) instanceof Double)) {
+        if ((Double.isNaN(input))) {
             input = AdaptiveScalarEncoder.SENTINEL_VALUE_FOR_MISSING_DATA;
         }
         if (input == AdaptiveScalarEncoder.SENTINEL_VALUE_FOR_MISSING_DATA) {
@@ -225,7 +225,7 @@ public class AdaptiveScalarEncoder extends ScalarEncoder {
         if (this.minVal == 0 || this.maxVal == 0) {
             int[] initialBuckets = new int[this.n];
             Arrays.fill(initialBuckets, 0);
-            List<Encoding> encoderResultList = new ArrayList<Encoding>();
+            List<Encoding> encoderResultList = new ArrayList<>();
             Encoding encoderResult = new Encoding(0, 0, initialBuckets);
             encoderResultList.add(encoderResult);
             return encoderResultList;

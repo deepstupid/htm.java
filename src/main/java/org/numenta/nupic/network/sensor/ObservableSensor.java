@@ -81,9 +81,14 @@ public class ObservableSensor<T> implements Sensor<Observable<T>> {
         
         Iterator<String> observerator = obs.toBlocking().getIterator();
         
-        Iterator<String> iterator = new Iterator<String>() {
-            @Override public boolean hasNext() { return observerator.hasNext(); }
-            @Override public String next() {
+        Iterator<String> iterator = new Iterator<>() {
+            @Override
+            public boolean hasNext() {
+                return observerator.hasNext();
+            }
+
+            @Override
+            public String next() {
                 return observerator.next();
             }
         };
@@ -98,7 +103,7 @@ public class ObservableSensor<T> implements Sensor<Observable<T>> {
     @SuppressWarnings("unchecked")
     public static <T> Sensor<T> create(SensorParams p) {
         ObservableSensor<String[]> sensor =
-                new ObservableSensor<String[]>(p);
+                new ObservableSensor<>(p);
         
         return (Sensor<T>)sensor;
     }

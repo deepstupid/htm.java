@@ -43,7 +43,7 @@ public class SparseObjectMatrix<T> extends AbstractSparseMatrix<T> implements Pe
     /** keep it simple */
     private static final long serialVersionUID = 1L;
     
-    private TIntObjectMap<T> sparseMap = new TIntObjectHashMap<T>();
+    private final TIntObjectMap<T> sparseMap = new TIntObjectHashMap<>();
 
     /**
      * Constructs a new {@code SparseObjectMatrix}

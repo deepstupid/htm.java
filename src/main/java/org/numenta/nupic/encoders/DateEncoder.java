@@ -107,11 +107,11 @@ public class DateEncoder extends Encoder<DateTime> {
     protected Tuple timeOfDay;
     protected ScalarEncoder timeOfDayEncoder;
 
-    protected List<Integer> customDaysList = new ArrayList<>();
+    protected final List<Integer> customDaysList = new ArrayList<>();
 
     // Currently the only holiday we know about is December 25
     // holidays is a list of holidays that occur on a fixed date every year
-    protected List<Tuple> holidaysList = Collections.singletonList(new Tuple(12, 25));
+    protected final List<Tuple> holidaysList = Collections.singletonList(new Tuple(12, 25));
     
     //////////////// Convenience DateTime Formats ////////////////////
     public transient static DateTimeFormatter FULL_DATE_TIME_ZONE = DateTimeFormat.forPattern("YYYY/MM/dd HH:mm:ss.SSSz");
@@ -127,7 +127,7 @@ public class DateEncoder extends Encoder<DateTime> {
     protected transient DateTimeFormatter customFormatter;
     protected String customFormatterPattern;
     
-    protected Set<FieldMetaType> fieldTypes = new HashSet<>(Collections.singletonList(FieldMetaType.DATETIME));
+    protected final Set<FieldMetaType> fieldTypes = new HashSet<>(Collections.singletonList(FieldMetaType.DATETIME));
     
     
 

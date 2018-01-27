@@ -110,7 +110,7 @@ public class AnomalyLikelihood extends Anomaly {
     
     private boolean isWeighted;
     
-    private List<Sample> historicalScores = new ArrayList<>();
+    private final List<Sample> historicalScores = new ArrayList<>();
     private AnomalyParams distribution;
     
     public AnomalyLikelihood(boolean useMovingAvg, int windowSize, boolean isWeighted, int claLearningPeriod, int estimationSamples) {
@@ -399,7 +399,7 @@ public class AnomalyLikelihood extends Anomaly {
     public AveragedAnomalyRecordList anomalyScoreMovingAverage(List<Sample> anomalyScores, int windowSize) {
         TDoubleList historicalValues = new TDoubleArrayList();
         double total = 0.0;
-        List<Sample> averagedRecordList = new ArrayList<Sample>();
+        List<Sample> averagedRecordList = new ArrayList<>();
         for(Sample record : anomalyScores) {
             ////////////////////////////////////////////////////////////////////////////////////////////
             // Python version has check for malformed records here, but can't happen in java version. //
@@ -693,7 +693,7 @@ public class AnomalyLikelihood extends Anomaly {
     
     // Table lookup for Q function, from wikipedia
     // http://en.wikipedia.org/wiki/Q-function
-    private static double[] Q;
+    private static final double[] Q;
     static {
         Q = new double[71];
         Q[0] = 0.500000000;

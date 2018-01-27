@@ -59,7 +59,7 @@ public class SensorParams extends NamedTuple {
             u(new String[] { "FILE", "URI" }),
             p(new String[] { "FILE", "PATH" }),
             o(new String[] { "NAME", "ONSUB" });
-            private String[] arr;
+            private final String[] arr;
             Args(String[] s) {
                 this.arr = s;
             }

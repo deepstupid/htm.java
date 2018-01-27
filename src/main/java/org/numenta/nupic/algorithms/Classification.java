@@ -22,7 +22,7 @@ public class Classification<T> implements Persistable {
     private T[] actualValues;
 
     /** Map of step count -to- probabilities */
-    TIntObjectMap<double[]> probabilities = new TIntObjectHashMap<double[]>();
+    TIntObjectMap<double[]> probabilities = new TIntObjectHashMap<>();
     
     /**
      * Utility method to copy the contents of a ClassifierResult.
@@ -31,9 +31,9 @@ public class Classification<T> implements Persistable {
      * by changes to the original.
      */
     public Classification<T> copy() {
-        Classification<T> retVal = new Classification<T>();
+        Classification<T> retVal = new Classification<>();
         retVal.actualValues = Arrays.copyOf(actualValues, actualValues.length);
-        retVal.probabilities = new TIntObjectHashMap<double[]>(probabilities);
+        retVal.probabilities = new TIntObjectHashMap<>(probabilities);
         
         return retVal;
     }

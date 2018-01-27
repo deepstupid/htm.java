@@ -157,10 +157,10 @@ public class ObservableTestBaseTest extends ObservableTestBase {
      * to pass the tests when they actually shouldn't.
      */
     static class FauxNetwork {
-        List<Observer<Inference>> observers = new ArrayList<>();
+        final List<Observer<Inference>> observers = new ArrayList<>();
         
-        PublishSubject<Inference> internalDispatch = PublishSubject.create();
-        Observable<Inference> clientObservable;
+        final PublishSubject<Inference> internalDispatch = PublishSubject.create();
+        final Observable<Inference> clientObservable;
         
         public FauxNetwork() {
             internalDispatch.subscribe(new Observer<Inference>() {

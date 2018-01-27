@@ -22,17 +22,10 @@
 package org.numenta.nupic.network;
 
 
-import java.lang.Thread.UncaughtExceptionHandler;
 import java.math.BigDecimal;
 import java.math.MathContext;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.joda.time.DateTime;
 import org.numenta.nupic.FieldMetaType;
@@ -178,7 +171,6 @@ import rx.subjects.PublishSubject;
  * @author David Ray
  */
 public class Layer<T> implements Persistable {
-    private static final long serialVersionUID = 1L;
 
     protected static final Logger LOGGER = LoggerFactory.getLogger(Layer.class);
     
@@ -197,7 +189,7 @@ public class Layer<T> implements Persistable {
     private Boolean autoCreateClassifiers;
     private Anomaly anomalyComputer;
 
-    private transient ConcurrentLinkedQueue<Observer<Inference>> subscribers = new ConcurrentLinkedQueue<Observer<Inference>>();
+    private transient Queue<Observer<Inference>> subscribers = new ArrayDeque<>();
     private transient PublishSubject<T> publisher = null;
     private transient Observable<Inference> userObservable;
     private transient Subscription subscription;
@@ -221,7 +213,7 @@ public class Layer<T> implements Persistable {
     private Layer<Inference> next;
     private Layer<Inference> previous;
 
-    private transient List<Observer<Inference>> observers = new ArrayList<Observer<Inference>>();
+    private transient List<Observer<Inference>> observers = new ArrayList<>();
     private transient CheckPointOperator<?> checkPointOp;
     private transient List<Observer<byte[]>> checkPointOpObservers = new ArrayList<>();
     
@@ -231,7 +223,7 @@ public class Layer<T> implements Persistable {
      * Retains the order of added items - for use with interposed
      * {@link Observable}
      */
-    private List<Object> addedItems = new ArrayList<>();
+    private final List<Object> addedItems = new ArrayList<>();
     /** Indicates whether there is a generic processing node entered */
     private boolean hasGenericProcess;
 
@@ -241,7 +233,9 @@ public class Layer<T> implements Persistable {
      */
     private List<EncoderTuple> encoderTuples;
 
-    private transient Map<Class<T>, Observable<ManualInput>> observableDispatch = Collections.synchronizedMap(new HashMap<Class<T>, Observable<ManualInput>>());
+    private transient Map<Class<T>, Observable<ManualInput>> observableDispatch =
+            new ConcurrentHashMap<>();
+            //Collections.synchronizedMap(new HashMap<Class<T>, Observable<ManualInput>>());
 
     /** This layer's thread */
     private transient Thread LAYER_THREAD;
@@ -336,7 +330,7 @@ public class Layer<T> implements Persistable {
         // Flag which lets us know to skip or do certain setups during initialization.
         isPostSerialized = true;
         
-        observers = new ArrayList<Observer<Inference>>();
+        observers = new ArrayList<>();
         
         return this;
     }
@@ -502,7 +496,7 @@ public class Layer<T> implements Persistable {
 
         autoCreateClassifiers = autoCreateClassifiers != null && (autoCreateClassifiers | (Boolean)params.get(KEY.AUTO_CLASSIFY));
 
-        if(autoCreateClassifiers != null && autoCreateClassifiers.booleanValue() && (factory.inference.getClassifiers() == null || factory.inference.getClassifiers().size() < 1)) {
+        if(autoCreateClassifiers != null && autoCreateClassifiers && (factory.inference.getClassifiers() == null || factory.inference.getClassifiers().size() < 1)) {
             factory.inference.classifiers(makeClassifiers(encoder == null ? parentNetwork.getEncoder() : encoder));
 
             // Note classifier addition by setting content mask
@@ -673,7 +667,7 @@ public class Layer<T> implements Persistable {
         if(userObservable == null) {
             userObservable = Observable.create(t1 -> {
                 if(observers == null) {
-                    observers = new ArrayList<Observer<Inference>>();
+                    observers = new ArrayList<>();
                 }
                 observers.add((Observer<Inference>)t1);
             });
@@ -701,7 +695,7 @@ public class Layer<T> implements Persistable {
         }
 
         if(subscribers == null) {
-            subscribers = new ConcurrentLinkedQueue<Observer<Inference>>();
+            subscribers = new ArrayDeque<>();
         }
         subscribers.add(subscriber);
         
@@ -901,7 +895,7 @@ public class Layer<T> implements Persistable {
         this.params.set(KEY.INPUT_DIMENSIONS, inputDims);
 
         if(key == KEY.AUTO_CLASSIFY) {
-            this.autoCreateClassifiers = value != null && ((Boolean) value).booleanValue();
+            this.autoCreateClassifiers = value != null && (Boolean) value;
             // Note the addition of a classifier
             algo_content_mask |= CLA_CLASSIFIER;
         }
@@ -1525,7 +1519,7 @@ public class Layer<T> implements Persistable {
         sequence = fillInSequence(sequence);
 
         // All subscribers and observers are notified from a single delegate.
-        if(subscribers == null) subscribers = new ConcurrentLinkedQueue<Observer<Inference>>();
+        if(subscribers == null) subscribers = new ArrayDeque<>();
         subscribers.add(getDelegateObserver());
         subscription = sequence.subscribe(getDelegateSubscriber());
 
@@ -1555,7 +1549,9 @@ public class Layer<T> implements Persistable {
      */
     @SuppressWarnings("unchecked")
     private Map<Class<T>, Observable<ManualInput>> createDispatchMap() {
-        Map<Class<T>, Observable<ManualInput>> observableDispatch = Collections.synchronizedMap(new HashMap<Class<T>, Observable<ManualInput>>());
+        Map<Class<T>, Observable<ManualInput>> observableDispatch =
+                new ConcurrentHashMap();
+                //Collections.synchronizedMap(new HashMap<Class<T>, Observable<ManualInput>>());
 
         publisher = PublishSubject.create();
 
@@ -1740,7 +1736,7 @@ public class Layer<T> implements Persistable {
         if(spatialPooler != null) {
             Integer skipCount = 0;
             if((skipCount = ((Integer)params.get(KEY.SP_PRIMER_DELAY))) != null) {
-                o = o.map(factory.createSpatialFunc(spatialPooler)).skip(skipCount.intValue());
+                o = o.map(factory.createSpatialFunc(spatialPooler)).skip(skipCount);
             } else {
                 o = o.map(factory.createSpatialFunc(spatialPooler));
             }
@@ -1752,7 +1748,7 @@ public class Layer<T> implements Persistable {
         }
 
         // Classifier config
-        if(autoCreateClassifiers != null && autoCreateClassifiers.booleanValue()) {
+        if(autoCreateClassifiers != null && autoCreateClassifiers) {
             o = o.map(factory.createClassifierFunc());
         }
 
@@ -1781,7 +1777,7 @@ public class Layer<T> implements Persistable {
             } else if(node instanceof SpatialPooler) {
                 Integer skipCount = 0;
                 if((skipCount = ((Integer)params.get(KEY.SP_PRIMER_DELAY))) != null) {
-                    o = o.map(factory.createSpatialFunc(spatialPooler)).skip(skipCount.intValue());
+                    o = o.map(factory.createSpatialFunc(spatialPooler)).skip(skipCount);
                 } else {
                     o = o.map(factory.createSpatialFunc(spatialPooler));
                 }
@@ -1791,7 +1787,7 @@ public class Layer<T> implements Persistable {
         }
 
         // Classifier config
-        if(autoCreateClassifiers != null && autoCreateClassifiers.booleanValue()) {
+        if(autoCreateClassifiers != null && autoCreateClassifiers) {
             o = o.map(factory.createClassifierFunc());
         }
 
@@ -1813,7 +1809,7 @@ public class Layer<T> implements Persistable {
     private Subscription createSubscription(final Observer<Inference> sub) {
         return new Subscription() {
 
-            private Observer<Inference> observer = sub;
+            private final Observer<Inference> observer = sub;
 
             @Override
             public void unsubscribe() {
@@ -1837,18 +1833,18 @@ public class Layer<T> implements Persistable {
      * @return
      */
     private Observer<Inference> getDelegateSubscriber() {
-        return new Observer<Inference>() {
+        return new Observer<>() {
 
             @Override
             public void onCompleted() {
-                for(Observer<Inference> o : subscribers) {
+                for (Observer<Inference> o : subscribers) {
                     o.onCompleted();
                 }
             }
 
             @Override
             public void onError(Throwable e) {
-                for(Observer<Inference> o : subscribers) {
+                for (Observer<Inference> o : subscribers) {
                     o.onError(e);
                 }
             }
@@ -1856,7 +1852,7 @@ public class Layer<T> implements Persistable {
             @Override
             public void onNext(Inference i) {
                 currentInference = i;
-                for(Observer<Inference> o : subscribers) {
+                for (Observer<Inference> o : subscribers) {
                     o.onNext(i);
                 }
             }
@@ -1870,18 +1866,18 @@ public class Layer<T> implements Persistable {
      * @return
      */
     private Observer<Inference> getDelegateObserver() {
-        return new Observer<Inference>() {
+        return new Observer<>() {
 
             @Override
             public void onCompleted() {
-                for(Observer<Inference> o : observers) {
+                for (Observer<Inference> o : observers) {
                     o.onCompleted();
                 }
             }
 
             @Override
             public void onError(Throwable e) {
-                for(Observer<Inference> o : observers) {
+                for (Observer<Inference> o : observers) {
                     o.onError(e);
                     e.printStackTrace();
                 }
@@ -1890,7 +1886,7 @@ public class Layer<T> implements Persistable {
             @Override
             public void onNext(Inference i) {
                 currentInference = i;
-                for(Observer<Inference> o : observers) {
+                for (Observer<Inference> o : observers) {
                     o.onNext(i);
                 }
             }
@@ -1902,8 +1898,8 @@ public class Layer<T> implements Persistable {
      * during restart or deserialization.
      */
     private void clearSubscriberObserverLists() {
-        if(observers == null) observers = new ArrayList<Observer<Inference>>(); 
-        if(subscribers == null) subscribers = new ConcurrentLinkedQueue<Observer<Inference>>();
+        if(observers == null) observers = new ArrayList<>();
+        if(subscribers == null) subscribers = new ArrayDeque<>();
         subscribers.clear();
         userObservable = null;
     }
@@ -2292,15 +2288,15 @@ public class Layer<T> implements Persistable {
         //                   OBSERVABLE COMPONENT CREATION METHODS                  //
         //////////////////////////////////////////////////////////////////////////////
         public Func1<ManualInput, ManualInput> createSpatialFunc(final SpatialPooler sp) {
-            return new Func1<ManualInput, ManualInput>() {
+            return new Func1<>() {
 
                 int inputWidth = -1;
 
                 @Override
                 public ManualInput call(ManualInput t1) {
                     int[] sdr = t1.getSDR();
-                    if(sdr.length > 0 && ArrayUtils.isSparse(sdr)) {
-                        if(inputWidth == -1) {
+                    if (sdr.length > 0 && ArrayUtils.isSparse(sdr)) {
+                        if (inputWidth == -1) {
                             inputWidth = calculateInputWidth();
                         }
                         sdr = ArrayUtils.asDense(sdr, inputWidth);
@@ -2325,11 +2321,11 @@ public class Layer<T> implements Persistable {
         }
 
         public Func1<ManualInput, ManualInput> createClassifierFunc() {
-            return new Func1<ManualInput, ManualInput>() {
+            return new Func1<>() {
 
                 private Object bucketIdx;
                 private Object actValue;
-                Map<String, Object> inputMap = new HashMap<String, Object>() {
+                final Map<String, Object> inputMap = new HashMap<>() {
 
                     private static final long serialVersionUID = 1L;
 
@@ -2343,17 +2339,17 @@ public class Layer<T> implements Persistable {
                 public ManualInput call(ManualInput t1) {
                     Map<String, NamedTuple> ci = t1.getClassifierInput();
                     int recordNum = getRecordNum();
-                    for(String key : ci.keySet()) {
+                    for (String key : ci.keySet()) {
                         NamedTuple inputs = ci.get(key);
                         bucketIdx = inputs.get("bucketIdx");
                         actValue = inputs.get("inputValue");
 
-                        Classifier c = (Classifier)t1.getClassifiers().get(key);
+                        Classifier c = (Classifier) t1.getClassifiers().get(key);
 
                         // c will be null if no classifier was specified for this field in KEY.INFERRED_FIELDS map
-                        if(c != null) {
+                        if (c != null) {
                             Classification<Object> result = c.compute(recordNum, inputMap, t1.getSDR(), isLearn, true);
-                            t1.recordNum(recordNum).storeClassification((String)inputs.get("name"), result);
+                            t1.recordNum(recordNum).storeClassification((String) inputs.get("name"), result);
                         }
                     }
 
@@ -2363,21 +2359,21 @@ public class Layer<T> implements Persistable {
         }
 
         public Func1<ManualInput, ManualInput> createAnomalyFunc(final Anomaly an) {
-            return new Func1<ManualInput, ManualInput>() {
+            return new Func1<>() {
                 int isArrayInput = -1;
-                int cellsPerColumn = connections.getCellsPerColumn();
+                final int cellsPerColumn = connections.getCellsPerColumn();
 
                 @Override
                 public ManualInput call(ManualInput t1) {
-                    if((hasSP() && t1.getFeedForwardSparseActives() == null) || t1.getPreviousPredictiveCells() == null) {
+                    if ((hasSP() && t1.getFeedForwardSparseActives() == null) || t1.getPreviousPredictiveCells() == null) {
                         return t1.anomalyScore(1.0);
-                    }else if(!hasSP() && (isArrayInput == 1 || t1.getLayerInput().getClass().equals(int[].class))) {
+                    } else if (!hasSP() && (isArrayInput == 1 || t1.getLayerInput().getClass().equals(int[].class))) {
                         isArrayInput = 1;
-                        t1.feedForwardSparseActives((int[])t1.getLayerInput());
+                        t1.feedForwardSparseActives((int[]) t1.getLayerInput());
                     }
-                    
-                    return t1.anomalyScore(anomalyComputer.compute(t1.getFeedForwardSparseActives(), 
-                        SDR.cellsAsColumnIndices(t1.getPreviousPredictiveCells(), cellsPerColumn), 0, 0));
+
+                    return t1.anomalyScore(anomalyComputer.compute(t1.getFeedForwardSparseActives(),
+                            SDR.cellsAsColumnIndices(t1.getPreviousPredictiveCells(), cellsPerColumn), 0, 0));
                 }
             };
         }
@@ -2392,15 +2388,15 @@ public class Layer<T> implements Persistable {
         if(sensor != null) {
             // Recreate the Sensor and its underlying Stream
             Class<?> sensorKlass = sensor.getSensorClass();
-            if(sensorKlass.toString().indexOf("File") != -1) {
+            if(sensorKlass.toString().contains("File")) {
                 Object path = sensor.getSensorParams().get("PATH");
                 sensor = (HTMSensor<?>)Sensor.create(
                     FileSensor::create, SensorParams.create(Keys::path, "", path));
-            }else if(sensorKlass.toString().indexOf("Observ") != -1) {
+            }else if(sensorKlass.toString().contains("Observ")) {
                 Object supplierOfObservable = sensor.getSensorParams().get("ONSUB");
                 sensor = (HTMSensor<?>)Sensor.create(
                     ObservableSensor::create, SensorParams.create(Keys::obs, "", supplierOfObservable));
-            }else if(sensorKlass.toString().indexOf("URI") != -1) {
+            }else if(sensorKlass.toString().contains("URI")) {
                 Object url = sensor.getSensorParams().get("URI");
                 sensor = (HTMSensor<?>)Sensor.create(
                     URISensor::create, SensorParams.create(Keys::uri, "", url));

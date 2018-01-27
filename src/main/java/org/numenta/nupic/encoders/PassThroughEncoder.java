@@ -151,10 +151,10 @@ public class PassThroughEncoder<T> extends Encoder<T> {
         if (parentFieldName != null && parentFieldName.length() > 0 && LOGGER.isTraceEnabled())
             LOGGER.trace("Decoding Field: {}.{}", parentFieldName, this.name);
 
-        List<MinMax> ranges = new ArrayList<MinMax>();
+        List<MinMax> ranges = new ArrayList<>();
         ranges.add(new MinMax(0, 0));
         RangeList inner = new RangeList(ranges, "input");
-        Map<String, RangeList> fieldsDict = new HashMap<String, RangeList>();
+        Map<String, RangeList> fieldsDict = new HashMap<>();
         fieldsDict.put(fieldName, inner);
 
         return new DecodeResult(fieldsDict, Collections.singletonList(fieldName));

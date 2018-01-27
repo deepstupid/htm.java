@@ -49,7 +49,7 @@ public class GroupBy2<R extends Comparable<R>> implements Generator<Tuple> {
     private static final long serialVersionUID = 1L;
     
     /** stores the user inputted pairs */
-    private Pair<List<Object>, Function<Object, R>>[] entries;
+    private final Pair<List<Object>, Function<Object, R>>[] entries;
     
     /** stores the {@link GroupBy} {@link Generator}s created from the supplied lists */
     private List<GroupBy<Object, R>> generatorList;
@@ -137,9 +137,9 @@ public class GroupBy2<R extends Comparable<R>> implements Generator<Tuple> {
     @SuppressWarnings("unchecked")
     public void reset() {
         generatorList = new ArrayList<>();
-        
-        for(int i = 0;i < entries.length;i++) {
-            generatorList.add(GroupBy.of(entries[i].getFirst(), entries[i].getSecond()));
+
+        for (Pair<List<Object>, Function<Object, R>> entry : entries) {
+            generatorList.add(GroupBy.of(entry.getFirst(), entry.getSecond()));
         }
         
         numEntries = generatorList.size();

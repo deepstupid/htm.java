@@ -193,7 +193,7 @@ public class HeaderTest {
 
     private ValueList getTestHeaderOff() {
         return new ValueList() {
-            Tuple[] ta = new Tuple[] {
+            final Tuple[] ta = new Tuple[] {
                 new Tuple("timestamp", "consumption"),
                 new Tuple("datetime", "float"),
                 new Tuple("T"),
@@ -213,7 +213,7 @@ public class HeaderTest {
     
     private ValueList getTestHeaderSeq() {
         return new ValueList() {
-            Tuple[] ta = new Tuple[] {
+            final Tuple[] ta = new Tuple[] {
                 new Tuple("timestamp", "consumption"),
                 new Tuple("datetime", "float"),
                 new Tuple("T", "B", "S"),
@@ -233,7 +233,7 @@ public class HeaderTest {
     
     private ValueList getTestHeaderReset() {
         return new ValueList() {
-            Tuple[] ta = new Tuple[] {
+            final Tuple[] ta = new Tuple[] {
                 new Tuple("timestamp", "consumption"),
                 new Tuple("datetime", "float"),
                 new Tuple("T", "B", "R"),
@@ -253,7 +253,7 @@ public class HeaderTest {
     
     private ValueList getTestHeaderLearn() {
         return new ValueList() {
-            Tuple[] ta = new Tuple[] {
+            final Tuple[] ta = new Tuple[] {
                 new Tuple("timestamp", "consumption"),
                 new Tuple("datetime", "float"),
                 new Tuple("T", "B", "L"),

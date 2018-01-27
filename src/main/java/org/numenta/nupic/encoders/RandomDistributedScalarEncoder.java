@@ -193,7 +193,7 @@ public class RandomDistributedScalarEncoder extends Encoder<Double> {
 		 * This HashMap maps a bucket index into its bit representation We
 		 * initialize the HashMap with a single bucket with index 0
 		 */
-		bucketMap = new ConcurrentHashMap<Integer, List<Integer>>();
+		bucketMap = new ConcurrentHashMap<>();
 		// generate the random permutation
 		int[] t = ArrayUtils.range(0, getN());
 		rng.shuffle(t);
@@ -251,7 +251,7 @@ public class RandomDistributedScalarEncoder extends Encoder<Double> {
 	 */
 	public List<Integer> newRepresentation(int index, int newIndex)
 			throws IllegalStateException {
-		List<Integer> newRepresentation = new ArrayList<Integer>(
+		List<Integer> newRepresentation = new ArrayList<>(
 				bucketMap.get(index));
 
 		/*
@@ -527,8 +527,8 @@ public class RandomDistributedScalarEncoder extends Encoder<Double> {
 			setName("[" + getResolution() + "]");
 		name = getName();
 
-		return new ArrayList<Tuple>(Collections.singletonList(new Tuple(name,
-                0)));
+		return new ArrayList<>(Collections.singletonList(new Tuple(name,
+				0)));
 	}
 
 	/**
@@ -704,7 +704,7 @@ public class RandomDistributedScalarEncoder extends Encoder<Double> {
 		}
 
 		public RandomDistributedScalarEncoder.Builder setOffset(double offset) {
-			this.offset = Double.valueOf(offset);
+			this.offset = offset;
 			return this;
 		}
 
@@ -763,6 +763,6 @@ public class RandomDistributedScalarEncoder extends Encoder<Double> {
 	 */
 	@Override
 	public Set<FieldMetaType> getDecoderOutputFieldTypes() {
-		return new LinkedHashSet<FieldMetaType>(Arrays.asList(FieldMetaType.FLOAT, FieldMetaType.INTEGER));
+		return new LinkedHashSet<>(Arrays.asList(FieldMetaType.FLOAT, FieldMetaType.INTEGER));
 	}
 }

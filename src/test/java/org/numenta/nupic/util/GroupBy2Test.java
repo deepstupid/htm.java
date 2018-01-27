@@ -35,7 +35,7 @@ import chaschev.lang.Pair;
 
 public class GroupBy2Test {
     
-    private List<Slot<?>> none = Collections.singletonList(Slot.empty());
+    private final List<Slot<?>> none = Collections.singletonList(Slot.empty());
     
     public List<Integer> list(int i) {
         return Collections.singletonList(i);

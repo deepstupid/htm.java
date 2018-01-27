@@ -57,7 +57,7 @@ public class FileSensor implements Sensor<File>, Serializable {
     private static final boolean DEFAULT_PARALLEL_MODE = false;
     
     private transient BatchedCsvStream<String[]> stream;
-    private SensorParams params;
+    private final SensorParams params;
     
     /**
      * Private constructor. Instances of this class should be obtained 
@@ -74,8 +74,8 @@ public class FileSensor implements Sensor<File>, Serializable {
         
         String pathStr = (String)params.get("PATH");
 
-        if(pathStr.indexOf("!") != -1) {
-            pathStr = pathStr.indexOf("file:") != -1 ? pathStr.substring("file:".length()) :
+        if(pathStr.contains("!")) {
+            pathStr = pathStr.contains("file:") ? pathStr.substring("file:".length()) :
                 pathStr;
             
             Stream<String> stream = getJarEntryStream(pathStr);

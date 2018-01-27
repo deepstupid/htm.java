@@ -39,7 +39,7 @@ public class DistalDendrite extends Segment implements Persistable {
     /** keep it simple */
     private static final long serialVersionUID = 1L;
     
-    private Cell cell;
+    private final Cell cell;
     
     private long lastUsedIteration;
     

@@ -37,7 +37,7 @@ public class FastConnectionsMatrix extends AbstractSparseBinaryMatrix implements
     /** keep it simple */
     private static final long serialVersionUID = 1L;
     
-    private TIntHashSet[] columns;
+    private final TIntHashSet[] columns;
    
     /**
      * @param dimensions

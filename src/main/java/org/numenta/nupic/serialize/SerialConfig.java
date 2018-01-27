@@ -145,9 +145,9 @@ public class SerialConfig implements Serializable {
     /** Default checkpoint Network file name for the {@link CheckPointer#checkPoint(rx.Observer)} method. */
     private static final String CHECKPOINT_FILE = "Network_Checkpoint_";
     
-    private String fileName;
-    private String fileDir;
-    private List<Class<? extends Persistable>> registry;
+    private final String fileName;
+    private final String fileDir;
+    private final List<Class<? extends Persistable>> registry;
     private StandardOpenOption[] options = PRODUCTION_OPTIONS;
     private StandardOpenOption[] checkPointOptions = CHECKPOINT_OPTIONS;
     

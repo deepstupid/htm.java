@@ -209,7 +209,7 @@ public class ManualInput implements Inference {
     @Override
     public Map<String, NamedTuple> getClassifierInput() {
         if(classifierInput == null) {
-            classifierInput = new HashMap<String, NamedTuple>();
+            classifierInput = new HashMap<>(1);
         }
         return classifierInput;
     }
@@ -320,20 +320,20 @@ public class ManualInput implements Inference {
      */
     ManualInput copy() {
         ManualInput retVal = new ManualInput();
-        retVal.classifierInput = new HashMap<String, NamedTuple>(this.classifierInput);
+        retVal.classifierInput = new HashMap<>(this.classifierInput);
         retVal.classifiers = new NamedTuple(this.classifiers.keys(), this.classifiers.values().toArray());
         retVal.layerInput = this.layerInput;
         retVal.sdr = Arrays.copyOf(this.sdr, this.sdr.length);
         retVal.encoding = Arrays.copyOf(this.encoding, this.encoding.length);
         retVal.feedForwardActiveColumns = Arrays.copyOf(this.feedForwardActiveColumns, this.feedForwardActiveColumns.length);
         retVal.feedForwardSparseActives = Arrays.copyOf(this.feedForwardSparseActives, this.feedForwardSparseActives.length);
-        retVal.previousPredictiveCells = new LinkedHashSet<Cell>(this.previousPredictiveCells);
-        retVal.predictiveCells = new LinkedHashSet<Cell>(this.predictiveCells);
+        retVal.previousPredictiveCells = new LinkedHashSet<>(this.previousPredictiveCells);
+        retVal.predictiveCells = new LinkedHashSet<>(this.predictiveCells);
         retVal.classification = new HashMap<>(this.classification);
         retVal.anomalyScore = this.anomalyScore;
         retVal.customObject = this.customObject;
         retVal.computeCycle = this.computeCycle;
-        retVal.activeCells = new LinkedHashSet<Cell>(this.activeCells);
+        retVal.activeCells = new LinkedHashSet<>(this.activeCells);
         
         return retVal;
     }
@@ -347,9 +347,7 @@ public class ManualInput implements Inference {
     @Override
     public Classification<Object> getClassification(String fieldName) {
 
-        if(classification == null)
-            return null;
-        return classification.get(fieldName);
+        return classification == null ? null : classification.get(fieldName);
     }
     
     /**
@@ -362,7 +360,7 @@ public class ManualInput implements Inference {
      */
     ManualInput storeClassification(String fieldName, Classification<Object> classification) {
         if(this.classification == null) {
-            this.classification = new HashMap<String, Classification<Object>>();
+            this.classification = new HashMap<>(1);
         }
         this.classification.put(fieldName, classification);
         return this;

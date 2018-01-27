@@ -89,7 +89,7 @@ public class ComputeCycleTest {
         //cc = tm.compute(cn, activeColumnsIndices, true);
         
         Function<Column, Column> identity = Function.identity();
-        Function<DistalDendrite, Column> segToCol = segment -> segment.getParentCell().getColumn(); 
+        Function<DistalDendrite, Column> segToCol = segment -> segment.getParentCell().column;
         
         List<Column> activeColumns = Arrays.stream(activeColumnsIndices)
                 .sorted()
@@ -110,7 +110,7 @@ public class ComputeCycleTest {
             List<DistalDendrite> sos = columnData.matchingSegments();
             assertEquals(1, sos.size());
             assertEquals(0, sos.get(0).getIndex());
-            assertEquals(4, sos.get(0).getParentCell().getIndex());
+            assertEquals(4, sos.get(0).getParentCell().index);
             
             assertTrue(columnData.column().equals(cn.getColumn(4)));
         }

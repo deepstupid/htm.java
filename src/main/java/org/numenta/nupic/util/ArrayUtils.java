@@ -48,25 +48,28 @@ import java.util.stream.IntStream;
  */
 public class ArrayUtils {
     /** Empty array constant */
-    private static int[] EMPTY_ARRAY = new int[0];
+    private static final int[] EMPTY_ARRAY = new int[0];
     
-    public static Condition<Integer> WHERE_1 = new Condition.Adapter<Integer>() {
+    public static final Condition<Integer> WHERE_1 = new Condition.Adapter<>() {
         public boolean eval(int i) {
             return i == 1;
         }
     };
-    public static Condition<Double> GREATER_THAN_0 = new Condition.Adapter<Double>() {
+    public static final Condition<Double> GREATER_THAN_0 = new Condition.Adapter<>() {
         public boolean eval(double i) {
             return i > 0;
         }
     };
-    public static Condition<Integer> INT_GREATER_THAN_0 = new Condition.Adapter<Integer>() {
+    public static final Condition<Integer> INT_GREATER_THAN_0 = new Condition.Adapter<>() {
         public boolean eval(int i) {
             return i > 0;
         }
     };
-    public static Condition<Integer> GREATER_OR_EQUAL_0 = new Condition.Adapter<Integer>() {
-        @Override public boolean eval(int n) { return n >= 0; }
+    public static final Condition<Integer> GREATER_OR_EQUAL_0 = new Condition.Adapter<>() {
+        @Override
+        public boolean eval(int n) {
+            return n >= 0;
+        }
     };
     
     
@@ -78,8 +81,8 @@ public class ArrayUtils {
      */
     public static int product(int[] dims) {
         int retVal = 1;
-        for(int i = 0;i < dims.length;i++) {
-            retVal *= dims[i];
+        for (int dim : dims) {
+            retVal *= dim;
         }
         
         return retVal;
@@ -141,8 +144,8 @@ public class ArrayUtils {
      */
     public static boolean contains(int[] match, List<int[]> container) {
         int len = container.size();
-        for (int i = 0; i < len; i++) {
-            if (Arrays.equals(match, container.get(i))) {
+        for (int[] aContainer : container) {
+            if (Arrays.equals(match, aContainer)) {
                 return true;
             }
         }
@@ -331,9 +334,9 @@ public class ArrayUtils {
         int c = array[0].length;
         int[] result = new int[r * c];
         int index = 0;
-        for (int i = 0; i < r; i++) {
+        for (int[] anArray : array) {
             for (int j = 0; j < c; j++) {
-                result[index] = array[i][j];
+                result[index] = anArray[j];
                 index++;
             }
         }
@@ -363,10 +366,10 @@ public class ArrayUtils {
         int[][] result = new int[(r * c) / n][n];
         int ii = 0;
         int jj = 0;
-        
-        for (int i = 0; i < r; i++) {
+
+        for (int[] anArray : array) {
             for (int j = 0; j < c; j++) {
-                result[ii][jj] = array[i][j];
+                result[ii][jj] = anArray[j];
                 jj++;
                 if (jj == n) {
                     jj = 0;
@@ -444,9 +447,9 @@ public class ArrayUtils {
        double[] B = new double[A.length * A[0].length];
        int index = 0;
 
-       for(int i = 0;i<A.length;i++){
-           for(int j = 0;j<A[0].length;j++){
-               B[index++] = A[i][j];
+       for (double[] aA : A) {
+           for (int j = 0; j < A[0].length; j++) {
+               B[index++] = aA[j];
            }
        }
        return B;
@@ -462,9 +465,9 @@ public class ArrayUtils {
        int[] B = new int[A.length * A[0].length];
        int index = 0;
 
-       for(int i = 0;i < A.length;i++){
-           for(int j = 0;j < A[0].length;j++){
-               B[index++] = A[i][j];
+       for (int[] aA : A) {
+           for (int j = 0; j < A[0].length; j++) {
+               B[index++] = aA[j];
            }
        }
        return B;
@@ -498,7 +501,7 @@ public class ArrayUtils {
      * @return a list of tuples
      */
     public static List<Tuple> zip(List<?> arg1, List<?> arg2) {
-        List<Tuple> tuples = new ArrayList<Tuple>();
+        List<Tuple> tuples = new ArrayList<>();
         int len = Math.min(arg1.size(), arg2.size());
         for (int i = 0; i < len; i++) {
             tuples.add(new Tuple(arg1.get(i), arg2.get(i)));
@@ -516,7 +519,7 @@ public class ArrayUtils {
      * @return a list of tuples
      */
     public static List<Tuple> zip(List<?>... args) {
-        List<Tuple> tuples = new ArrayList<Tuple>();
+        List<Tuple> tuples = new ArrayList<>();
         
         int min = Arrays.stream(args).mapToInt(List::size).min().orElse(0);
         
@@ -541,7 +544,7 @@ public class ArrayUtils {
      * @return a list of tuples
      */
     public static List<Tuple> zip(int[]... args) {
-        List<Tuple> tuples = new ArrayList<Tuple>();
+        List<Tuple> tuples = new ArrayList<>();
         
         int min = Arrays.stream(args).mapToInt(i -> i.length).min().orElse(0);
         
@@ -566,7 +569,7 @@ public class ArrayUtils {
      * @return a list of tuples
      */
     public static List<Tuple> zip(Object[]... args) {
-        List<Tuple> tuples = new ArrayList<Tuple>();
+        List<Tuple> tuples = new ArrayList<>();
         
         int min = Integer.MAX_VALUE;
         for(Object[] oa : args) {
@@ -717,12 +720,12 @@ public class ArrayUtils {
      */
     public static int[] retainLogicalAnd(int[] values, Condition<?>[] conditions) {
         TIntArrayList l = new TIntArrayList();
-        for (int i = 0; i < values.length; i++) {
+        for (int value : values) {
             boolean result = true;
             for (int j = 0; j < conditions.length && result; j++) {
-                result &= conditions[j].eval(values[i]);
+                result &= conditions[j].eval(value);
             }
-            if (result) l.add(values[i]);
+            if (result) l.add(value);
         }
         return l.toArray();
     }
@@ -737,12 +740,12 @@ public class ArrayUtils {
      */
     public static double[] retainLogicalAnd(double[] values, Condition<?>[] conditions) {
         TDoubleArrayList l = new TDoubleArrayList();
-        for (int i = 0; i < values.length; i++) {
+        for (double value : values) {
             boolean result = true;
             for (int j = 0; j < conditions.length && result; j++) {
-                result &= conditions[j].eval(values[i]);
+                result &= conditions[j].eval(value);
             }
-            if (result) l.add(values[i]);
+            if (result) l.add(value);
         }
         return l.toArray();
     }
@@ -971,8 +974,8 @@ public class ArrayUtils {
      */
     public static double average(int[] arr) {
         int sum = 0;
-        for (int i = 0; i < arr.length; i++) {
-            sum += arr[i];
+        for (int anArr : arr) {
+            sum += anArr;
         }
         return sum / (double)arr.length;
     }
@@ -984,8 +987,8 @@ public class ArrayUtils {
      */
     public static double average(double[] arr) {
         double sum = 0;
-        for (int i = 0; i < arr.length; i++) {
-            sum += arr[i];
+        for (double anArr : arr) {
+            sum += anArr;
         }
         return sum / arr.length;
     }
@@ -1000,8 +1003,8 @@ public class ArrayUtils {
         double accum = 0.0;
         double dev = 0.0;
         double accum2 = 0.0;
-        for (int i = 0; i < arr.length; i++) {
-            dev = arr[i] - mean;
+        for (double anArr : arr) {
+            dev = anArr - mean;
             accum += dev * dev;
             accum2 += dev;
         }
@@ -1089,8 +1092,8 @@ public class ArrayUtils {
      */
     public static int sum(int[] array) {
         int sum = 0;
-        for (int i = 0; i < array.length; i++) {
-            sum += array[i];
+        for (int anArray : array) {
+            sum += anArray;
         }
         return sum;
     }
@@ -1122,8 +1125,8 @@ public class ArrayUtils {
      */
     public static double sum(double[] array) {
         double sum = 0;
-        for (int i = 0; i < array.length; i++) {
-            sum += array[i];
+        for (double anArray : array) {
+            sum += anArray;
         }
         return sum;
     }
@@ -1303,7 +1306,7 @@ public class ArrayUtils {
     private static class CoordinateAssembler {
         final private int[] position;
         final private List<int[]> dimensions;
-        final List<int[]> result = new ArrayList<int[]>();
+        final List<int[]> result = new ArrayList<>();
 
         public static List<int[]> assemble(List<int[]> dimensions) {
             CoordinateAssembler assembler = new CoordinateAssembler(dimensions);
@@ -1324,8 +1327,8 @@ public class ArrayUtils {
             } else {// inductive condition
                 int index = dimensions.size() - level;
                 int[] currentDimension = dimensions.get(index);
-                for (int i = 0; i < currentDimension.length; i++) {
-                    position[index] = currentDimension[i];
+                for (int aCurrentDimension : currentDimension) {
+                    position[index] = aCurrentDimension;
                     process(level - 1);
                 }
             }
@@ -1354,8 +1357,8 @@ public class ArrayUtils {
      * @param setTo   the value to set at the specified indexes.
      */
     public static void setIndexesTo(double[] values, int[] indexes, double setTo) {
-        for (int i = 0; i < indexes.length; i++) {
-            values[indexes[i]] = setTo;
+        for (int indexe : indexes) {
+            values[indexe] = setTo;
         }
     }
 
@@ -1368,8 +1371,8 @@ public class ArrayUtils {
      * @param setTo   the value to set at the specified indexes.
      */
     public static void setIndexesTo(int[] values, int[] indexes, int setTo) {
-        for (int i = 0; i < indexes.length; i++) {
-            values[indexes[i]] = setTo;
+        for (int indexe : indexes) {
+            values[indexe] = setTo;
         }
     }
 
@@ -1507,8 +1510,8 @@ public class ArrayUtils {
      */
     public static int valueGreaterCount(double compare, double[] array) {
         int count = 0;
-        for (int i = 0; i < array.length; i++) {
-            if (array[i] > compare) {
+        for (double anArray : array) {
+            if (anArray > compare) {
                 count++;
             }
         }
@@ -1527,8 +1530,8 @@ public class ArrayUtils {
      */
     public static int valueGreaterOrEqualCount(double compare, double[] array) {
         int count = 0;
-        for (int i = 0; i < array.length; i++) {
-            if (array[i] >= compare) {
+        for (double anArray : array) {
+            if (anArray >= compare) {
                 count++;
             }
         }
@@ -1547,8 +1550,8 @@ public class ArrayUtils {
      */
     public static int valueGreaterCountAtIndex(double compare, double[] array, int[] indexes) {
         int count = 0;
-        for (int i = 0; i < indexes.length; i++) {
-            if (array[indexes[i]] > compare) {
+        for (int indexe : indexes) {
+            if (array[indexe] > compare) {
                 count++;
             }
         }
@@ -1599,8 +1602,8 @@ public class ArrayUtils {
      * @param values the values to raise
      */
     public static void raiseValuesBy(double amount, double[] values, int[] indexesToRaise) {
-        for (int i = 0; i < indexesToRaise.length; i++) {
-            values[indexesToRaise[i]] += amount;
+        for (int anIndexesToRaise : indexesToRaise) {
+            values[anIndexesToRaise] += amount;
         }
     }
 
@@ -1623,8 +1626,8 @@ public class ArrayUtils {
      * @param values
      */
     public static void raiseValuesBy(int amount, int[] indexes, int[] values) {
-        for (int i = 0; i < indexes.length; i++) {
-            values[indexes[i]] += amount;
+        for (int indexe : indexes) {
+            values[indexe] += amount;
         }
     }
 
@@ -1897,7 +1900,7 @@ public class ArrayUtils {
     public static int[] toPrimitive(Integer[] ints) {
         int[] retVal = new int[ints.length];
         for(int i = 0;i < retVal.length;i++) {
-            retVal[i] = ints[i].intValue();
+            retVal[i] = ints[i];
         }
         return retVal;
     }
@@ -1912,7 +1915,7 @@ public class ArrayUtils {
     public static double[] toPrimitive(Double[] doubs) {
         double[] retVal = new double[doubs.length];
         for(int i = 0;i < retVal.length;i++) {
-            retVal[i] = doubs[i].doubleValue();
+            retVal[i] = doubs[i];
         }
         return retVal;
     }
@@ -1941,9 +1944,9 @@ public class ArrayUtils {
      */
     public static int max(int[] array) {
         int max = Integer.MIN_VALUE;
-        for (int i = 0; i < array.length; i++) {
-            if (array[i] > max) {
-                max = array[i];
+        for (int anArray : array) {
+            if (anArray > max) {
+                max = anArray;
             }
         }
         return max;
@@ -1956,9 +1959,9 @@ public class ArrayUtils {
      */
     public static double max(double[] array) {
         double max = Double.MIN_VALUE;
-        for (int i = 0; i < array.length; i++) {
-            if (array[i] > max) {
-                max = array[i];
+        for (double anArray : array) {
+            if (anArray > max) {
+                max = anArray;
             }
         }
         return max;
@@ -2019,9 +2022,9 @@ public class ArrayUtils {
      */
     public static int min(int[] array) {
         int min = Integer.MAX_VALUE;
-        for (int i = 0; i < array.length; i++) {
-            if (array[i] < min) {
-                min = array[i];
+        for (int anArray : array) {
+            if (anArray < min) {
+                min = anArray;
             }
         }
         return min;
@@ -2034,9 +2037,9 @@ public class ArrayUtils {
      */
     public static double min(double[] array) {
         double min = Double.MAX_VALUE;
-        for (int i = 0; i < array.length; i++) {
-            if (array[i] < min) {
-                min = array[i];
+        for (double anArray : array) {
+            if (anArray < min) {
+                min = anArray;
             }
         }
         return min;
@@ -2137,8 +2140,8 @@ public class ArrayUtils {
      */
     public static Object getValue(Object array, int... indexes) {
         Object slice = array;
-        for(int i = 0;i < indexes.length;i++) {
-            slice = Array.get(slice, indexes[i]);
+        for (int indexe : indexes) {
+            slice = Array.get(slice, indexe);
         }
         
         return slice;

@@ -35,7 +35,7 @@ public class FlatArrayMatrix<T> extends AbstractFlatMatrix<T> implements Persist
     /** keep it simple */
     private static final long serialVersionUID = 1L;
     
-    private T[] data;
+    private final T[] data;
 
     public FlatArrayMatrix(int[] dimensions) {
         this(dimensions, false);

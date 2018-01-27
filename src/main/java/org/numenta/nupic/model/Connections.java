@@ -73,14 +73,14 @@ public class Connections implements Persistable {
     private int numColumns = 1; //product of column dimensions
 
     //Extra parameter settings
-    private double synPermMin = 0.0;
-    private double synPermMax = 1.0;
+    private final double synPermMin = 0.0;
+    private final double synPermMax = 1.0;
     private double synPermTrimThreshold = synPermActiveInc / 2.0;
     private int updatePeriod = 50;
-    private double initConnectedPct = 0.5;
+    private final double initConnectedPct = 0.5;
 
     //Internal state
-    private double version = 1.0;
+    private final double version = 1.0;
     public int spIterationNum = 0;
     public int spIterationLearnNum = 0;
     public long tmIteration = 0;
@@ -138,9 +138,9 @@ public class Connections implements Persistable {
 
     /////////////////////////////////////// Temporal Memory Vars ///////////////////////////////////////////
 
-    protected Set<Cell> activeCells = new LinkedHashSet<Cell>();
-    protected Set<Cell> winnerCells = new LinkedHashSet<Cell>();
-    protected Set<Cell> predictiveCells = new LinkedHashSet<>();
+    protected Set<Cell> activeCells = new LinkedHashSet<>();
+    protected Set<Cell> winnerCells = new LinkedHashSet<>();
+    protected final Set<Cell> predictiveCells = new LinkedHashSet<>();
     protected List<DistalDendrite> activeSegments = new ArrayList<>();
     protected List<DistalDendrite> matchingSegments = new ArrayList<>();
     
@@ -215,9 +215,9 @@ public class Connections implements Persistable {
     /** Total number of synapses */
     protected long numSynapses;
     /** Used for recycling {@link DistalDendrite} indexes */
-    protected TIntArrayList freeFlatIdxs = new TIntArrayList();
+    protected final TIntArrayList freeFlatIdxs = new TIntArrayList();
     /** Indexed segments by their global index (can contain nulls) */
-    protected List<DistalDendrite> segmentForFlatIdx = new ArrayList<>();
+    protected final List<DistalDendrite> segmentForFlatIdx = new ArrayList<>();
     /** Stores each cycle's most recent activity */
     public Activity lastActivity;
     /** The default random number seed */
@@ -226,14 +226,14 @@ public class Connections implements Persistable {
     public Random random = new UniversalRandom(seed);
     
     /** Sorting Lambda used for sorting active and matching segments */
-    public Comparator<DistalDendrite> segmentPositionSortKey = (Comparator<DistalDendrite> & Serializable)(s1,s2) -> {
-        double c1 = s1.getParentCell().getIndex() + s1.getOrdinal() / (double)nextSegmentOrdinal;
-        double c2 = s2.getParentCell().getIndex() + s2.getOrdinal() / (double)nextSegmentOrdinal;
-        return c1 == c2 ? 0 : c1 > c2 ? 1 : -1;
+    public final Comparator<DistalDendrite> segmentPositionSortKey = (Comparator<DistalDendrite> & Serializable)(s1, s2) -> {
+        double c1 = s1.getParentCell().index + s1.getOrdinal() / (double)nextSegmentOrdinal;
+        double c2 = s2.getParentCell().index + s2.getOrdinal() / (double)nextSegmentOrdinal;
+        return Double.compare(c1, c2);
     };
 
     /** Sorting Lambda used for SpatialPooler inhibition */
-    public Comparator<Pair<Integer, Double>> inhibitionComparator = (Comparator<Pair<Integer, Double>> & Serializable)
+    public final Comparator<Pair<Integer, Double>> inhibitionComparator = (Comparator<Pair<Integer, Double>> & Serializable)
         (p1, p2) -> { 
             int p1key = p1.getFirst();
             int p2key = p2.getFirst();
@@ -363,9 +363,9 @@ public class Connections implements Persistable {
      * @return
      */
     public LinkedHashSet<Cell> getCellSet(int... cellIndexes) {
-        LinkedHashSet<Cell> retVal = new LinkedHashSet<Cell>(cellIndexes.length);
-        for(int i = 0;i < cellIndexes.length;i++) {
-            retVal.add(cells[cellIndexes[i]]);
+        LinkedHashSet<Cell> retVal = new LinkedHashSet<>(cellIndexes.length);
+        for (int cellIndexe : cellIndexes) {
+            retVal.add(cells[cellIndexe]);
         }
         return retVal;
     }
@@ -1213,8 +1213,8 @@ public class Connections implements Persistable {
     	/** default serial */
         private static final long serialVersionUID = 1L;
         
-        public int[] numActiveConnected;
-        public int[] numActivePotential;
+        public final int[] numActiveConnected;
+        public final int[] numActivePotential;
         
         public Activity(int[] numConnected, int[] numPotential) {
             this.numActiveConnected = numConnected;
@@ -1412,13 +1412,13 @@ public class Connections implements Persistable {
         }
 
         if(segments == null) {
-            segments = new LinkedHashMap<Cell, List<DistalDendrite>>();
+            segments = new LinkedHashMap<>();
         }
 
         List<DistalDendrite> retVal = null;
         if((retVal = segments.get(cell)) == null) {
             if(!doLazyCreate) return Collections.emptyList();
-            segments.put(cell, retVal = new ArrayList<DistalDendrite>());
+            segments.put(cell, retVal = new ArrayList<>());
         }
 
         return retVal;
@@ -1440,7 +1440,7 @@ public class Connections implements Persistable {
      * @return  the owning column's index
      */
     public int columnIndexForSegment(DistalDendrite segment) {
-        return segment.getParentCell().getIndex() / cellsPerColumn;
+        return segment.getParentCell().index / cellsPerColumn;
     }
     
     /**
@@ -1643,12 +1643,12 @@ public class Connections implements Persistable {
         }
 
         if(distalSynapses == null) {
-            distalSynapses = new LinkedHashMap<Segment, List<Synapse>>();
+            distalSynapses = new LinkedHashMap<>();
         }
 
         List<Synapse> retVal = null;
         if((retVal = distalSynapses.get(segment)) == null) {
-            distalSynapses.put(segment, retVal = new ArrayList<Synapse>());
+            distalSynapses.put(segment, retVal = new ArrayList<>());
         }
 
         return retVal;
@@ -1666,12 +1666,12 @@ public class Connections implements Persistable {
         }
 
         if(proximalSynapses == null) {
-            proximalSynapses = new LinkedHashMap<Segment, List<Synapse>>();
+            proximalSynapses = new LinkedHashMap<>();
         }
 
         List<Synapse> retVal = null;
         if((retVal = proximalSynapses.get(segment)) == null) {
-            proximalSynapses.put(segment, retVal = new ArrayList<Synapse>());
+            proximalSynapses.put(segment, retVal = new ArrayList<>());
         }
 
         return retVal;
@@ -2028,9 +2028,9 @@ public class Connections implements Persistable {
      * @return
      */
     public static List<Integer> asCellIndexes(Collection<Cell> cells) {
-        List<Integer> ints = new ArrayList<Integer>();
+        List<Integer> ints = new ArrayList<>();
         for(Cell cell : cells) {
-            ints.add(cell.getIndex());
+            ints.add(cell.index);
         }
 
         return ints;
@@ -2044,9 +2044,9 @@ public class Connections implements Persistable {
      * @return
      */
     public static List<Integer> asColumnIndexes(Collection<Column> columns) {
-        List<Integer> ints = new ArrayList<Integer>();
+        List<Integer> ints = new ArrayList<>();
         for(Column col : columns) {
-            ints.add(col.getIndex());
+            ints.add(col.index);
         }
 
         return ints;
@@ -2058,7 +2058,7 @@ public class Connections implements Persistable {
      * @return	the specified list of cells
      */
     public List<Cell> asCellObjects(Collection<Integer> cells) {
-        List<Cell> objs = new ArrayList<Cell>();
+        List<Cell> objs = new ArrayList<>();
         for(int i : cells) {
             objs.add(this.cells[i]);
         }
@@ -2071,7 +2071,7 @@ public class Connections implements Persistable {
      * @return		the specified list of columns
      */
     public List<Column> asColumnObjects(Collection<Integer> cols) {
-        List<Column> objs = new ArrayList<Column>();
+        List<Column> objs = new ArrayList<>();
         for(int i : cols) {
             objs.add(this.memory.getObject(i));
         }
@@ -2086,9 +2086,9 @@ public class Connections implements Persistable {
      * @return				a set view of the specified columns
      */
     public LinkedHashSet<Column> getColumnSet(int[] indexes) {
-        LinkedHashSet<Column> retVal = new LinkedHashSet<Column>();
-        for(int i = 0;i < indexes.length;i++) {
-            retVal.add(memory.getObject(indexes[i]));
+        LinkedHashSet<Column> retVal = new LinkedHashSet<>();
+        for (int indexe : indexes) {
+            retVal.add(memory.getObject(indexe));
         }
         return retVal;
     }
@@ -2101,9 +2101,9 @@ public class Connections implements Persistable {
      * @return				a List view of the specified columns
      */
     public List<Column> getColumnList(int[] indexes) {
-        List<Column> retVal = new ArrayList<Column>();
-        for(int i = 0;i < indexes.length;i++) {
-            retVal.add(memory.getObject(indexes[i]));
+        List<Column> retVal = new ArrayList<>();
+        for (int indexe : indexes) {
+            retVal.add(memory.getObject(indexe));
         }
         return retVal;
     }

@@ -69,9 +69,9 @@ public class GroupBy<T, R> implements Generator<Pair<T, R>>, PeekableIterator<Pa
     /** serial version */
     private static final long serialVersionUID = 1L;
     
-    private List<T> iter;
-    private Function<T, R> fn;
-    private Generator<Integer> range;
+    private final List<T> iter;
+    private final Function<T, R> fn;
+    private final Generator<Integer> range;
     private Pair<T, R> next;
     
     
@@ -90,7 +90,7 @@ public class GroupBy<T, R> implements Generator<Pair<T, R>>, PeekableIterator<Pa
         
         if(range.hasNext()) {
             T t = iter.get(range.next());
-            next = new Pair<T, R>(t, fn.apply(t));
+            next = new Pair<>(t, fn.apply(t));
         }
     }
     
@@ -117,7 +117,7 @@ public class GroupBy<T, R> implements Generator<Pair<T, R>>, PeekableIterator<Pa
     public Pair<T, R> next() {
         T t = range.hasNext() ? iter.get(range.next()) : null;
         Pair<T, R> ret = next;
-        next = t != null ? new Pair<T, R>(t, fn.apply(t)) : null;
+        next = t != null ? new Pair<>(t, fn.apply(t)) : null;
         return ret;
     }
     
@@ -132,6 +132,6 @@ public class GroupBy<T, R> implements Generator<Pair<T, R>>, PeekableIterator<Pa
      * @return
      */
     public static <T, R> GroupBy<T, R> of(List<T> l, Function<T, R> fn) {
-        return new GroupBy<T, R>(l, fn);
+        return new GroupBy<>(l, fn);
     }
  }

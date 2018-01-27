@@ -343,8 +343,8 @@ public class BatchedCsvStream<T> implements MetaStream<T>, Serializable {
     //////////////////////////////////////////////////////////////
     private static final transient Logger LOGGER = LoggerFactory.getLogger(BatchedCsvStream.class);
     
-    private Iterator<String[]> it;
-    private int fence;
+    private final Iterator<String[]> it;
+    private final int fence;
     private boolean isBatchOp;
     private boolean isTerminal;
     private boolean isArrayType;
@@ -490,9 +490,10 @@ public class BatchedCsvStream<T> implements MetaStream<T>, Serializable {
      * @return
      */
     private Iterator<String[]> getSequenceIterator(final Iterator<String[]> toWrap) {
-        return new Iterator<String[]>() {
-            private Iterator<String[]> delegate = toWrap;
+        return new Iterator<>() {
+            private final Iterator<String[]> delegate = toWrap;
             private int seq = 0;
+
             @Override
             public boolean hasNext() {
                 return delegate.hasNext();
@@ -505,10 +506,10 @@ public class BatchedCsvStream<T> implements MetaStream<T>, Serializable {
                 String[] retVal = new String[value.length + 1];
                 System.arraycopy(value, 0, retVal, 1, value.length);
                 retVal[0] = String.valueOf(seq++);
-                
+
                 return retVal;
             }
-            
+
         };
     }
     
@@ -525,9 +526,10 @@ public class BatchedCsvStream<T> implements MetaStream<T>, Serializable {
      * @return
      */
     private Iterator<String[]> getArraySequenceIterator(final Iterator<String[]> toWrap) {
-        return new Iterator<String[]>() {
-            private Iterator<String[]> delegate = toWrap;
+        return new Iterator<>() {
+            private final Iterator<String[]> delegate = toWrap;
             private int seq = 0;
+
             @Override
             public boolean hasNext() {
                 return delegate.hasNext();
@@ -540,10 +542,10 @@ public class BatchedCsvStream<T> implements MetaStream<T>, Serializable {
                 String[] retVal = new String[2];
                 retVal[0] = String.valueOf(seq++);
                 retVal[1] = Arrays.toString(value).trim();
-                
+
                 return retVal;
             }
-            
+
         };
     }
 

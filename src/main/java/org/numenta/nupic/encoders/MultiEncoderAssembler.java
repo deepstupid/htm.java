@@ -33,7 +33,7 @@ public class MultiEncoderAssembler {
         }
         
         // Sort the encoders so that they end up in a controlled order
-        List<String> sortedFields = new ArrayList<String>(encoderSettings.keySet());
+        List<String> sortedFields = new ArrayList<>(encoderSettings.keySet());
         Collections.sort(sortedFields);
 
         for (String field : sortedFields) {
@@ -50,26 +50,31 @@ public class MultiEncoderAssembler {
             
             String encoderType = (String) params.get("encoderType");
             Builder<?, ?> builder = ((MultiEncoder)encoder).getBuilder(encoderType);
-            
-            if(encoderType.equals("SDRCategoryEncoder")) {
-                // Add mappings for category list
-                configureCategoryBuilder(encoder, params, builder);
-            }else if(encoderType.equals("DateEncoder")) {
-                // Extract date specific mappings out of the map so that we can
-                // pre-configure the DateEncoder with its needed directives.
-                configureDateBuilder(encoder, encoderSettings, (DateEncoder.Builder)builder);
-            }else if(encoderType.equals("GeospatialCoordinateEncoder")) {
-                // Extract Geo specific mappings out of the map so that we can
-                // pre-configure the GeospatialCoordinateEncoder with its needed directives.
-                configureGeoBuilder(encoder, encoderSettings, (GeospatialCoordinateEncoder.Builder) builder);
-            }else{
-                for (String param : params.keySet()) {
-                    if (!param.equals("fieldName") && !param.equals("encoderType") &&
-                        !param.equals("fieldType") && !param.equals("fieldEncodings")) {
-                        
-                        encoder.setValue(builder, param, params.get(param));
+
+            switch (encoderType) {
+                case "SDRCategoryEncoder":
+                    // Add mappings for category list
+                    configureCategoryBuilder(encoder, params, builder);
+                    break;
+                case "DateEncoder":
+                    // Extract date specific mappings out of the map so that we can
+                    // pre-configure the DateEncoder with its needed directives.
+                    configureDateBuilder(encoder, encoderSettings, (DateEncoder.Builder) builder);
+                    break;
+                case "GeospatialCoordinateEncoder":
+                    // Extract Geo specific mappings out of the map so that we can
+                    // pre-configure the GeospatialCoordinateEncoder with its needed directives.
+                    configureGeoBuilder(encoder, encoderSettings, (GeospatialCoordinateEncoder.Builder) builder);
+                    break;
+                default:
+                    for (String param : params.keySet()) {
+                        if (!param.equals("fieldName") && !param.equals("encoderType") &&
+                                !param.equals("fieldType") && !param.equals("fieldEncodings")) {
+
+                            encoder.setValue(builder, param, params.get(param));
+                        }
                     }
-                }
+                    break;
             }
 
             encoder.addEncoder(fieldName, (Encoder<?>)builder.build());

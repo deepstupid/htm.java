@@ -106,25 +106,25 @@ public class Persistence {
         protected static final Logger LOGGER = LoggerFactory.getLogger(PersistenceAPI.class);
         
         /** Time stamped serialization file format */
-        public static DateTimeFormatter CHECKPOINT_TIMESTAMP_FORMAT = DateTimeFormat.forPattern(SerialConfig.CHECKPOINT_FORMAT_STRING);
+        public static final DateTimeFormatter CHECKPOINT_TIMESTAMP_FORMAT = DateTimeFormat.forPattern(SerialConfig.CHECKPOINT_FORMAT_STRING);
         private DateTimeFormatter checkPointFormatter = CHECKPOINT_TIMESTAMP_FORMAT;
         
         /** Indicates the underlying file settings */
         private SerialConfig serialConfig;
         
         /** Stores the bytes of the last serialized object or null if there was a problem */
-        private static AtomicReference<byte[]> lastBytes = new AtomicReference<byte[]>(null);
+        private static final AtomicReference<byte[]> lastBytes = new AtomicReference<>(null);
         /** 
          * All instances in this classloader will share the same atomic reference to the last 
          * checkpoint file name holder which is perfectly fine.
          */
-        private static AtomicReference<String> lastCheckPointFileName = new AtomicReference<String>(null);
+        private static final AtomicReference<String> lastCheckPointFileName = new AtomicReference<>(null);
         
         private SerializerCore defaultSerializer = new SerializerCore();
         
-        private ReentrantReadWriteLock rwl = new ReentrantReadWriteLock();
-        private Lock writeMonitor = rwl.writeLock();
-        private Lock readMonitor = rwl.readLock();
+        private final ReentrantReadWriteLock rwl = new ReentrantReadWriteLock();
+        private final Lock writeMonitor = rwl.writeLock();
+        private final Lock readMonitor = rwl.readLock();
         
         
         /**
@@ -430,7 +430,7 @@ public class Persistence {
                 final DateTimeFormatter f = checkPointFormatter;
                 chkPntFiles = Arrays.stream(customDir.list((d,n) -> {
                     // Return only checkpoint files before the specified checkpoint name.
-                    return n.indexOf(serialConfig.getCheckPointFileName()) != -1;
+                    return n.contains(serialConfig.getCheckPointFileName());
                 })).sorted((o1,o2) -> {
                     // Sort the list so that the most recent previous can be selected.
                     try {
@@ -468,7 +468,7 @@ public class Persistence {
             
             String defaultNamePortion = serialConfig.getCheckPointFileName();
             
-            if(checkPointFileName.indexOf(defaultNamePortion) != -1) {
+            if(checkPointFileName.contains(defaultNamePortion)) {
                 checkPointFileName = checkPointFileName.substring(defaultNamePortion.length());
             }
             
@@ -532,7 +532,7 @@ public class Persistence {
                 customDir.mkdirs();
     
                 // Check to make sure the fileName doesn't already include the full path.
-                serializedFile = new File(fileName.indexOf(customDir.getAbsolutePath()) != -1 ?
+                serializedFile = new File(fileName.contains(customDir.getAbsolutePath()) ?
                     fileName : customDir.getAbsolutePath() + File.separator +  fileName);
                 if(!serializedFile.exists()) {
                     serializedFile.createNewFile();
@@ -565,7 +565,7 @@ public class Persistence {
                 // Make sure container directory exists
                 customDir.mkdirs();
                 
-                File serializedFile = new File(fileName.indexOf(customDir.getAbsolutePath()) != -1 ?
+                File serializedFile = new File(fileName.contains(customDir.getAbsolutePath()) ?
                     fileName : customDir.getAbsolutePath() + File.separator +  fileName);
                 if(!serializedFile.exists()) {
                     throw new FileNotFoundException("File \"" + fileName + "\" was not found.");

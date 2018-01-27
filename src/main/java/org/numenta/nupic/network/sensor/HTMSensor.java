@@ -91,9 +91,9 @@ public class HTMSensor<T> implements Sensor<T>, Serializable {
     private static final long serialVersionUID = 1L;
     
     private boolean encodersInitted;
-    private Sensor<T> delegate;
-    private SensorParams sensorParams;
-    private Header header;
+    private final Sensor<T> delegate;
+    private final SensorParams sensorParams;
+    private final Header header;
     private Parameters localParameters;
     private MultiEncoder encoder;
     private transient Stream<int[]> outputStream;
@@ -101,14 +101,14 @@ public class HTMSensor<T> implements Sensor<T>, Serializable {
     private transient InputMap inputMap;
     
     private TIntObjectMap<Encoder<?>> indexToEncoderMap;
-    private TObjectIntHashMap<String> indexFieldMap = new TObjectIntHashMap<String>();
+    private final TObjectIntHashMap<String> indexFieldMap = new TObjectIntHashMap<>();
     
     
     private transient Iterator<int[]> mainIterator;
-    private List<LinkedList<int[]>> fanOuts = new ArrayList<>();
+    private final List<LinkedList<int[]>> fanOuts = new ArrayList<>();
     
     /** Protects {@ #mainIterator} formation and the next() call */
-    private Lock criticalAccessLock = new ReentrantLock();
+    private final Lock criticalAccessLock = new ReentrantLock();
     
     
     
@@ -175,7 +175,7 @@ public class HTMSensor<T> implements Sensor<T>, Serializable {
      * makes available an array of {@link FieldMetaType}s.
      */
     private void makeIndexEncoderMap() {
-        indexToEncoderMap = new TIntObjectHashMap<Encoder<?>>();
+        indexToEncoderMap = new TIntObjectHashMap<>();
         
         for (int i = 0, size = header.getFieldNames().size(); i < size; i++) {
             switch (header.getFieldTypes().get(i)) {
@@ -275,7 +275,7 @@ public class HTMSensor<T> implements Sensor<T>, Serializable {
      * into multiple fanouts.
      */
     private class Copy implements Iterator<int[]> {
-        private LinkedList<int[]> list;
+        private final LinkedList<int[]> list;
         Copy(LinkedList<int[]> l) { this.list = l; }
         public boolean hasNext() { return !list.isEmpty() || mainIterator.hasNext(); }
         public int[] next() {
@@ -365,7 +365,7 @@ public class HTMSensor<T> implements Sensor<T>, Serializable {
                 mainIterator = outputStream.iterator();
             }
             
-            LinkedList<int[]> l = new LinkedList<int[]>();
+            LinkedList<int[]> l = new LinkedList<>();
             fanOuts.add(l);
             Copy copy = new Copy(l);
             

@@ -65,7 +65,7 @@ import rx.observers.TestObserver;
 
 
 public class NetworkTest extends ObservableTestBase {
-    private int[][] dayMap = new int[][] { 
+    private final int[][] dayMap = new int[][] {
         new int[] { 1, 1, 0, 0, 0, 0, 0, 1 }, // Sunday
         new int[] { 1, 1, 1, 0, 0, 0, 0, 0 }, // Monday
         new int[] { 0, 1, 1, 1, 0, 0, 0, 0 }, // Tuesday
@@ -75,7 +75,7 @@ public class NetworkTest extends ObservableTestBase {
         new int[] { 0, 0, 0, 0, 0, 1, 1, 1 }, // Saturday
     };
     
-    private BiFunction<Inference, Integer, Integer> dayOfWeekPrintout = createDayOfWeekInferencePrintout();
+    private final BiFunction<Inference, Integer, Integer> dayOfWeekPrintout = createDayOfWeekInferencePrintout();
     
     @Test
     public void testResetMethod() {

@@ -58,14 +58,14 @@ import org.numenta.nupic.encoders.MultiEncoder;
  */
 public class CSVSource  implements MetaSource {
     private static final Pattern SPLIT = Pattern.compile("[\\s]*\\,[\\s]*");
-    private List<String[]> header;
-    private List<String[]> body;
-    private List<List<String[]>> file;
-    private TObjectIntMap<String> fieldIndexMap = new TObjectIntHashMap<>();
-    private FieldMetaType[] fieldTypes;
+    private final List<String[]> header;
+    private final List<String[]> body;
+    private final List<List<String[]>> file;
+    private final TObjectIntMap<String> fieldIndexMap = new TObjectIntHashMap<>();
+    private final FieldMetaType[] fieldTypes;
 
-    private String datePattern;
-    private DateTimeFormatter format;
+    private final String datePattern;
+    private final DateTimeFormatter format;
 
     public static final int HEADER_SIZE = 3;
     public static final int HEADER_IDX = 0;
@@ -171,31 +171,32 @@ public class CSVSource  implements MetaSource {
      */
     @Override
     public Iterator<Map<String, Object>> multiIterator() {
-        return new Iterator<Map<String, Object>>() {
+        return new Iterator<>() {
             int idx = -1;
-            int size = body.size();
+            final int size = body.size();
 
             @SuppressWarnings("serial")
-            Map<String, Object> map = new HashMap<String, Object>() {
+            final
+            Map<String, Object> map = new HashMap<>() {
 
                 /**
-                 * Overridden to access this class' internal array instead of having 
+                 * Overridden to access this class' internal array instead of having
                  * to rehash map entries on every record access and store.
                  */
                 @Override
                 public Object get(Object name) {
                     int typeIndex = fieldIndexMap.get(name);
                     // Return Date Time type
-                    if(fieldTypes[typeIndex] == FieldMetaType.DATETIME) { 
-                        if(format == null) {
+                    if (fieldTypes[typeIndex] == FieldMetaType.DATETIME) {
+                        if (format == null) {
                             throw new IllegalStateException(
-                                "DateField requires pattern configuration on construction.");
+                                    "DateField requires pattern configuration on construction.");
                         }
 
                         return format.parseDateTime(body.get(idx)[typeIndex]);
-                    }else if(fieldTypes[typeIndex] == FieldMetaType.FLOAT || 
-                        fieldTypes[typeIndex] == FieldMetaType.INTEGER) { // Return any numeric type
-                        
+                    } else if (fieldTypes[typeIndex] == FieldMetaType.FLOAT ||
+                            fieldTypes[typeIndex] == FieldMetaType.INTEGER) { // Return any numeric type
+
                         return Double.parseDouble(body.get(idx)[fieldIndexMap.get(name)]);
                     }
                     // Return String type (i.e. category)

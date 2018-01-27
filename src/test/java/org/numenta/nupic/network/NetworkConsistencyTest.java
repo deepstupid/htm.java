@@ -55,10 +55,10 @@ public class NetworkConsistencyTest {
     private static final int UPPER_BOUNDARY = 8;
     private static final int RECORDS_PER_CYCLE = 7;
     
-    private static Set<SampleWeek> simpleSamples = new HashSet<>();
-    private static Set<SampleWeek> napiSamples = new HashSet<>();
+    private static final Set<SampleWeek> simpleSamples = new HashSet<>();
+    private static final Set<SampleWeek> napiSamples = new HashSet<>();
     
-    private static boolean doPrintout = false;
+    private static final boolean doPrintout = false;
     
     private static final int SAMPLE_WEEK = new UniversalRandom(42).nextInt(125);
     
@@ -333,14 +333,14 @@ public class NetworkConsistencyTest {
     /////////////////////////////////////
     
     class SimpleLayer {
-        private Parameters params;
+        private final Parameters params;
 
-        private Connections memory = new Connections();
+        private final Connections memory = new Connections();
 
-        private ScalarEncoder encoder;
-        private SpatialPooler spatialPooler;
-        private TemporalMemory temporalMemory;
-        private Anomaly anomaly;
+        private final ScalarEncoder encoder;
+        private final SpatialPooler spatialPooler;
+        private final TemporalMemory temporalMemory;
+        private final Anomaly anomaly;
         
         private int columnCount;
         private int cellsPerColumn;
@@ -439,9 +439,14 @@ public class NetworkConsistencyTest {
     }
     
     static class SampleWeek {
-        int seqNum;
-        int[] encoderOut, spOut, tmIn, tmPred, activeCells, predictiveCells;
-        double score;
+        final int seqNum;
+        final int[] encoderOut;
+        final int[] spOut;
+        final int[] tmIn;
+        final int[] tmPred;
+        final int[] activeCells;
+        final int[] predictiveCells;
+        final double score;
         
         public SampleWeek(int seq, int[] enc, int[] spo, int[] tmin, int[] tmpred, int[] actCells, int[] predCells, double sc) {
             seqNum = seq;

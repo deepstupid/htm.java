@@ -29,7 +29,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
-import org.numenta.nupic.Parameters;
 import org.numenta.nupic.Parameters.KEY;
 import org.numenta.nupic.algorithms.CLAClassifier;
 import org.numenta.nupic.algorithms.Classification;
@@ -169,18 +168,18 @@ public class QuickDayTest {
      *
      */
     static class LayerImpl implements Layer<Double> {
-        private Parameters params;
+        private final Parameters params;
 
-        private Connections memory = new Connections();
+        private final Connections memory = new Connections();
 
-        private ScalarEncoder encoder;
-        private SpatialPooler spatialPooler;
-        private TemporalMemory temporalMemory;
-        private CLAClassifier classifier;
-        private Map<String, Object> classification = new LinkedHashMap<String, Object>();
+        private final ScalarEncoder encoder;
+        private final SpatialPooler spatialPooler;
+        private final TemporalMemory temporalMemory;
+        private final CLAClassifier classifier;
+        private final Map<String, Object> classification = new LinkedHashMap<String, Object>();
 
-        private int columnCount;
-        private int cellsPerColumn;
+        private final int columnCount;
+        private final int cellsPerColumn;
         private int theNum;
 
         private int[] predictedColumns;
@@ -274,7 +273,7 @@ public class QuickDayTest {
             int[] retVal = new int[cells.size()];
             int i = 0;
             for(Iterator<Cell> it = cells.iterator();i < retVal.length;i++) {
-                retVal[i] = it.next().getIndex();
+                retVal[i] = it.next().index;
                 retVal[i] /= cellsPerColumn; // Get the column index
             }
             Arrays.sort(retVal);

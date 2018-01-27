@@ -85,7 +85,7 @@ public abstract class Encoder<T>  implements Persistable {
 
 	/** Value used to represent no data */
 	public static final double SENTINEL_VALUE_FOR_MISSING_DATA = Double.NaN;
-    protected List<Tuple> description = new ArrayList<>();
+    protected final List<Tuple> description = new ArrayList<>();
 
 	/** The number of bits that are set to encode a single value - the
      * "width" of the output signal
@@ -437,18 +437,18 @@ public abstract class Encoder<T>  implements Persistable {
      */
     public void addEncoder(Encoder<T> parent, String name, Encoder<T> child, int offset) {
     	if(encoders == null) {
-    		encoders = new LinkedHashMap<EncoderTuple, List<EncoderTuple>>();
+    		encoders = new LinkedHashMap<>();
     	}
 
     	EncoderTuple key = getEncoderTuple(parent);
     	// Insert a new Tuple for the parent if not yet added.
     	if(key == null) {
-    	    encoders.put(key = new EncoderTuple("", this, 0), new ArrayList<EncoderTuple>());
+    	    encoders.put(key = new EncoderTuple("", this, 0), new ArrayList<>());
     	}
     	
     	List<EncoderTuple> childEncoders = null;
     	if((childEncoders = encoders.get(key)) == null) {
-    		encoders.put(key, childEncoders = new ArrayList<EncoderTuple>());
+    		encoders.put(key, childEncoders = new ArrayList<>());
     	}
     	childEncoders.add(new EncoderTuple(name, child, offset));
     }
@@ -460,7 +460,7 @@ public abstract class Encoder<T>  implements Persistable {
      */
     public EncoderTuple getEncoderTuple(Encoder<T> e) {
     	if(encoders == null) {
-    		encoders = new LinkedHashMap<EncoderTuple, List<EncoderTuple>>();
+    		encoders = new LinkedHashMap<>();
     	}
 
     	for(EncoderTuple tuple : encoders.keySet()) {
@@ -488,7 +488,7 @@ public abstract class Encoder<T>  implements Persistable {
      */
     public Map<EncoderTuple, List<EncoderTuple>> getEncoders() {
     	if(encoders == null) {
-    		encoders = new LinkedHashMap<EncoderTuple, List<EncoderTuple>>();
+    		encoders = new LinkedHashMap<>();
     	}
     	return encoders;
     }
@@ -516,13 +516,13 @@ public abstract class Encoder<T>  implements Persistable {
      */
     public List<FieldMetaType> getFlattenedFieldTypeList(Encoder<T> e) {
     	if(decoderFieldTypes == null) {
-    		decoderFieldTypes = new HashMap<Tuple, List<FieldMetaType>>();
+    		decoderFieldTypes = new HashMap<>();
     	}
 
     	Tuple key = getEncoderTuple(e);
     	List<FieldMetaType> fieldTypes = null;
     	if((fieldTypes = decoderFieldTypes.get(key)) == null) {
-    		decoderFieldTypes.put(key, fieldTypes = new ArrayList<FieldMetaType>());
+    		decoderFieldTypes.put(key, fieldTypes = new ArrayList<>());
     	}
     	return fieldTypes;
     }
@@ -631,12 +631,12 @@ public abstract class Encoder<T>  implements Persistable {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<String> getScalarNames(String parentFieldName) {
-		List<String> names = new ArrayList<String>();
+		List<String> names = new ArrayList<>();
 		if(getEncoders() != null) {
 			List<EncoderTuple> encoders = getEncoders(this);
 			for(Tuple tuple : encoders) {
 				List<String> subNames = ((Encoder<T>)tuple.get(1)).getScalarNames(getName());
-				List<String> hierarchicalNames = new ArrayList<String>();
+				List<String> hierarchicalNames = new ArrayList<>();
 				if(parentFieldName != null) {
 					for(String name : subNames) {
 						hierarchicalNames.add(String.format("%s.%s", parentFieldName, name));
@@ -667,7 +667,7 @@ public abstract class Encoder<T>  implements Persistable {
 			return Collections.unmodifiableSet(getFlattenedFieldTypeList());
 		}
 
-		Set<FieldMetaType> retVal = new HashSet<FieldMetaType>();
+		Set<FieldMetaType> retVal = new HashSet<>();
 		for(Tuple t : getEncoders(this)) {
 			Set<FieldMetaType> subTypes = ((Encoder<T>)t.get(1)).getDecoderOutputFieldTypes();
 			retVal.addAll(subTypes);
@@ -748,7 +748,7 @@ public abstract class Encoder<T>  implements Persistable {
 	 * @return	list of encoded values in String form
 	 */
 	public <S> List<String> getEncodedValues(S inputData) {
-		List<String> retVals = new ArrayList<String>();
+		List<String> retVals = new ArrayList<>();
 		Map<EncoderTuple, List<EncoderTuple>> encoders = getEncoders();
 		if(encoders != null && encoders.size() > 0) {
 			for(EncoderTuple t : encoders.keySet()) {
@@ -861,17 +861,16 @@ public abstract class Encoder<T>  implements Persistable {
 		String prevFieldName = null;
 		int prevFieldOffset = -1;
 		int offset = -1;
-		for(int i = 0;i < len;i++) {
-			Tuple t = description.get(i);//(name, offset)
-			if(formatted) {
-				offset = ((int)t.get(1)) + 1;
-				if(bitOffset == offset - 1) {
-					prevFieldName = "separator";
-					prevFieldOffset = bitOffset;
-				}
-			}
-			if(bitOffset < offset) break;
-		}
+        for (Tuple t : description) {
+            if (formatted) {
+                offset = ((int) t.get(1)) + 1;
+                if (bitOffset == offset - 1) {
+                    prevFieldName = "separator";
+                    prevFieldOffset = bitOffset;
+                }
+            }
+            if (bitOffset < offset) break;
+        }
 		// Return the field name and offset within the field
 	    // return (fieldName, bitOffset - fieldOffset)
 		int width = formatted ? getDisplayWidth() : getWidth();
@@ -1000,8 +999,8 @@ public abstract class Encoder<T>  implements Persistable {
 	 */
 	@SuppressWarnings("unchecked")
 	public Tuple decode(int[] encoded, String parentFieldName) {
-		Map<String, Tuple> fieldsMap = new HashMap<String, Tuple>();
-		List<String> fieldsOrder = new ArrayList<String>();
+		Map<String, Tuple> fieldsMap = new HashMap<>();
+		List<String> fieldsOrder = new ArrayList<>();
 
 		String parentName = parentFieldName == null || parentFieldName.isEmpty() ?
 			getName() : String.format("%s.%s", parentFieldName, getName());
@@ -1082,7 +1081,7 @@ public abstract class Encoder<T>  implements Persistable {
 	@SuppressWarnings("unchecked")
 	public List<Encoding> getBucketInfo(int[] buckets) {
 		//Concatenate the results from bucketInfo on each child encoder
-		List<Encoding> retVals = new ArrayList<Encoding>();
+		List<Encoding> retVals = new ArrayList<>();
 		int bucketOffset = 0;
 		for(EncoderTuple encoderTuple : getEncoders(this)) {
 			int nextBucketOffset = -1;
@@ -1135,7 +1134,7 @@ public abstract class Encoder<T>  implements Persistable {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<Encoding> topDownCompute(int[] encoded) {
-		List<Encoding> retVals = new ArrayList<Encoding>();
+		List<Encoding> retVals = new ArrayList<>();
 
 		List<EncoderTuple> encoders = getEncoders(this);
 		int len = encoders.size();

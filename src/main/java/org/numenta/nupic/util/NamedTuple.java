@@ -155,8 +155,8 @@ public class NamedTuple extends Tuple {
      */
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        for(int i = 0;i < entries.length;i++) {
-            sb.append(entries[i].toString());
+        for (Bucket entry : entries) {
+            sb.append(entry.toString());
         }
         return sb.toString();
     }
@@ -235,9 +235,9 @@ public class NamedTuple extends Tuple {
     final class Entry implements Persistable {
         private static final long serialVersionUID = 1L;
         
-        String key;
+        final String key;
         Object value;
-        int hash;
+        final int hash;
         Entry prev;
         
         /**
@@ -308,7 +308,7 @@ public class NamedTuple extends Tuple {
         private static final long serialVersionUID = 1L;
         
         Entry last;
-        int idx;
+        final int idx;
         
         /**
          * Constructs a new {@code Bucket}

@@ -262,7 +262,7 @@ public class LogEncoder extends Encoder<Double> {
 
 		// Convert each range into normal space
 		RangeList inRanges = (RangeList) fields.values().toArray()[0];
-		RangeList outRanges = new RangeList(new ArrayList<MinMax>(), "");
+		RangeList outRanges = new RangeList(new ArrayList<>(), "");
 		for (MinMax minMax : inRanges.getRanges()) {
 			MinMax scaledMinMax = new MinMax( Math.pow(10, minMax.min()),
 											  Math.pow(10, minMax.max()));
@@ -292,10 +292,10 @@ public class LogEncoder extends Encoder<Double> {
 			fieldName = getName();
 		}
 
-		Map<String, RangeList> outFields = new HashMap<String, RangeList>();
+		Map<String, RangeList> outFields = new HashMap<>();
 		outFields.put(fieldName,  outRanges);
 
-		List<String> fieldNames = new ArrayList<String>();
+		List<String> fieldNames = new ArrayList<>();
 		fieldNames.add(fieldName);
 
 		return new DecodeResult(outFields, fieldNames);

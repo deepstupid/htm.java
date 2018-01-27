@@ -162,7 +162,7 @@ public class DeltaEncoder extends AdaptiveScalarEncoder {
 		if (this.prevAbsolute == 0 || this.prevDelta == 0) {
 			int[] initialBuckets = new int[this.n];
 			Arrays.fill(initialBuckets, 0);
-			List<Encoding> encoderResultList = new ArrayList<Encoding>();
+			List<Encoding> encoderResultList = new ArrayList<>();
 			Encoding encoderResult = new Encoding(0, 0, initialBuckets);
 			encoderResultList.add(encoderResult);
 			return encoderResultList;
@@ -171,7 +171,7 @@ public class DeltaEncoder extends AdaptiveScalarEncoder {
 		if (this.prevAbsolute != 0) {
 			double objVal = (double)(erList.get(0).getValue()) + this.prevAbsolute;
 			double objScalar = erList.get(0).getScalar().doubleValue() + this.prevAbsolute;
-			List<Encoding> encoderResultList = new ArrayList<Encoding>();
+			List<Encoding> encoderResultList = new ArrayList<>();
 			Encoding encoderResult = new Encoding(objVal, objScalar, erList.get(0).getEncoding());
 			encoderResultList.add(encoderResult);
 			return encoderResultList;

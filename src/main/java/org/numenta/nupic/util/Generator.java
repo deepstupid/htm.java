@@ -58,16 +58,16 @@ public interface Generator<T> extends Iterator<T>, Iterable<T>, Serializable {
         /**
          *  Inner implementation of an {@code Generator}
          */
-        return new Generator<T>() {
+        return new Generator<>() {
             private static final long serialVersionUID = 1L;
-            
+
             @Override
             public T next() {
                 return l.get(i.next());
             }
 
             @Override
-            public boolean hasNext() { 
+            public boolean hasNext() {
                 return i.hasNext();
             }
         };

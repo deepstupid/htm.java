@@ -72,7 +72,7 @@ public interface Sensor<T> extends Persistable {
             throw new IllegalArgumentException("Properties (i.e. \"SensorParams\") cannot be null");
         }
         
-        return new HTMSensor<T>(sf.create(t));
+        return new HTMSensor<>(sf.create(t));
     }
     
     /**

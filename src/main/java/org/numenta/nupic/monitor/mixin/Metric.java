@@ -22,6 +22,7 @@
 package org.numenta.nupic.monitor.mixin;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -38,8 +39,8 @@ import org.numenta.nupic.util.ArrayUtils;
  * @author cogmission
  */
 public class Metric {
-    public MonitorMixinBase monitor;
-    public String title;
+    public final MonitorMixinBase monitor;
+    public final String title;
     
     public double min;
     public double max;
@@ -136,11 +137,11 @@ public class Metric {
             return new double[] { 0, 0, 0, 0, 0 };
         }
         return new double[] {
-            BigDecimal.valueOf(mean).setScale(sigFigs, BigDecimal.ROUND_HALF_UP).doubleValue(),
-            BigDecimal.valueOf(standardDeviation).setScale(sigFigs, BigDecimal.ROUND_HALF_UP).doubleValue(),
-            BigDecimal.valueOf(min).setScale(sigFigs, BigDecimal.ROUND_HALF_UP).doubleValue(),
-            BigDecimal.valueOf(max).setScale(sigFigs, BigDecimal.ROUND_HALF_UP).doubleValue(),
-            BigDecimal.valueOf(sum).setScale(sigFigs, BigDecimal.ROUND_HALF_UP).doubleValue()
+            BigDecimal.valueOf(mean).setScale(sigFigs, RoundingMode.HALF_UP).doubleValue(),
+            BigDecimal.valueOf(standardDeviation).setScale(sigFigs, RoundingMode.HALF_UP).doubleValue(),
+            BigDecimal.valueOf(min).setScale(sigFigs, RoundingMode.HALF_UP).doubleValue(),
+            BigDecimal.valueOf(max).setScale(sigFigs, RoundingMode.HALF_UP).doubleValue(),
+            BigDecimal.valueOf(sum).setScale(sigFigs, RoundingMode.HALF_UP).doubleValue()
         };
     }
 }

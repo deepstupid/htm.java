@@ -84,7 +84,7 @@ public class TemporalMemory implements ComputeDecorator, Serializable{
     
     public static void init(Connections c) {
         SparseObjectMatrix<Column> matrix = c.getMemory() == null ?
-            new SparseObjectMatrix<Column>(c.getColumnDimensions()) :
+                new SparseObjectMatrix<>(c.getColumnDimensions()) :
                 c.getMemory();
         c.setMemory(matrix);
         
@@ -151,7 +151,7 @@ public class TemporalMemory implements ComputeDecorator, Serializable{
             .collect(Collectors.toList());
         
         Function<Column, Column> identity = Function.identity();
-        Function<DistalDendrite, Column> segToCol = segment -> segment.getParentCell().getColumn(); 
+        Function<DistalDendrite, Column> segToCol = segment -> segment.getParentCell().column;
         
         @SuppressWarnings({ "rawtypes" })
         GroupBy2<Column> grouper = GroupBy2.<Column>of(
@@ -177,8 +177,8 @@ public class TemporalMemory implements ComputeDecorator, Serializable{
                     Tuple cellsXwinnerCell = burstColumn(conn, columnData.column(), columnData.matchingSegments(), 
                         prevActiveCells, prevWinnerCells, permanenceIncrement, permanenceDecrement, conn.getRandom(), 
                            learn);
-                    
-                    cycle.activeCells.addAll((List<Cell>)cellsXwinnerCell.get(0));
+
+                    Collections.addAll(cycle.activeCells, (Cell[])cellsXwinnerCell.get(0));
                     cycle.winnerCells.add((Cell)cellsXwinnerCell.get(1));
                 }
             }else{
@@ -348,8 +348,8 @@ public class TemporalMemory implements ComputeDecorator, Serializable{
     public Tuple burstColumn(Connections conn, Column column, List<DistalDendrite> matchingSegments, 
         Set<Cell> prevActiveCells, Set<Cell> prevWinnerCells, double permanenceIncrement, double permanenceDecrement, 
             Random random, boolean learn) {
-        
-        List<Cell> cells = column.getCells();
+
+        Cell[] cells = column.cells;
         Cell bestCell = null;
         
         if(!matchingSegments.isEmpty()) {
@@ -431,7 +431,7 @@ public class TemporalMemory implements ComputeDecorator, Serializable{
      * 
      * @return  the least used {@code Cell}
      */
-    public Cell leastUsedCell(Connections conn, List<Cell> cells, Random random) {
+    public Cell leastUsedCell(Connections conn, Cell[] cells, Random random) {
         List<Cell> leastUsedCells = new ArrayList<>();
         int minNumSegments = Integer.MAX_VALUE;
         for(Cell cell : cells) {
