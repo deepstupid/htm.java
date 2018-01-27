@@ -52,12 +52,12 @@ public interface Inference extends Persistable {
      * 
      * @return
      */
-    public int getRecordNum();
+    int getRecordNum();
     /**
      * Returns the {@link ComputeCycle}
      * @return
      */
-    public ComputeCycle getComputeCycle();
+    ComputeCycle getComputeCycle();
     /**
      * Returns a custom Object during sequence processing where one or more 
      * {@link Func1}(s) were added to a {@link Layer} in between algorithmic
@@ -65,27 +65,27 @@ public interface Inference extends Persistable {
      *  
      * @return  the custom object set during processing
      */
-    public Object getCustomObject();
+    Object getCustomObject();
     /**
      * Returns the {@link Map} used as input into a given {@link CLAClassifier}
      * if it exists.
      * 
      * @return
      */
-    public Map<String, NamedTuple> getClassifierInput();
+    Map<String, NamedTuple> getClassifierInput();
     /**
      * Returns a tuple containing key/value pairings of input field
      * names to the {@link CLAClassifier} used in conjunction with it.
      * 
      * @return
      */
-    public NamedTuple getClassifiers();
+    NamedTuple getClassifiers();
     /**
      * Returns the object used as input into a given Layer
      * which is associated with this computation result.
      * @return
      */
-    public Object getLayerInput();
+    Object getLayerInput();
 
     /**
      * Returns the <em>Sparse Distributed Representation</em> vector
@@ -94,49 +94,49 @@ public interface Inference extends Persistable {
      * 
      * @return
      */
-    public int[] getSDR();
+    int[] getSDR();
     /**
      * Returns the initial encoding produced by an {@link Encoder} or one
      * of its subtypes.
      * 
      * @return
      */
-    public int[] getEncoding();
+    int[] getEncoding();
     /**
      * Returns the most recent {@link Classification}
      * 
      * @param fieldName
      * @return
      */
-    public Classification<Object> getClassification(String fieldName);
+    Classification<Object> getClassification(String fieldName);
     /**
      * Returns the most recent anomaly calculation.
      * @return
      */
-    public double getAnomalyScore();
+    double getAnomalyScore();
     /**
      * Returns the column activation from a {@link SpatialPooler}
      * @return
      */
-    public int[] getFeedForwardActiveColumns();
+    int[] getFeedForwardActiveColumns();
     /**
      * Returns the column activations in sparse form
      * @return
      */
-    public int[] getFeedForwardSparseActives();
+    int[] getFeedForwardSparseActives();
     /**
      * Returns the column activation from a {@link TemporalMemory}
      * @return
      */
-    public Set<Cell> getActiveCells();
+    Set<Cell> getActiveCells();
     /**
      * Returns the predicted output from the last inference cycle.
      * @return
      */
-    public Set<Cell> getPreviousPredictiveCells();
+    Set<Cell> getPreviousPredictiveCells();
     /**
      * Returns the currently predicted columns.
      * @return
      */
-    public Set<Cell> getPredictiveCells();
+    Set<Cell> getPredictiveCells();
 }

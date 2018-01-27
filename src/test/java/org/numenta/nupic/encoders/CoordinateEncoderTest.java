@@ -157,12 +157,7 @@ public class CoordinateEncoderTest {
 	public void testTopWCoordinates() {
 		final int[][] coordinates = new int[][] { { 1 }, { 2 }, { 3 }, { 4 }, { 5 } };
 		
-		CoordinateOrder mock = new CoordinateOrder() {
-			@Override public double orderForCoordinate(int[] coordinate) {
-				return  ArrayUtils.sum(coordinate) / 5.0d;
-			}
-			
-		};
+		CoordinateOrder mock = coordinate -> ArrayUtils.sum(coordinate) / 5.0d;
 		
 		int[][] top = new CoordinateEncoder().topWCoordinates(mock, coordinates, 2);
 		assertEquals(2, top.length);
@@ -348,7 +343,7 @@ public class CoordinateEncoderTest {
 		int sum = ArrayUtils.sum(ArrayUtils.and(sdr1, sdr2));
 //		System.out.println("and = " + Arrays.toString(ArrayUtils.where(ArrayUtils.and(sdr1, sdr2), ArrayUtils.WHERE_1)));
 //		System.out.println("sum = " + ArrayUtils.sum(ArrayUtils.and(sdr1, sdr2)));
-		return (double)sum / (double)ArrayUtils.sum(sdr1);
+		return (double)sum / ArrayUtils.sum(sdr1);
 	}
 	
 	public double[] overlapsForRelativeAreas(int n, int w, int[] initPosition, int initRadius, 

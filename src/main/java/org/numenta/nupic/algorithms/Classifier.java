@@ -7,9 +7,9 @@ import java.util.Map;
  * to the system, such as {@link CLAClassifier} or {@link SDRClassifier}.
  */
 public interface Classifier {
-    public <T> Classification<T> compute(int                 recordNum,
-                                         Map<String, Object> classification,
-                                         int[]               patternNZ,
-                                         boolean             learn,
-                                         boolean             infer);
+    <T> Classification<T> compute(int recordNum,
+                                  Map<String, Object> classification,
+                                  int[] patternNZ,
+                                  boolean learn,
+                                  boolean infer);
 }

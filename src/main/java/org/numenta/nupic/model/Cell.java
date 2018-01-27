@@ -162,9 +162,7 @@ public class Cell implements Comparable<Cell>, Serializable {
         if(getClass() != obj.getClass())
             return false;
         Cell other = (Cell)obj;
-        if(index != other.index)
-            return false;
-        return true;
+        return index == other.index;
     }
     
 }

@@ -264,11 +264,11 @@ public class NetworkTestHarness {
      * @return
      */
     public static Map<String, Map<String, Object>> getGeospatialFieldEncodingMap() {
-        Map<String, Map<String, Object>> fieldEncodings = setupMap(null, 0, 0, 0.0D, 0.0D, 0.0D, 0.0D, (Boolean)null, (Boolean)null, (Boolean)null, "timestamp", "datetime", "DateEncoder");
-        fieldEncodings = setupMap(fieldEncodings, 50, 21, 0.0D, 100.0D, 0.0D, 0.1D, (Boolean)null, Boolean.TRUE, (Boolean)null, "consumption", "float", "ScalarEncoder");
-        fieldEncodings = setupMap(fieldEncodings, 999, 25, 0.0D, 100.0D, 0.0D, 0.1D, (Boolean)null, Boolean.TRUE, (Boolean)null, "location", "geo", "GeospatialCoordinateEncoder");
+        Map<String, Map<String, Object>> fieldEncodings = setupMap(null, 0, 0, 0.0D, 0.0D, 0.0D, 0.0D, null, null, null, "timestamp", "datetime", "DateEncoder");
+        fieldEncodings = setupMap(fieldEncodings, 50, 21, 0.0D, 100.0D, 0.0D, 0.1D, null, Boolean.TRUE, null, "consumption", "float", "ScalarEncoder");
+        fieldEncodings = setupMap(fieldEncodings, 999, 25, 0.0D, 100.0D, 0.0D, 0.1D, null, Boolean.TRUE, null, "location", "geo", "GeospatialCoordinateEncoder");
         
-        fieldEncodings.get("timestamp").put(Parameters.KEY.DATEFIELD_TOFD.getFieldName(), new Tuple(new Object[]{Integer.valueOf(21), Double.valueOf(9.5D)}));
+        fieldEncodings.get("timestamp").put(Parameters.KEY.DATEFIELD_TOFD.getFieldName(), new Tuple(Integer.valueOf(21), Double.valueOf(9.5D)));
         fieldEncodings.get("timestamp").put(Parameters.KEY.DATEFIELD_PATTERN.getFieldName(), "MM/dd/YY HH:mm");
         
         fieldEncodings.get("location").put("timestep", "60");

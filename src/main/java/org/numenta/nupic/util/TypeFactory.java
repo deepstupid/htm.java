@@ -23,6 +23,6 @@
 package org.numenta.nupic.util;
 
 public interface TypeFactory<T> {
-    public T make(int... args);
-    public Class<T> typeClass();
+    T make(int... args);
+    Class<T> typeClass();
 }

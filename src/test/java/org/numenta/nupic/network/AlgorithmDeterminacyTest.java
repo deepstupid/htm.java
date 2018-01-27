@@ -200,7 +200,7 @@ public class AlgorithmDeterminacyTest {
             .addHeader("B").build();
 
         Sensor<ObservableSensor<String[]>> sensor = Sensor.create(
-            ObservableSensor::create, SensorParams.create(Keys::obs, new Object[] {"name", manual}));
+            ObservableSensor::create, SensorParams.create(Keys::obs, "name", manual));
                     
         Parameters p = getParameters();
         

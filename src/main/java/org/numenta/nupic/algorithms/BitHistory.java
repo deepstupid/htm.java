@@ -175,7 +175,7 @@ public class BitHistory implements Persistable {
         // Experiment... try normalizing the votes from each bit
         if(total > 0) {
             double[] temp = ArrayUtils.divide(votes, total);
-            for(int i = 0;i < temp.length;i++) votes[i] = temp[i];
+            System.arraycopy(temp, 0, votes, 0, temp.length);
         }
 
         if(classifier.verbosity >= 2) {

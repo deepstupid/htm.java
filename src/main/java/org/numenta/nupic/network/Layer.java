@@ -21,10 +21,8 @@
  */
 package org.numenta.nupic.network;
 
-<<<<<<< HEAD
-=======
+
 import java.lang.Thread.UncaughtExceptionHandler;
->>>>>>> 8fc6b596461a879fdf3e8936833c9a972d858b57
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.util.ArrayList;
@@ -40,22 +38,14 @@ import org.joda.time.DateTime;
 import org.numenta.nupic.FieldMetaType;
 import org.numenta.nupic.Parameters;
 import org.numenta.nupic.Parameters.KEY;
-<<<<<<< HEAD
-=======
+
 import org.numenta.nupic.algorithms.Classification;
 import org.numenta.nupic.algorithms.TemporalMemory;
 import org.numenta.nupic.algorithms.SpatialPooler;
->>>>>>> 8fc6b596461a879fdf3e8936833c9a972d858b57
 import org.numenta.nupic.algorithms.Anomaly;
 import org.numenta.nupic.algorithms.Classifier;
-import org.numenta.nupic.algorithms.SDRClassifier;
 import org.numenta.nupic.algorithms.CLAClassifier;
-<<<<<<< HEAD
-import org.numenta.nupic.algorithms.Classification;
-import org.numenta.nupic.algorithms.SpatialPooler;
-import org.numenta.nupic.algorithms.TemporalMemory;
-=======
->>>>>>> 8fc6b596461a879fdf3e8936833c9a972d858b57
+
 import org.numenta.nupic.encoders.DateEncoder;
 import org.numenta.nupic.encoders.Encoder;
 import org.numenta.nupic.encoders.EncoderTuple;
@@ -414,11 +404,7 @@ public class Layer<T> implements Persistable {
                 (encoder == null ? "" : "MultiEncoder,"), 
                 (spatialPooler == null ? "" : "SpatialPooler,"), 
                 (temporalMemory == null ? "" : "TemporalMemory,"), 
-<<<<<<< HEAD
-                (autoCreateClassifiers == null ? "" : "Auto creating CLAClassifiers for each input field."), 
-=======
                 (autoCreateClassifiers == null ? "" : "Auto creating Classifiers for each input field."),
->>>>>>> 8fc6b596461a879fdf3e8936833c9a972d858b57
                 (anomalyComputer == null ? "" : "Anomaly"));
         }
     }
@@ -460,7 +446,7 @@ public class Layer<T> implements Persistable {
     @SuppressWarnings("unchecked")
     public Layer<T> close() {
         if(isClosed) {
-            LOGGER.warn("Close called on Layer " + getName() + " which is already closed.");
+            LOGGER.warn("Close called on Layer {} which is already closed.", getName());
             return this;
         }
         
@@ -501,13 +487,12 @@ public class Layer<T> implements Persistable {
             if(((inputLength = ((int[])params.get(KEY.INPUT_DIMENSIONS)).length) != (columnLength = ((int[])params.get(KEY.COLUMN_DIMENSIONS)).length))
                             || encoder.getWidth() != (product = ArrayUtils.product((int[])params.get(KEY.INPUT_DIMENSIONS)))) {
 
-                LOGGER.warn("The number of Input Dimensions (" + inputLength + ") != number of Column Dimensions " + "(" + columnLength + ") --OR-- Encoder width (" + encoder.getWidth()
-                                + ") != product of dimensions (" + product + ") -- now attempting to fix it.");
+                LOGGER.warn("The number of Input Dimensions ({}) != number of Column Dimensions ({}) --OR-- Encoder width ({}) != product of dimensions ({}) -- now attempting to fix it.", inputLength, columnLength, encoder.getWidth(), product);
 
                 int[] inferredDims = inferInputDimensions(encoder.getWidth(), columnLength);
                 if(inferredDims != null && inferredDims.length > 0 && encoder.getWidth() == ArrayUtils.product(inferredDims)) {
                     LOGGER.info("Input dimension fix successful!");
-                    LOGGER.info("Using calculated input dimensions: " + Arrays.toString(inferredDims));
+                    LOGGER.info("Using calculated input dimensions: {}", Arrays.toString(inferredDims));
                 }
 
                 params.setInputDimensions(inferredDims);
@@ -549,9 +534,8 @@ public class Layer<T> implements Persistable {
             int inputLength, columnLength = 0;
             if((inputLength = ((int[])params.get(KEY.INPUT_DIMENSIONS)).length) != 
                 (columnLength = ((int[])params.get(KEY.COLUMN_DIMENSIONS)).length)) {
-                
-                LOGGER.error("The number of Input Dimensions (" + inputLength + ") is not same as the number of Column Dimensions " + 
-                    "(" + columnLength + ") in Parameters! - SpatialPooler not initialized!");
+
+                LOGGER.error("The number of Input Dimensions ({}) is not same as the number of Column Dimensions ({}) in Parameters! - SpatialPooler not initialized!", inputLength, columnLength);
                 
                 return this;
             }
@@ -567,7 +551,7 @@ public class Layer<T> implements Persistable {
 
         this.isClosed = true;
 
-        LOGGER.debug("Layer " + name + " content initialize mask = " + Integer.toBinaryString(algo_content_mask));
+        LOGGER.debug("Layer {} content initialize mask = {}", name, Integer.toBinaryString(algo_content_mask));
 
         return this;
     }
@@ -687,14 +671,11 @@ public class Layer<T> implements Persistable {
         }
         
         if(userObservable == null) {
-            userObservable = Observable.create(new Observable.OnSubscribe<Inference>() {
-                @Override
-                public void call(Subscriber<? super Inference> t1) {
-                    if(observers == null) {
-                        observers = new ArrayList<Observer<Inference>>();
-                    }
-                    observers.add((Observer<Inference>)t1);
+            userObservable = Observable.create(t1 -> {
+                if(observers == null) {
+                    observers = new ArrayList<Observer<Inference>>();
                 }
+                observers.add((Observer<Inference>)t1);
             });
         }
 
@@ -920,7 +901,7 @@ public class Layer<T> implements Persistable {
         this.params.set(KEY.INPUT_DIMENSIONS, inputDims);
 
         if(key == KEY.AUTO_CLASSIFY) {
-            this.autoCreateClassifiers = value == null ? false : ((Boolean)value).booleanValue();
+            this.autoCreateClassifiers = value != null && ((Boolean) value).booleanValue();
             // Note the addition of a classifier
             algo_content_mask |= CLA_CLASSIFIER;
         }
@@ -1067,11 +1048,7 @@ public class Layer<T> implements Persistable {
     /**
      * Restarts this {@code Layer}
      * 
-<<<<<<< HEAD
-     * {@link #restart()} is to be called after a call to {@link #halt()}, to begin
-=======
      * {@link #restart} is to be called after a call to {@link #halt()}, to begin
->>>>>>> 8fc6b596461a879fdf3e8936833c9a972d858b57
      * processing again. The {@link Network} will continue from where it previously
      * left off after the last call to halt().
      * 
@@ -1284,7 +1261,7 @@ public class Layer<T> implements Persistable {
      */
     public void reset() {
         if(temporalMemory == null) {
-            LOGGER.debug("Attempt to reset Layer: " + getName() + "without TemporalMemory");
+            LOGGER.debug("Attempt to reset Layer: {}without TemporalMemory", getName());
         } else {
             temporalMemory.reset(connections);
         }
@@ -1680,21 +1657,16 @@ public class Layer<T> implements Persistable {
     
     /**
      * Executes the check point logic, handles the return of the serialized byte array
-<<<<<<< HEAD
-     * by delegating the call to {@link rx.Observer#onNext(byte[])} of all the currently queued
-=======
      * by delegating the call to {@link rx.Observer#onNext}(byte[]) of all the currently queued
->>>>>>> 8fc6b596461a879fdf3e8936833c9a972d858b57
      * Observers; then clears the list of Observers.
      */
     private void doCheckPoint() {
         byte[] bytes = parentNetwork.internalCheckPointOp();
         
         if(bytes != null) {
-            LOGGER.debug("Layer [" + getName() + "] checkPointed file: " + 
-                Persistence.get().getLastCheckPointFileName());
+            LOGGER.debug("Layer [{}] checkPointed file: {}", getName(), Persistence.get().getLastCheckPointFileName());
         }else{
-            LOGGER.debug("Layer [" + getName() + "] checkPoint   F A I L E D   at: " + (new DateTime()));
+            LOGGER.debug("Layer [{}] checkPoint   F A I L E D   at: {}", getName(), new DateTime());
         }
         
         for(Observer<byte[]> o : checkPointOpObservers) {
@@ -1961,16 +1933,16 @@ public class Layer<T> implements Persistable {
             names[i] = et.getName();
             Class fieldClassifier = inferredFields.get(et.getName());
             if(fieldClassifier == null) {
-                LOGGER.info("Not classifying \"" + et.getName() + "\" input field");
+                LOGGER.info("Not classifying \"{}\" input field", et.getName());
             }
             else if(CLAClassifier.class.isAssignableFrom(fieldClassifier)) {
-                LOGGER.info("Classifying \"" + et.getName() + "\" input field with CLAClassifier");
+                LOGGER.info("Classifying \"{}\" input field with CLAClassifier", et.getName());
                 ca[i] = new CLAClassifier();
             }
-            else if(SDRClassifier.class.isAssignableFrom(fieldClassifier)) {
-                LOGGER.info("Classifying \"" + et.getName() + "\" input field with SDRClassifier");
-                ca[i] = new SDRClassifier();
-            }
+//            else if(SDRClassifier.class.isAssignableFrom(fieldClassifier)) {
+//                LOGGER.info("Classifying \"" + et.getName() + "\" input field with SDRClassifier");
+//                ca[i] = new SDRClassifier();
+//            }
             else {
                 throw new IllegalStateException(
                         "Invalid Classifier class token, \"" + fieldClassifier + "\",\n\t" +
@@ -2036,16 +2008,13 @@ public class Layer<T> implements Persistable {
      * Starts this {@code Layer}'s thread
      */
     protected void startLayerThread() {
-<<<<<<< HEAD
-        (LAYER_THREAD = new Thread("Sensor Layer [" + getName() + "] Thread") {
-=======
         LAYER_THREAD = new Thread("Sensor Layer [" + getName() + "] Thread") {
->>>>>>> 8fc6b596461a879fdf3e8936833c9a972d858b57
 
             @SuppressWarnings("unchecked")
             public void run() {
-                LOGGER.debug("Layer [" + getName() + "] started Sensor output stream processing.");
-<<<<<<< HEAD
+                LOGGER.debug("Layer [{}] started Sensor output stream processing.", getName());
+
+
 
                 // Applies "terminal" function, at this point the input stream
                 // is "sealed".
@@ -2064,30 +2033,8 @@ public class Layer<T> implements Persistable {
 
                     return true;
                 }).forEach(intArray -> {
-                    ((ManualInput)Layer.this.factory.inference).encoding(intArray);
+                    Layer.this.factory.inference.encoding(intArray);
 
-=======
-
-                // Applies "terminal" function, at this point the input stream
-                // is "sealed".
-                sensor.getOutputStream().filter(i -> {
-                    if(isHalted) {
-                        notifyComplete();
-                        if(next != null) {
-                            next.halt();
-                        }
-                        return false;
-                    }
-                    
-                    if(Thread.currentThread().isInterrupted()) {
-                        notifyError(new RuntimeException("Unknown Exception while filtering input"));
-                    }
-
-                    return true;
-                }).forEach(intArray -> {
-                    ((ManualInput)Layer.this.factory.inference).encoding(intArray);
-
->>>>>>> 8fc6b596461a879fdf3e8936833c9a972d858b57
                     Layer.this.compute((T)intArray);
 
                     // Notify all downstream observers that the stream is closed
@@ -2096,20 +2043,10 @@ public class Layer<T> implements Persistable {
                     }
                 });
             }
-<<<<<<< HEAD
-        }).start();
-=======
         };
-        
-        LAYER_THREAD.setUncaughtExceptionHandler(new UncaughtExceptionHandler() {
-			
-			@Override
-			public void uncaughtException(Thread t, Throwable e) {
-				notifyError(new RuntimeException("Unhandled Exception in "+LAYER_THREAD.getName(),e));
-			}
-		});
+
+        LAYER_THREAD.setUncaughtExceptionHandler((t, e) -> notifyError(new RuntimeException("Unhandled Exception in "+LAYER_THREAD.getName(),e)));
         LAYER_THREAD.start();
->>>>>>> 8fc6b596461a879fdf3e8936833c9a972d858b57
     }
     
     /**
@@ -2117,12 +2054,8 @@ public class Layer<T> implements Persistable {
      * that stores the state of this {@code Network} while keeping the Network up and running.
      * The Network will be stored at the pre-configured location (in binary form only, not JSON).
      * 
-<<<<<<< HEAD
      * @param network   the {@link Network} to check point.
      * @return  the {@link CheckPointOp} operator 
-=======
-     * @return  the {@link CheckPointOp} operator
->>>>>>> 8fc6b596461a879fdf3e8936833c9a972d858b57
      */
     @SuppressWarnings("unchecked")
     CheckPointOp<byte[]> getCheckPointOperator() {
@@ -2152,17 +2085,14 @@ public class Layer<T> implements Persistable {
      */
     static class CheckPointOperator<T> extends Observable<T> implements CheckPointOp<T> {
         private CheckPointOperator(Layer<?> l) {
-            this(new Observable.OnSubscribe<T>() {
-                @SuppressWarnings({ "unchecked" })
-                @Override public void call(Subscriber<? super T> r) {
-                    if(l.LAYER_THREAD != null) {
-                        // The layer thread automatically tests for the list of observers to 
-                        // contain > 0 elements, which indicates a check point operation should
-                        // be executed.
-                        l.checkPointOpObservers.add((Observer<byte[]>)r);
-                    }else{
-                        l.doCheckPoint();
-                    }
+            this(r -> {
+                if(l.LAYER_THREAD != null) {
+                    // The layer thread automatically tests for the list of observers to
+                    // contain > 0 elements, which indicates a check point operation should
+                    // be executed.
+                    l.checkPointOpObservers.add((Observer<byte[]>)r);
+                }else{
+                    l.doCheckPoint();
                 }
             });
         }
@@ -2234,24 +2164,20 @@ public class Layer<T> implements Persistable {
 
             @Override
             public Observable<ManualInput> call(Observable<String[]> t1) {
-                return t1.map(new Func1<String[], ManualInput>() {
+                return t1.map(t11 -> {
 
-                    @Override
-                    public ManualInput call(String[] t1) {
-
-                        ////////////////////////////////////////////////////////////////////////
-                        //                  Do transformative work here                       //
-                        //                                                                    //
-                        // In "real life", this will send data through the MultiEncoder       //
-                        // Below is simply a faked out place holder...                        //
-                        ////////////////////////////////////////////////////////////////////////
-                        int[] sdr = new int[t1.length];
-                        for(int i = 0;i < sdr.length;i++) {
-                            sdr[i] = Integer.parseInt(t1[i]);
-                        }
-
-                        return inference.recordNum(getRecordNum()).sdr(sdr).layerInput(sdr);
+                    ////////////////////////////////////////////////////////////////////////
+                    //                  Do transformative work here                       //
+                    //                                                                    //
+                    // In "real life", this will send data through the MultiEncoder       //
+                    // Below is simply a faked out place holder...                        //
+                    ////////////////////////////////////////////////////////////////////////
+                    int[] sdr = new int[t11.length];
+                    for(int i = 0;i < sdr.length;i++) {
+                        sdr[i] = Integer.parseInt(t11[i]);
                     }
+
+                    return inference.recordNum(getRecordNum()).sdr(sdr).layerInput(sdr);
                 });
             }
         }
@@ -2275,23 +2201,18 @@ public class Layer<T> implements Persistable {
 
             @Override
             public Observable<ManualInput> call(Observable<Map> t1) {
-                return t1.map(new Func1<Map, ManualInput>() {
-
-                    @SuppressWarnings("unchecked")
-                    @Override
-                    public ManualInput call(Map t1) {
-                        if(encoderTuples == null) {
-                            encoderTuples = encoder.getEncoders(encoder);
-                        }
-
-                        // Store the encoding
-                        int[] encoding = encoder.encode(t1);
-                        inference.sdr(encoding).encoding(encoding);
-
-                        doEncoderBucketMapping(inference, t1);
-
-                        return inference.recordNum(getRecordNum()).layerInput(t1);
+                return t1.map(t11 -> {
+                    if(encoderTuples == null) {
+                        encoderTuples = encoder.getEncoders(encoder);
                     }
+
+                    // Store the encoding
+                    int[] encoding = encoder.encode(t11);
+                    inference.sdr(encoding).encoding(encoding);
+
+                    doEncoderBucketMapping(inference, t11);
+
+                    return inference.recordNum(getRecordNum()).layerInput(t11);
                 });
             }
         }
@@ -2311,13 +2232,9 @@ public class Layer<T> implements Persistable {
 
             @Override
             public Observable<ManualInput> call(Observable<int[]> t1) {
-                return t1.map(new Func1<int[], ManualInput>() {
-
-                    @Override
-                    public ManualInput call(int[] t1) {
-                        // Indicates a value that skips the encoding step
-                        return inference.recordNum(getRecordNum()).sdr(t1).layerInput(t1);
-                    }
+                return t1.map(t11 -> {
+                    // Indicates a value that skips the encoding step
+                    return inference.recordNum(getRecordNum()).sdr(t11).layerInput(t11);
                 });
             }
         }
@@ -2395,19 +2312,15 @@ public class Layer<T> implements Persistable {
         }
 
         public Func1<ManualInput, ManualInput> createTemporalFunc(final TemporalMemory tm) {
-            return new Func1<ManualInput, ManualInput>() {
-
-                @Override
-                public ManualInput call(ManualInput t1) {
-                    int[] sdr = t1.getSDR();
-                    if(!ArrayUtils.isSparse(sdr)) {
-                        // Set on Layer, then set sparse actives as the sdr,
-                        // then set on Manual Input (t1)
-                        sdr = ArrayUtils.where(sdr, ArrayUtils.WHERE_1);
-                        t1.sdr(sdr).feedForwardSparseActives(sdr);
-                    }
-                    return t1.sdr(temporalInput(sdr, t1));
+            return t1 -> {
+                int[] sdr = t1.getSDR();
+                if(!ArrayUtils.isSparse(sdr)) {
+                    // Set on Layer, then set sparse actives as the sdr,
+                    // then set on Manual Input (t1)
+                    sdr = ArrayUtils.where(sdr, ArrayUtils.WHERE_1);
+                    t1.sdr(sdr).feedForwardSparseActives(sdr);
                 }
+                return t1.sdr(temporalInput(sdr, t1));
             };
         }
 
@@ -2435,12 +2348,7 @@ public class Layer<T> implements Persistable {
                         bucketIdx = inputs.get("bucketIdx");
                         actValue = inputs.get("inputValue");
 
-<<<<<<< HEAD
-                        CLAClassifier c = (CLAClassifier)t1.getClassifiers().get(key);
-                        Classification<Object> result = c.compute(recordNum, inputMap, t1.getSDR(), isLearn, true);
-=======
                         Classifier c = (Classifier)t1.getClassifiers().get(key);
->>>>>>> 8fc6b596461a879fdf3e8936833c9a972d858b57
 
                         // c will be null if no classifier was specified for this field in KEY.INFERRED_FIELDS map
                         if(c != null) {
@@ -2554,12 +2462,9 @@ public class Layer<T> implements Persistable {
         } else if(other.parentRegion == null || !parentRegion.getName().equals(other.parentRegion.getName()))
             return false;
         if(sensorParams == null) {
-            if(other.sensorParams != null)
-                return false;
-        } else if(!sensorParams.equals(other.sensorParams))
-            return false;
-        
-        return true;
+            return other.sensorParams == null;
+        } else return sensorParams.equals(other.sensorParams);
+
     }
 
 }

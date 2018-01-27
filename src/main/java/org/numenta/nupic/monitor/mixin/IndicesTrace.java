@@ -21,11 +21,7 @@
  */
 package org.numenta.nupic.monitor.mixin;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedHashSet;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -50,7 +46,7 @@ public class IndicesTrace extends Trace<LinkedHashSet<Integer>> {
      */
     public CountsTrace makeCountsTrace() {
         CountsTrace trace = new CountsTrace(monitor, String.format("# %s", title));
-        trace.items = items.stream().map(l -> l.size()).collect(Collectors.toList());
+        trace.items = items.stream().map(HashSet::size).collect(Collectors.toList());
         return trace;
     }
 
@@ -63,7 +59,7 @@ public class IndicesTrace extends Trace<LinkedHashSet<Integer>> {
         Trace<Integer> countsTrace = makeCountsTrace();
         
         int[] accum = { 0 };
-        trace.items = countsTrace.items.stream().map(i -> accum[0] += ((int)i)).collect(Collectors.toList());
+        trace.items = countsTrace.items.stream().map(i -> accum[0] += i).collect(Collectors.toList());
         
         return trace;
     }

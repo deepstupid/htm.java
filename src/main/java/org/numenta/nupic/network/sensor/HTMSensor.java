@@ -320,7 +320,7 @@ public class HTMSensor<T> implements Sensor<T>, Serializable {
             throw new IllegalStateException("Stream is already \"terminal\" (operated upon or empty)");
         }
         
-        final MultiEncoder encoder = (MultiEncoder)getEncoder();
+        final MultiEncoder encoder = getEncoder();
         if(encoder == null) {
             throw new IllegalStateException(
                 "setLocalParameters(Parameters) must be called before calling this method.");
@@ -391,7 +391,7 @@ public class HTMSensor<T> implements Sensor<T>, Serializable {
      * @return
      */
     private String[] getFieldNames() {
-        return (String[])header.getFieldNames().toArray(new String[header.getFieldNames().size()]);
+        return header.getFieldNames().toArray(new String[header.getFieldNames().size()]);
     }
     
     /**
@@ -651,7 +651,7 @@ public class HTMSensor<T> implements Sensor<T>, Serializable {
      * @return
      */
     public <K> MultiEncoder getEncoder() {
-        return (MultiEncoder)encoder;
+        return encoder;
     }
 
     /* (non-Javadoc)
@@ -684,11 +684,8 @@ public class HTMSensor<T> implements Sensor<T>, Serializable {
         } else if(!indexFieldMap.equals(other.indexFieldMap))
             return false;
         if(sensorParams == null) {
-            if(other.sensorParams != null)
-                return false;
-        } else if(!Arrays.equals(sensorParams.keys(), other.sensorParams.keys()))
-            return false;
-        return true;
+            return other.sensorParams == null;
+        } else return Arrays.equals(sensorParams.keys(), other.sensorParams.keys());
     }
 
 }

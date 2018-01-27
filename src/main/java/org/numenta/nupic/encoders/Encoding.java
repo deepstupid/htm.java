@@ -101,9 +101,6 @@ public class Encoding extends Tuple {
         if (!this.getValue().equals(other.getValue())) {
             return false;
         }
-        if(!Arrays.equals(this.getEncoding(), other.getEncoding())){
-            return false;
-        }
-        return true;
+        return Arrays.equals(this.getEncoding(), other.getEncoding());
     }
 }

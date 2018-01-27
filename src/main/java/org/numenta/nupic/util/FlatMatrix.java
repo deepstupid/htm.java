@@ -42,7 +42,7 @@ public interface FlatMatrix<T> extends Matrix<T> {
      */
     int getMaxIndex();
 
-    public int computeIndex(int[] coordinates, boolean doCheck);
+    int computeIndex(int[] coordinates, boolean doCheck);
 
     /**
      * Returns an integer array representing the coordinates of the specified index

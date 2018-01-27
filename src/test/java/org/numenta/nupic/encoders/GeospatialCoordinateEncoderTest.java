@@ -141,7 +141,7 @@ public class GeospatialCoordinateEncoderTest {
 		assertEquals(sdr1.length, sdr2.length);
 		int sum = ArrayUtils.sum(ArrayUtils.and(sdr1, sdr2));
 
-		return (double)sum / (double)ArrayUtils.sum(sdr1);
+		return (double)sum / ArrayUtils.sum(sdr1);
 	} 
 
 	@Test

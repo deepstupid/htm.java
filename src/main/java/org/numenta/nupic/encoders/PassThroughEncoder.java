@@ -157,7 +157,7 @@ public class PassThroughEncoder<T> extends Encoder<T> {
         Map<String, RangeList> fieldsDict = new HashMap<String, RangeList>();
         fieldsDict.put(fieldName, inner);
 
-        return new DecodeResult(fieldsDict, Arrays.asList(fieldName));
+        return new DecodeResult(fieldsDict, Collections.singletonList(fieldName));
     }
 
     @Override

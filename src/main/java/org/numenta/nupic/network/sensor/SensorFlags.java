@@ -61,7 +61,7 @@ public enum SensorFlags {
     /** Flag description */
     private String description;
     
-    private SensorFlags(String desc) {
+    SensorFlags(String desc) {
         this.description = desc;
     }
     

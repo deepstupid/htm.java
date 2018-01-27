@@ -127,7 +127,7 @@ public class Region implements Persistable {
     @SuppressWarnings("unchecked")
     @Override
     public Region preSerialize() {
-        layers.values().stream().forEach(l -> l.preSerialize());
+        layers.values().stream().forEach(Layer::preSerialize);
         return this;
     }
     
@@ -137,7 +137,7 @@ public class Region implements Persistable {
     @SuppressWarnings("unchecked")
     @Override
     public Region postDeSerialize() {
-        layers.values().stream().forEach(l -> l.postDeSerialize());
+        layers.values().stream().forEach(Layer::postDeSerialize);
         
         // Connect Layer Observable chains (which are transient so we must 
         // rebuild them and their subscribers)
@@ -188,7 +188,7 @@ public class Region implements Persistable {
      */
     public Region close() {
         if(layers.size() < 1) {
-            LOGGER.warn("Closing region: " + name + " before adding contents.");
+            LOGGER.warn("Closing region: {} before adding contents.", name);
             return this;
         }
         
@@ -335,11 +335,11 @@ public class Region implements Persistable {
         }
         
         if(tail.hasSensor()) {
-            LOGGER.info("Starting Region [" + getName() + "] input Layer thread.");
+            LOGGER.info("Starting Region [{}] input Layer thread.", getName());
             tail.start();
             return true;
         }else{
-            LOGGER.warn("Start called on Region [" + getName() + "] with no effect due to no Sensor present.");
+            LOGGER.warn("Start called on Region [{}] with no effect due to no Sensor present.", getName());
         }
         
         return false;
@@ -364,11 +364,11 @@ public class Region implements Persistable {
         }
         
         if(tail.hasSensor()) {
-            LOGGER.info("Re-Starting Region [" + getName() + "] input Layer thread.");
+            LOGGER.info("Re-Starting Region [{}] input Layer thread.", getName());
             tail.restart(startAtIndex);
             return true;
         }else{
-            LOGGER.warn("Re-Start called on Region [" + getName() + "] with no effect due to no Sensor present.");
+            LOGGER.warn("Re-Start called on Region [{}] with no effect due to no Sensor present.", getName());
         }
         
         return false;
@@ -382,7 +382,7 @@ public class Region implements Persistable {
      * @return  the {@link CheckPointOp} operator 
      */
     CheckPointOp<byte[]> getCheckPointOperator() {
-        LOGGER.debug("Region [" + getName() + "] CheckPoint called at: " + (new DateTime()));
+        LOGGER.debug("Region [{}] CheckPoint called at: {}", getName(), new DateTime());
         if(tail != null) {
             return tail.getCheckPointOperator();
             
@@ -396,14 +396,14 @@ public class Region implements Persistable {
      * Stops each {@link Layer} contained within this {@code Region}
      */
     public void halt() {
-        LOGGER.debug("Halt called on Region [" + getName() + "]");
+        LOGGER.debug("Halt called on Region [{}]", getName());
         if(tail != null) {
             tail.halt();
         }else{
             close();
             tail.halt();
         }
-        LOGGER.debug("Region [" + getName() + "] halted.");
+        LOGGER.debug("Region [{}] halted.", getName());
     }
     
     /**
@@ -695,11 +695,8 @@ public class Region implements Persistable {
         } else if(!layers.equals(other.layers))
             return false;
         if(name == null) {
-            if(other.name != null)
-                return false;
-        } else if(!name.equals(other.name))
-            return false;
-        return true;
+            return other.name == null;
+        } else return name.equals(other.name);
     }
     
 }

@@ -238,10 +238,7 @@ public class Pool implements Persistable {
             !other.synapseConnections.containsAll(synapseConnections)))
                 return false;
         if(synapsesBySourceIndex == null) {
-            if(other.synapsesBySourceIndex != null)
-                return false;
-        } else if(!synapsesBySourceIndex.toString().equals(other.synapsesBySourceIndex.toString()))
-            return false;
-        return true;
+            return other.synapsesBySourceIndex == null;
+        } else return synapsesBySourceIndex.toString().equals(other.synapsesBySourceIndex.toString());
     }
 }

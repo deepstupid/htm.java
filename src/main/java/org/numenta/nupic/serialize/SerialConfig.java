@@ -174,7 +174,7 @@ public class SerialConfig implements Serializable {
      * @param fileName  the file name to use
      */
     public SerialConfig(String fileName) {
-        this(fileName, (String)null);
+        this(fileName, null);
     }
     
     /**
@@ -262,7 +262,7 @@ public class SerialConfig implements Serializable {
      * @return  the absolute path to the serialize directory.
      */
     public String getAbsoluteSerialDir() {
-        return System.getProperty("user.home") + File.separator + fileDir;
+        return System.getProperty("java.io.tmpdir") + File.separator + fileDir;
     }
     
     /**
@@ -386,11 +386,8 @@ public class SerialConfig implements Serializable {
         } else if(!fileName.equals(other.fileName))
             return false;
         if(registry == null) {
-            if(other.registry != null)
-                return false;
-        } else if(!registry.equals(other.registry))
-            return false;
-        return true;
+            return other.registry == null;
+        } else return registry.equals(other.registry);
     }
 }
 

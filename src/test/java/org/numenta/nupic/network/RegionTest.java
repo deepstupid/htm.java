@@ -39,10 +39,8 @@ import org.numenta.nupic.Parameters;
 import org.numenta.nupic.Parameters.KEY;
 import org.numenta.nupic.algorithms.Anomaly;
 import org.numenta.nupic.algorithms.Anomaly.Mode;
-<<<<<<< HEAD
-=======
+
 import org.numenta.nupic.algorithms.CLAClassifier;
->>>>>>> 8fc6b596461a879fdf3e8936833c9a972d858b57
 import org.numenta.nupic.algorithms.SpatialPooler;
 import org.numenta.nupic.algorithms.TemporalMemory;
 import org.numenta.nupic.datagen.ResourceLocator;
@@ -207,11 +205,9 @@ public class RegionTest extends ObservableTestBase {
         Parameters p = NetworkTestHarness.getParameters();
         p = p.union(NetworkTestHarness.getDayDemoTestEncoderParams());
         p.set(KEY.RANDOM, new MersenneTwister(42));
-<<<<<<< HEAD
-=======
+
         p.set(KEY.INFERRED_FIELDS, getInferredFieldsMap("dayOfWeek", CLAClassifier.class));
->>>>>>> 8fc6b596461a879fdf3e8936833c9a972d858b57
-        
+
         Map<String, Object> params = new HashMap<>();
         params.put(KEY_MODE, Mode.PURE);
         
@@ -247,14 +243,12 @@ public class RegionTest extends ObservableTestBase {
             }
         });
         
-        (new Thread() {
-            public void run() {
-                while(!isHalted) {
-                    try { Thread.sleep(1); }catch(Exception e) {e.printStackTrace();}
-                }
-                r1.halt();
+        (new Thread(() -> {
+            while(!isHalted) {
+                try { Thread.sleep(1); }catch(Exception e) {e.printStackTrace();}
             }
-        }).start();
+            r1.halt();
+        })).start();
         
         r1.start();
         
@@ -335,12 +329,9 @@ public class RegionTest extends ObservableTestBase {
         p.set(KEY.MAX_BOOST, 10.0);
         p.set(KEY.DUTY_CYCLE_PERIOD, 7);
         p.set(KEY.RANDOM, new MersenneTwister(42));
-<<<<<<< HEAD
-        
-=======
+
         p.set(KEY.INFERRED_FIELDS, getInferredFieldsMap("dayOfWeek", CLAClassifier.class));
 
->>>>>>> 8fc6b596461a879fdf3e8936833c9a972d858b57
         Map<String, Object> params = new HashMap<>();
         params.put(KEY_MODE, Mode.PURE);
         
@@ -413,11 +404,9 @@ public class RegionTest extends ObservableTestBase {
         p.set(KEY.MAX_BOOST, 10.0);
         p.set(KEY.DUTY_CYCLE_PERIOD, 7);
         p.set(KEY.RANDOM, new MersenneTwister(42));
-<<<<<<< HEAD
-=======
+
         p.set(KEY.INFERRED_FIELDS, getInferredFieldsMap("dayOfWeek", CLAClassifier.class));
->>>>>>> 8fc6b596461a879fdf3e8936833c9a972d858b57
-        
+
         Map<String, Object> params = new HashMap<>();
         params.put(KEY_MODE, Mode.PURE);
         Network n = Network.create("test network", p)
@@ -464,11 +453,9 @@ public class RegionTest extends ObservableTestBase {
         Parameters p = NetworkTestHarness.getParameters();
         p = p.union(NetworkTestHarness.getDayDemoTestEncoderParams());
         p.set(KEY.RANDOM, new MersenneTwister(42));
-<<<<<<< HEAD
-=======
+
         p.set(KEY.INFERRED_FIELDS, getInferredFieldsMap("dayOfWeek", CLAClassifier.class));
->>>>>>> 8fc6b596461a879fdf3e8936833c9a972d858b57
-        
+
         Network n = Network.create("test network", p)
             .add(Network.createRegion("r1")
                 .add(Network.createLayer("2/3", p)

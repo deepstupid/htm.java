@@ -333,13 +333,10 @@ public class Deque<E> implements Iterable<E>, Serializable {
 		if (currentSize != other.currentSize)
 			return false;
 		if (backingList == null) {
-			if (other.backingList != null)
-				return false;
-		} else if (!deepEquals(other))
-			return false;
-		
-		return true;
-	}
+            return other.backingList == null;
+		} else return deepEquals(other);
+
+    }
 	
 	private boolean deepEquals(Deque<E> other) {
 		Iterator<E> otherIt = other.iterator();

@@ -192,7 +192,7 @@ public class ObservableSensorTest {
         Sensor<ObservableSensor<String[]>> sensor = Sensor.create(
             ObservableSensor::create, 
                 SensorParams.create(
-                    Keys::obs, new Object[] {"name", manual}));
+                    Keys::obs, "name", manual));
         
         Thread t = null;
         (t = new Thread() {

@@ -223,8 +223,8 @@ public class SDRCategoryEncoder extends Encoder<String> {
             int[] categoryEncoding = sdrByCategory.getSdr(index);
             System.arraycopy(categoryEncoding, 0, output, 0, categoryEncoding.length);
         }
-        LOG.trace("input:" + input + ", index:" + index + ", output:" + ArrayUtils.intArrayToString(output));
-        LOG.trace("decoded:" + decodedToStr(decode(output, "")));
+        LOG.trace("input:{}, index:{}, output:{}", input, index, ArrayUtils.intArrayToString(output));
+        LOG.trace("decoded:{}", decodedToStr(decode(output, "")));
     }
     
     /**
@@ -304,7 +304,7 @@ public class SDRCategoryEncoder extends Encoder<String> {
         if (LOG.isTraceEnabled()){
             int inx = 0;
             for (String category : sdrByCategory.keySet()) {
-                LOG.trace(overlap[inx] + " " + category);
+                LOG.trace("{} {}", overlap[inx], category);
                 inx++;
             }
         }
@@ -333,7 +333,7 @@ public class SDRCategoryEncoder extends Encoder<String> {
         Map<String, RangeList> fieldsDict = new HashMap<>();
         fieldsDict.put(fieldName, new RangeList(resultRanges, resultString.toString()));
         // return ({fieldName: (resultRanges, resultString)}, [fieldName])
-        return new DecodeResult(fieldsDict, Arrays.asList(fieldName));
+        return new DecodeResult(fieldsDict, Collections.singletonList(fieldName));
     }
 
 

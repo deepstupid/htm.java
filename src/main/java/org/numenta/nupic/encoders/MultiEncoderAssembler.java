@@ -53,7 +53,7 @@ public class MultiEncoderAssembler {
             
             if(encoderType.equals("SDRCategoryEncoder")) {
                 // Add mappings for category list
-                configureCategoryBuilder((MultiEncoder)encoder, params, builder);
+                configureCategoryBuilder(encoder, params, builder);
             }else if(encoderType.equals("DateEncoder")) {
                 // Extract date specific mappings out of the map so that we can
                 // pre-configure the DateEncoder with its needed directives.
@@ -67,7 +67,7 @@ public class MultiEncoderAssembler {
                     if (!param.equals("fieldName") && !param.equals("encoderType") &&
                         !param.equals("fieldType") && !param.equals("fieldEncodings")) {
                         
-                        ((MultiEncoder)encoder).setValue(builder, param, params.get(param));
+                        encoder.setValue(builder, param, params.get(param));
                     }
                 }
             }
@@ -254,7 +254,7 @@ public class MultiEncoderAssembler {
             if((keyType = (String)encoderSettings.get(key).get("encoderType")) != null &&
                     keyType.equals(encoderType)) {
                 // Remove the key from the specified map (extraction)
-                return (Map<String, Object>)encoderSettings.get(key);
+                return encoderSettings.get(key);
             }
         }
         return null;

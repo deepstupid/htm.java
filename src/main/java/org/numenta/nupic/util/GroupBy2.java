@@ -238,9 +238,9 @@ public class GroupBy2<R extends Comparable<R>> implements Generator<Tuple> {
      */
     private boolean nextMinKey() {
         return Arrays.stream(nextList)
-            .filter(opt -> opt.isPresent())
+            .filter(Slot::isPresent)
             .map(opt -> opt.get().getSecond())
-            .min((k, k2) -> k.compareTo(k2))
+            .min(Comparable::compareTo)
             .map(k -> { minKeyVal = k; return k; } )
             .isPresent();
     }

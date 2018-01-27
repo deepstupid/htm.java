@@ -152,10 +152,7 @@ public class ComputeCycle implements Persistable {
         } else if(!activeSegments.equals(other.activeSegments))
             return false;
         if(matchingSegments == null) {
-            if(other.matchingSegments != null)
-                return false;
-        } else if(!matchingSegments.equals(other.matchingSegments))
-            return false;
-        return true;
+            return other.matchingSegments == null;
+        } else return matchingSegments.equals(other.matchingSegments);
     }
 }

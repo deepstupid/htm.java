@@ -22,12 +22,7 @@
 
 package org.numenta.nupic.encoders;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
@@ -116,7 +111,7 @@ public class DateEncoder extends Encoder<DateTime> {
 
     // Currently the only holiday we know about is December 25
     // holidays is a list of holidays that occur on a fixed date every year
-    protected List<Tuple> holidaysList = Arrays.asList(new Tuple(12, 25));
+    protected List<Tuple> holidaysList = Collections.singletonList(new Tuple(12, 25));
     
     //////////////// Convenience DateTime Formats ////////////////////
     public transient static DateTimeFormatter FULL_DATE_TIME_ZONE = DateTimeFormat.forPattern("YYYY/MM/dd HH:mm:ss.SSSz");
@@ -132,7 +127,7 @@ public class DateEncoder extends Encoder<DateTime> {
     protected transient DateTimeFormatter customFormatter;
     protected String customFormatterPattern;
     
-    protected Set<FieldMetaType> fieldTypes = new HashSet<>(Arrays.asList(FieldMetaType.DATETIME));
+    protected Set<FieldMetaType> fieldTypes = new HashSet<>(Collections.singletonList(FieldMetaType.DATETIME));
     
     
 
@@ -550,7 +545,7 @@ public class DateEncoder extends Encoder<DateTime> {
                 + inputData.getSecondOfMinute() / 3600.0;
 
         // The day of week was 1 based, so convert to 0 based
-        double dayOfWeek = (double)inputData.getDayOfWeek() - 1.0 + (timeOfDay / 24.0);
+        double dayOfWeek = inputData.getDayOfWeek() - 1.0 + (timeOfDay / 24.0);
 
         if(seasonEncoder != null) {
             // The day of year was 1 based, so convert to 0 based

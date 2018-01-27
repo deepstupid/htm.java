@@ -46,13 +46,11 @@ public class ObservableTestBaseTest extends ObservableTestBase {
      */
     @Test
     public void testDirectObservableSubscriberCanCatchFailedAssertions() {
-        Observable<Inference> observable = Observable.create(new Observable.OnSubscribe<Inference>() {
-            @Override public void call(Subscriber<? super Inference> subscriber) {
-                ManualInput inf = new ManualInput();
-                inf.anomalyScore(1.0);
-                
-                subscriber.onNext(inf);
-            }
+        Observable<Inference> observable = Observable.create(subscriber -> {
+            ManualInput inf = new ManualInput();
+            inf.anomalyScore(1.0);
+
+            subscriber.onNext(inf);
         });
         
         Observer<Inference> observer = new Observer<Inference>() {
@@ -158,7 +156,7 @@ public class ObservableTestBaseTest extends ObservableTestBase {
      * and whose indirection causes the asserts within {@link Observer#onNext(Object)}
      * to pass the tests when they actually shouldn't.
      */
-    class FauxNetwork {
+    static class FauxNetwork {
         List<Observer<Inference>> observers = new ArrayList<>();
         
         PublishSubject<Inference> internalDispatch = PublishSubject.create();
@@ -175,12 +173,7 @@ public class ObservableTestBaseTest extends ObservableTestBase {
                 }
             });
             
-            clientObservable = Observable.create(new Observable.OnSubscribe<Inference>() {
-                @SuppressWarnings("unchecked")
-                @Override public void call(Subscriber<? super Inference> t) {
-                    observers.add((Observer<Inference>)t);
-                }
-            });
+            clientObservable = Observable.create(t -> observers.add((Observer<Inference>)t));
         }
         
         public void subscribe(Observer<Inference> subscriber) {

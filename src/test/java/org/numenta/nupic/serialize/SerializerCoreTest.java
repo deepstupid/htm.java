@@ -38,7 +38,7 @@ public class SerializerCoreTest implements Serializable {
     public void testGetObjectInput() {
         try {
             HTMObjectInput input = Persistence.get().serializer().getObjectInput(new InputStream() {
-                @Override public int read() throws IOException {
+                @Override public int read() {
                     return 0;
                 }
             });
@@ -58,7 +58,7 @@ public class SerializerCoreTest implements Serializable {
     public void testGetObjectOutput() {
         try {
             HTMObjectOutput output = Persistence.get().serializer().getObjectOutput(new OutputStream() {
-                @Override public void write(int b) throws IOException {
+                @Override public void write(int b) {
                     
                 }
             });

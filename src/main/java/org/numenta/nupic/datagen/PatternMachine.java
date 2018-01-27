@@ -250,7 +250,7 @@ public class PatternMachine {
             }else if(verbosity > 1) {
                 numberText = number + " (" + numberItems.get(number).size() + "bits)";
             }else{
-                numberText = "" + number;
+                numberText = String.valueOf(number);
             }
             
             numberList.add(numberText);
@@ -270,13 +270,10 @@ public class PatternMachine {
         LinkedHashMap<Integer, LinkedHashSet<Integer>> retVal = new LinkedHashMap<Integer, LinkedHashSet<Integer>>();
         
         List<Integer> sortByKeys = new ArrayList<Integer>(map.keySet());
-        Collections.sort(sortByKeys, new Comparator<Integer>() {
-            @Override public int compare(Integer arg0, Integer arg1) {
-                int len0 = map.get(arg0).size();
-                int len1 = map.get(arg1).size();
-                return len0 == len1 ? 0 : len0 > len1 ? -1 : 1;
-            }
-            
+        sortByKeys.sort((arg0, arg1) -> {
+            int len0 = map.get(arg0).size();
+            int len1 = map.get(arg1).size();
+            return len0 == len1 ? 0 : len0 > len1 ? -1 : 1;
         });
         for(Integer key : sortByKeys) {
             retVal.put(key, new LinkedHashSet<Integer>(map.get(key)));
@@ -314,7 +311,7 @@ public class PatternMachine {
         List<Integer> retVal = new ArrayList<Integer>();
         int len = population.size();
         for(int i = 0;i < num;i++) {
-            int j = (int)(random.nextDouble() * (len - i));
+            int j = random.nextInt(len - i);
             retVal.add(population.get(j));
             population.set(j, population.get(len - i - 1));
         }

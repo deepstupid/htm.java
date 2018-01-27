@@ -39,5 +39,5 @@ public interface PeekableIterator<T> extends Iterator<T> {
      * 
      * @return  the "next" item to be returned by a call to {@link Iterator#next()}
      */
-    public T peek();
+    T peek();
 }

@@ -37,7 +37,7 @@ public interface MetaStream<T> extends Stream<T> {
      * 
      * @return  a {@link ValueList} describing meta features of this stream.
      */
-    public ValueList getMeta();
+    ValueList getMeta();
     
     /**
      * <p>
@@ -51,5 +51,5 @@ public interface MetaStream<T> extends Stream<T> {
      * 
      * @return  true if terminal, false if not.
      */
-    public boolean isTerminal();
+    boolean isTerminal();
 }

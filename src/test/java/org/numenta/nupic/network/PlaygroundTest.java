@@ -91,7 +91,7 @@ public class PlaygroundTest {
         int cycleCount = 0;
         for(;cycleCount < NUM_CYCLES;cycleCount++) {
             for(double j = 0;j < INPUT_GROUP_COUNT;j++) {
-                pub.onNext("" + j);
+                pub.onNext(String.valueOf(j));
             }
             
             network.reset();
@@ -117,11 +117,11 @@ public class PlaygroundTest {
         p.set(KEY.RANDOM, new FastRandom(42));
         
         Sensor<ObservableSensor<String[]>> sensor = Sensor.create(
-            ObservableSensor::create, SensorParams.create(Keys::obs, new Object[] {"name", 
-                PublisherSupplier.builder()
-                    .addHeader("dayOfWeek")
-                    .addHeader("number")
-                    .addHeader("B").build() }));
+            ObservableSensor::create, SensorParams.create(Keys::obs, "name",
+                        PublisherSupplier.builder()
+                            .addHeader("dayOfWeek")
+                            .addHeader("number")
+                            .addHeader("B").build()));
         
         Network network = Network.create("test network", p).add(Network.createRegion("r1")
             .add(Network.createLayer("1", p)
@@ -159,7 +159,7 @@ public class PlaygroundTest {
                 System.out.println("TemporalMemory Actives = " + Arrays.toString(SDR.asColumnIndices(inf.getSDR(), cellsPerColumn)));
                 
                 System.out.print("CLAClassifier prediction = " + 
-                    stringValue((Double)result.getMostProbableValue(1)) + " --> " + ((Double)result.getMostProbableValue(1)));
+                    stringValue((Double)result.getMostProbableValue(1)) + " --> " + result.getMostProbableValue(1));
                 
                 System.out.println("  |  CLAClassifier 1 step prob = " + Arrays.toString(result.getStats(1)) + "\n");
                 

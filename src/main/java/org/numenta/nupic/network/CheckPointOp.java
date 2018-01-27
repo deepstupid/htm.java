@@ -63,5 +63,5 @@ public interface CheckPointOp<T> {
      * @param t     a {@link rx.Observer}
      * @return  a Subscription object which is meaningless.
      */
-    public Subscription checkPoint(Observer<? super T> t);
+    Subscription checkPoint(Observer<? super T> t);
 }

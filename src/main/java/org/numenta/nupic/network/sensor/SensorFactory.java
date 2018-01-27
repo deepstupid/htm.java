@@ -50,5 +50,5 @@ public interface SensorFactory<T> {
      * @param params    the {@link SensorParams} to use for configuration.
      * @return
      */
-    public Sensor<T> create(SensorParams params);
+    Sensor<T> create(SensorParams params);
 }

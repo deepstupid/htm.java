@@ -43,7 +43,7 @@ public class CategoryEncoderTest {
 	private CategoryEncoder.Builder builder;
 
 	private void setUp() {
-        builder =  ((CategoryEncoder.Builder)CategoryEncoder.builder())
+        builder =  CategoryEncoder.builder()
             .w(3)
             .radius(0)
             .minVal(0.0)
@@ -62,7 +62,7 @@ public class CategoryEncoderTest {
 
 		setUp();
 		builder.radius(1);
-		builder.categoryList(Arrays.<String>asList(categories));
+		builder.categoryList(Arrays.asList(categories));
 		initCE();
 
 		LOGGER.info("Testing CategoryEncoder...");
@@ -78,7 +78,7 @@ public class CategoryEncoderTest {
 		MinMax minMax = rangeList.get(0).getRanges().get(0);
 		assertEquals(minMax.min(), minMax.max(), 0);
 		assertTrue(minMax.min() == 3 && minMax.max() == 3);
-		LOGGER.info("decodedToStr of " + minMax + "=>" + ce.decodedToStr(decoded));
+        LOGGER.info("decodedToStr of {}=>{}", minMax, ce.decodedToStr(decoded));
 
 		// Test topdown compute
 		for(String v : categories) {
@@ -88,7 +88,7 @@ public class CategoryEncoderTest {
 			assertEquals((int)ce.getScalars(v).get(0), (int)topDown.getScalar().doubleValue());
 
 			int[] bucketIndices = ce.getBucketIndices(v);
-			LOGGER.info("bucket index => " + bucketIndices[0]);
+            LOGGER.info("bucket index => {}", bucketIndices[0]);
 			topDown = ce.getBucketInfo(bucketIndices).get(0);
 			assertEquals(v, topDown.getValue());
 			assertEquals((int)ce.getScalars(v).get(0), (int)topDown.getScalar().doubleValue());
@@ -109,7 +109,7 @@ public class CategoryEncoderTest {
 		minMax = rangeList.get(0).getRanges().get(0);
 		assertEquals(minMax.min(), minMax.max(), 0);
 		assertTrue(minMax.min() == 0 && minMax.max() == 0);
-		LOGGER.info("decodedToStr of " + minMax + "=>" + ce.decodedToStr(decoded));
+        LOGGER.info("decodedToStr of {}=>{}", minMax, ce.decodedToStr(decoded));
 
 		Encoding topDown = ce.topDownCompute(output).get(0);
 		assertEquals(topDown.getValue(), "<UNKNOWN>");
@@ -121,7 +121,7 @@ public class CategoryEncoderTest {
 		assertTrue(Arrays.equals( new int[] {0,0,0,1,1,1,0,0,0,0,0,0 }, output));
 
 		// MISSING VALUE
-		int[] outputForMissing = ce.encode((String)null);
+		int[] outputForMissing = ce.encode(null);
 		assertTrue(Arrays.equals( new int[] {0,0,0,0,0,0,0,0,0,0,0,0 }, outputForMissing));
 
 		// Test reverse lookup
@@ -132,7 +132,7 @@ public class CategoryEncoderTest {
 		minMax = rangeList.get(0).getRanges().get(0);
 		assertEquals(minMax.min(), minMax.max(), 0);
 		assertTrue(minMax.min() == 1 && minMax.max() == 1);
-		LOGGER.info("decodedToStr of " + minMax + "=>" + ce.decodedToStr(decoded));
+        LOGGER.info("decodedToStr of {}=>{}", minMax, ce.decodedToStr(decoded));
 
 		// Test topdown compute
 		topDown = ce.topDownCompute(output).get(0);
@@ -151,7 +151,7 @@ public class CategoryEncoderTest {
 		minMax = rangeList.get(0).getRanges().get(0);
 		assertTrue(minMax.min() != minMax.max());
 		assertTrue(minMax.min() == 0 && minMax.max() == 3);
-		LOGGER.info("decodedToStr of " + minMax + "=>" + ce.decodedToStr(decoded));
+        LOGGER.info("decodedToStr of {}=>{}", minMax, ce.decodedToStr(decoded));
 
 
 		//----------------
@@ -160,18 +160,19 @@ public class CategoryEncoderTest {
 
 		setUp();
 		builder.radius(1);
-		builder.categoryList(Arrays.<String>asList(categories));
+		builder.categoryList(Arrays.asList(categories));
 		initCE();
 
 		for(String cat : categories) {
 			output = ce.encode(cat);
 			topDown = ce.topDownCompute(output).get(0);
-			LOGGER.debug(cat + "->" + Arrays.toString(output) +
-					" " + ArrayUtils.where(output, new Condition.Adapter<Integer>() {
-						public boolean eval(int i) { return i == 1; }
-					}));
-			LOGGER.debug(" scalarTopDown: " + ce.topDownCompute(output));
-			LOGGER.debug(" topDown " + topDown);
+            LOGGER.debug("{}->{} {}", cat, Arrays.toString(output), ArrayUtils.where(output, new Condition.Adapter<Integer>() {
+                public boolean eval(int i) {
+                    return i == 1;
+                }
+            }));
+            LOGGER.debug(" scalarTopDown: {}", ce.topDownCompute(output));
+            LOGGER.debug(" topDown {}", topDown);
 			assertEquals(topDown.getValue(), cat);
 			assertEquals(topDown.getScalar(), (int)ce.getScalars(cat).get(0));
 		}
@@ -185,20 +186,19 @@ public class CategoryEncoderTest {
 		builder.radius(1);
 		builder.w(9);
 		builder.forced(true);
-		builder.categoryList(Arrays.<String>asList(categories));
+		builder.categoryList(Arrays.asList(categories));
 		initCE();
 
 		for(String cat : categories) {
 			output = ce.encode(cat);
 			topDown = ce.topDownCompute(output).get(0);
-			LOGGER.debug(cat + "->" + Arrays.toString(output) +
-						" " + ArrayUtils.where(output, new Condition.Adapter<Integer>() {
-					public boolean eval(int i) {
-						return i == 1;
-					}
-			}));
-			LOGGER.debug(" scalarTopDown: " + ce.topDownCompute(output));
-			LOGGER.debug(" topDown " + topDown);
+            LOGGER.debug("{}->{} {}", cat, Arrays.toString(output), ArrayUtils.where(output, new Condition.Adapter<Integer>() {
+                public boolean eval(int i) {
+                    return i == 1;
+                }
+            }));
+            LOGGER.debug(" scalarTopDown: {}", ce.topDownCompute(output));
+            LOGGER.debug(" topDown {}", topDown);
 			assertEquals(topDown.getValue(), cat);
 			assertEquals(topDown.getScalar(), (int)ce.getScalars(cat).get(0));
 
@@ -212,12 +212,13 @@ public class CategoryEncoderTest {
 //			LOGGER.info("outputNZs = " + Arrays.toString(outputNZs));
 //			LOGGER.info("outputDelta = " + Arrays.toString(output));
 			topDown = ce.topDownCompute(output).get(0);
-			LOGGER.debug("missing 1 bit on left: ->" + Arrays.toString(output) +
-					" " + ArrayUtils.where(output, new Condition.Adapter<Integer>() {
-						public boolean eval(int i) { return i == 1; }
-					}));
-			LOGGER.debug(" scalarTopDown: " + ce.topDownCompute(output));
-			LOGGER.debug(" topDown " + topDown);
+            LOGGER.debug("missing 1 bit on left: ->{} {}", Arrays.toString(output), ArrayUtils.where(output, new Condition.Adapter<Integer>() {
+                public boolean eval(int i) {
+                    return i == 1;
+                }
+            }));
+            LOGGER.debug(" scalarTopDown: {}", ce.topDownCompute(output));
+            LOGGER.debug(" topDown {}", topDown);
 			assertEquals(topDown.getValue(), cat);
 			assertEquals(topDown.getScalar(), (int)ce.getScalars(cat).get(0));
 
@@ -225,12 +226,13 @@ public class CategoryEncoderTest {
 			output[outputNZs[0]] = 1;
 			output[outputNZs[outputNZs.length - 1]] = 0;
 			topDown = ce.topDownCompute(output).get(0);
-			LOGGER.debug("missing 1 bit on right: ->" + Arrays.toString(output) +
-					" " + ArrayUtils.where(output, new Condition.Adapter<Integer>() {
-						public boolean eval(int i) { return i == 1; }
-					}));
-			LOGGER.debug(" scalarTopDown: " + ce.topDownCompute(output));
-			LOGGER.debug(" topDown " + topDown);
+            LOGGER.debug("missing 1 bit on right: ->{} {}", Arrays.toString(output), ArrayUtils.where(output, new Condition.Adapter<Integer>() {
+                public boolean eval(int i) {
+                    return i == 1;
+                }
+            }));
+            LOGGER.debug(" scalarTopDown: {}", ce.topDownCompute(output));
+            LOGGER.debug(" topDown {}", topDown);
 			assertEquals(topDown.getValue(), cat);
 			assertEquals(topDown.getScalar(), (int)ce.getScalars(cat).get(0));
 
@@ -240,12 +242,13 @@ public class CategoryEncoderTest {
 			for(int i = 0;i < indexes.length;i++) output[indexes[i]] = 1;
 			LOGGER.info(Arrays.toString(output));
 			topDown = ce.topDownCompute(output).get(0);
-			LOGGER.debug("missing 4 bits on left: ->" + Arrays.toString(output) +
-					" " + ArrayUtils.where(output, new Condition.Adapter<Integer>() {
-						public boolean eval(int i) { return i == 1; }
-					}));
-			LOGGER.debug(" scalarTopDown: " + ce.topDownCompute(output));
-			LOGGER.debug(" topDown " + topDown);
+            LOGGER.debug("missing 4 bits on left: ->{} {}", Arrays.toString(output), ArrayUtils.where(output, new Condition.Adapter<Integer>() {
+                public boolean eval(int i) {
+                    return i == 1;
+                }
+            }));
+            LOGGER.debug(" scalarTopDown: {}", ce.topDownCompute(output));
+            LOGGER.debug(" topDown {}", topDown);
 			assertEquals(topDown.getValue(), cat);
 			assertEquals(topDown.getScalar(), (int)ce.getScalars(cat).get(0));
 
@@ -255,12 +258,13 @@ public class CategoryEncoderTest {
 			for(int i = 0;i < indexes.length;i++) output[indexes[i]] = 1;
 			LOGGER.info(Arrays.toString(output));
 			topDown = ce.topDownCompute(output).get(0);
-			LOGGER.debug("missing 4 bits on left: ->" + Arrays.toString(output) +
-					" " + ArrayUtils.where(output, new Condition.Adapter<Integer>() {
-						public boolean eval(int i) { return i == 1; }
-					}));
-			LOGGER.debug(" scalarTopDown: " + ce.topDownCompute(output));
-			LOGGER.debug(" topDown " + topDown);
+            LOGGER.debug("missing 4 bits on left: ->{} {}", Arrays.toString(output), ArrayUtils.where(output, new Condition.Adapter<Integer>() {
+                public boolean eval(int i) {
+                    return i == 1;
+                }
+            }));
+            LOGGER.debug(" scalarTopDown: {}", ce.topDownCompute(output));
+            LOGGER.debug(" topDown {}", topDown);
 			assertEquals(topDown.getValue(), cat);
 			assertEquals(topDown.getScalar(), (int)ce.getScalars(cat).get(0));
 		}
@@ -269,12 +273,13 @@ public class CategoryEncoderTest {
 		int[] output2 = ce.encode("cat9");
 		output = ArrayUtils.or(output1, output2);
 		topDown = ce.topDownCompute(output).get(0);
-		LOGGER.debug("cat1 + cat9 ->" + Arrays.toString(output) +
-				" " + ArrayUtils.where(output, new Condition.Adapter<Integer>() {
-					public boolean eval(int i) { return i == 1; }
-				}));
-		LOGGER.debug(" scalarTopDown: " + ce.topDownCompute(output));
-		LOGGER.debug(" topDown " + topDown);
+        LOGGER.debug("cat1 + cat9 ->{} {}", Arrays.toString(output), ArrayUtils.where(output, new Condition.Adapter<Integer>() {
+            public boolean eval(int i) {
+                return i == 1;
+            }
+        }));
+        LOGGER.debug(" scalarTopDown: {}", ce.topDownCompute(output));
+        LOGGER.debug(" topDown {}", topDown);
 
 		assertTrue(topDown.getScalar().equals((int)ce.getScalars("cat1").get(0)) ||
 			topDown.getScalar().equals((int)ce.getScalars("cat9").get(0)));

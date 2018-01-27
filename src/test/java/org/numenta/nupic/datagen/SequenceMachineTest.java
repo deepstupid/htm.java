@@ -19,7 +19,7 @@ public class SequenceMachineTest {
         SequenceMachine sm = new SequenceMachine(null);
         List<Integer> result = sm.generateNumbers(2, 10, new Tuple(5, 10));
         
-        assertTrue(Arrays.equals(expected, ArrayUtils.toPrimitive(result.toArray(new Integer[0]))));
+        assertTrue(Arrays.equals(expected, ArrayUtils.toPrimitive(result.toArray(new Integer[result.size()]))));
     }
 
 }

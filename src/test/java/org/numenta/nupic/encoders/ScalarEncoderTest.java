@@ -28,10 +28,7 @@ import org.numenta.nupic.util.ArrayUtils;
 import org.numenta.nupic.util.MinMax;
 import org.numenta.nupic.util.Tuple;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -260,7 +257,7 @@ public class ScalarEncoderTest {
 			
 			Map<String, RangeList> fieldsMap = decoded.getFields();
 			assertEquals(1, fieldsMap.size());
-			RangeList ranges = (RangeList)new ArrayList<RangeList>(fieldsMap.values()).get(0);
+			RangeList ranges = new ArrayList<RangeList>(fieldsMap.values()).get(0);
 			assertEquals(1, ranges.size());
 			assertEquals(ranges.getRange(0).min(), ranges.getRange(0).max(), 0);
 			assertTrue(ranges.getRange(0).min() - v < se.getResolution());
@@ -356,7 +353,7 @@ public class ScalarEncoderTest {
 		TDoubleList actValues = new TDoubleArrayList(new double[] { 4, 2, 1 });
 		
 		TDoubleList scores = se.closenessScores(expValues, actValues, false);
-		for(Tuple t : ArrayUtils.zip(Arrays.asList(2, 2, 1), Arrays.asList(scores.get(0)))) {
+		for(Tuple t : ArrayUtils.zip(Arrays.asList(2, 2, 1), Collections.singletonList(scores.get(0)))) {
 			double a = (int)t.get(0);
 			double b = (double)t.get(1);
 			assertTrue(a == b);

@@ -263,7 +263,7 @@ public class Network implements Persistable {
             tail.close();
         }
         
-        regions.stream().forEach(r -> r.preSerialize());
+        regions.stream().forEach(Region::preSerialize);
         return this;
     }
     
@@ -275,7 +275,7 @@ public class Network implements Persistable {
     @Override
     public Network postDeSerialize() {
         regions.stream().forEach(r -> r.setNetwork(this));
-        regions.stream().forEach(r -> r.postDeSerialize());
+        regions.stream().forEach(Region::postDeSerialize);
         
         // Connect Layer Observable chains (which are transient so we must 
         // rebuild them and their subscribers)
@@ -323,7 +323,7 @@ public class Network implements Persistable {
      * @return  the {@link CheckPointOp} operator 
      */
     CheckPointOp<byte[]> getCheckPointOperator() {
-        LOGGER.debug("Network [" + getName() + "] called checkPoint() at: " + (new DateTime()));
+        LOGGER.debug("Network [{}] called checkPoint() at: {}", getName(), new DateTime());
         
         if(regions.size() == 1) {
             this.tail = regions.get(0);
@@ -697,7 +697,7 @@ public class Network implements Persistable {
      * Closes all the {@link Region} objects, in this {@link Network}
      */
     public Network close() {
-        regions.forEach(region -> region.close());
+        regions.forEach(Region::close);
         return this;
     }
 
@@ -843,11 +843,8 @@ public class Network implements Persistable {
         } else if(!regions.equals(other.regions))
             return false;
         if(sensor == null) {
-            if(other.sensor != null)
-                return false;
-        } else if(!sensor.equals(other.sensor))
-            return false;
-        return true;
+            return other.sensor == null;
+        } else return sensor.equals(other.sensor);
     }
 
 }

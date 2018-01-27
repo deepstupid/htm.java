@@ -67,7 +67,7 @@ public class URISensorTest {
         assertEquals("\'T\':\'B\'", list.getRow(2).toString());
         
         try {
-            parms = SensorParams.create(Keys::path, new Object[] { "", new Object() });
+            parms = SensorParams.create(Keys::path, "", new Object());
             Sensor.create(URISensor::create, parms);
             fail();
         }catch(Exception e) {

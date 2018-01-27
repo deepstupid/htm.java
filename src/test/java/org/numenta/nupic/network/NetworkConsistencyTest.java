@@ -316,8 +316,8 @@ public class NetworkConsistencyTest {
                 if(doPrintout) System.out.println("Anomaly Score = " + score);
                 
                 if(inf.getRecordNum() / 7 == SAMPLE_WEEK) {
-                    napiSamples.add(new SampleWeek(inf.getRecordNum() + 1, inf.getEncoding(), inf.getFeedForwardActiveColumns(), 
-                        inf.getFeedForwardSparseActives(), predictedColumns, actCellIndices, predCellIndices, score));
+                    napiSamples.add(new SampleWeek(inf.getRecordNum() + 1, inf.getEncoding(), inf.getFeedForwardActiveColumns(),
+                            inf.getFeedForwardSparseActives(), predictedColumns, actCellIndices, predCellIndices, score));
                 }
             }
         });
@@ -438,7 +438,7 @@ public class NetworkConsistencyTest {
         }
     }
     
-    class SampleWeek {
+    static class SampleWeek {
         int seqNum;
         int[] encoderOut, spOut, tmIn, tmPred, activeCells, predictiveCells;
         double score;
@@ -500,9 +500,7 @@ public class NetworkConsistencyTest {
                 return false;
             if(!Arrays.equals(activeCells, other.activeCells))
                 return false;
-            if(!Arrays.equals(predictiveCells, other.predictiveCells))
-                return false;
-            return true;
+            return Arrays.equals(predictiveCells, other.predictiveCells);
         }
 
     }

@@ -55,21 +55,21 @@ import com.bethecoder.table.spec.AsciiTable;
  * @author David Ray
  */
 public interface MonitorMixinBase {
-    public <T> T getMonitor();
+    <T> T getMonitor();
     
-    public Connections getConnections();
+    Connections getConnections();
     
-    public Map<String, Trace<?>> getTraceMap();
+    Map<String, Trace<?>> getTraceMap();
     
-    public Map<String, Map<String, ?>> getDataMap();
+    Map<String, Map<String, ?>> getDataMap();
     
-    public String mmGetName();
+    String mmGetName();
     
-    public void mmClearHistory();
+    void mmClearHistory();
     
-    public <T extends Trace<?>> List<T> mmGetDefaultTraces(int verbosity);
+    <T extends Trace<?>> List<T> mmGetDefaultTraces(int verbosity);
     
-    public List<Metric> mmGetDefaultMetrics(int verbosity);
+    List<Metric> mmGetDefaultMetrics(int verbosity);
     
     default String mmPrettyPrintTraces(List<Trace<?>> traces, BoolsTrace breakOnResets) {
         String[] header = new String[traces.size() + 1];
@@ -84,7 +84,7 @@ public interface MonitorMixinBase {
                 table.add(Collections.nCopies(header.length + 1, "<reset>").toArray(new String[header.length + 1]));
             }
             String[] sa = new String[traces.size() + 1];
-            sa[0] = "" + i;
+            sa[0] = String.valueOf(i);
             int x = 1;
             for(Trace<?> t : traces) {
                 sa[x++] = t.prettyPrintDatum(t.items.get(i)); 

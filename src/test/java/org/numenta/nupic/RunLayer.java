@@ -34,6 +34,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -52,6 +53,7 @@ import org.numenta.nupic.encoders.Encoder;
 import org.numenta.nupic.encoders.EncoderTuple;
 import org.numenta.nupic.encoders.MultiEncoder;
 import org.numenta.nupic.encoders.ScalarEncoder;
+import org.numenta.nupic.model.Cell;
 import org.numenta.nupic.model.ComputeCycle;
 import org.numenta.nupic.model.Connections;
 import org.numenta.nupic.model.SDR;
@@ -61,6 +63,7 @@ import org.numenta.nupic.util.Tuple;
 import org.numenta.nupic.util.UniversalRandom;
 
 public class RunLayer {
+    private static final Pattern SPLIT = Pattern.compile("[\\s]*\\,[\\s]*");
     public static boolean IS_VERBOSE = true;
     public static boolean LEARN = true;
     public static boolean TM_ONLY = true;
@@ -176,7 +179,7 @@ public class RunLayer {
                 System.out.println("ScalarEncoder Output = " + Arrays.toString(encoding));
             }
             
-            int bucketIdx = valueEncoder.getBucketIndices((double)value)[0];
+            int bucketIdx = valueEncoder.getBucketIndices(value)[0];
 //            writeEncOutput(encoding);
             return new Tuple(encoding, bucketIdx);
         }
@@ -214,7 +217,7 @@ public class RunLayer {
         public Tuple tmStep(int[] sparseSPOutput, boolean learn, boolean isVerbose) {
             // Input into the Temporal Memory
             ComputeCycle cc = tm.compute(connections, sparseSPOutput, learn);
-            int[] activeCellIndices = cc.activeCells().stream().mapToInt(c -> c.getIndex()).sorted().toArray();
+            int[] activeCellIndices = cc.activeCells().stream().mapToInt(Cell::getIndex).sorted().toArray();
             int[] predColumnIndices = SDR.cellsAsColumnIndices(cc.predictiveCells(), connections.getCellsPerColumn());
             int[] activeColumns = Arrays.stream(activeCellIndices)
                 .map(cell -> cell / connections.getCellsPerColumn())
@@ -481,7 +484,7 @@ public class RunLayer {
         try (Stream<String> stream = Files.lines(Paths.get(MakeshiftLayer.readFile))) {
             MakeshiftLayer.input = stream.map(l -> {
                 String line = l.replace("[", "").replace("]",  "").trim();
-                int[] result = Arrays.stream(line.split("[\\s]*\\,[\\s]*")).mapToInt(i -> Integer.parseInt(i)).toArray();
+                int[] result = Arrays.stream(SPLIT.split(line)).mapToInt(Integer::parseInt).toArray();
                 return result;
             }).collect(Collectors.toList());
         } catch (IOException e) {
@@ -491,7 +494,7 @@ public class RunLayer {
     
     public static void loadRawInputFile() {
         try (Stream<String> stream = Files.lines(Paths.get(MakeshiftLayer.INPUT_PATH))) {
-            MakeshiftLayer.raw = stream.map(l -> l.trim()).collect(Collectors.toList());
+            MakeshiftLayer.raw = stream.map(String::trim).collect(Collectors.toList());
         }catch(Exception e) {e.printStackTrace();}
     }
     
@@ -499,7 +502,7 @@ public class RunLayer {
     public static void main(String[] args) {
         long start = System.currentTimeMillis();
         
-        RunLayer.MakeshiftLayer layer = RunLayer.createLayer();
+        MakeshiftLayer layer = RunLayer.createLayer();
         
        System.out.println("\n===================================\n");
         

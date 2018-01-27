@@ -22,13 +22,7 @@
 
 package org.numenta.nupic.encoders;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import org.numenta.nupic.FieldMetaType;
 import org.numenta.nupic.model.Persistable;
@@ -670,7 +664,7 @@ public abstract class Encoder<T>  implements Persistable {
 	@SuppressWarnings("unchecked")
 	public Set<FieldMetaType> getDecoderOutputFieldTypes() {
 		if(getFlattenedFieldTypeList() != null) {
-			return new HashSet<>(getFlattenedFieldTypeList());
+			return Collections.unmodifiableSet(getFlattenedFieldTypeList());
 		}
 
 		Set<FieldMetaType> retVal = new HashSet<FieldMetaType>();

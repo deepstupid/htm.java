@@ -147,7 +147,7 @@ public class TemporalMemory implements ComputeDecorator, Serializable{
         
         List<Column> activeColumns = Arrays.stream(activeColumnIndices)
             .sorted()
-            .mapToObj(i -> conn.getColumn(i))
+            .mapToObj(conn::getColumn)
             .collect(Collectors.toList());
         
         Function<Column, Column> identity = Function.identity();
@@ -211,16 +211,16 @@ public class TemporalMemory implements ComputeDecorator, Serializable{
 	    
 	    List<DistalDendrite> activeSegments = IntStream.range(0, activity.numActiveConnected.length)
 	        .filter(i -> activity.numActiveConnected[i] >= conn.getActivationThreshold())
-	        .mapToObj(i -> conn.segmentForFlatIdx(i))
+	        .mapToObj(conn::segmentForFlatIdx)
 	        .collect(Collectors.toList());
 	    
 	    List<DistalDendrite> matchingSegments = IntStream.range(0, activity.numActiveConnected.length)
 	        .filter(i -> activity.numActivePotential[i] >= conn.getMinThreshold())
-	        .mapToObj(i -> conn.segmentForFlatIdx(i))
+	        .mapToObj(conn::segmentForFlatIdx)
 	        .collect(Collectors.toList());
 	    
-	    Collections.sort(activeSegments, conn.segmentPositionSortKey);
-	    Collections.sort(matchingSegments, conn.segmentPositionSortKey);
+	    activeSegments.sort(conn.segmentPositionSortKey);
+	    matchingSegments.sort(conn.segmentPositionSortKey);
 	    
 	    cycle.activeSegments = activeSegments;
 	    cycle.matchingSegments = matchingSegments;
@@ -235,7 +235,7 @@ public class TemporalMemory implements ComputeDecorator, Serializable{
         conn.getPredictiveCells();
 	    
 	    if(learn) {
-	        activeSegments.stream().forEach(s -> conn.recordSegmentActivity(s));
+	        activeSegments.stream().forEach(conn::recordSegmentActivity);
 	        conn.startNewIteration();
 	    }
 	}
@@ -354,7 +354,7 @@ public class TemporalMemory implements ComputeDecorator, Serializable{
         
         if(!matchingSegments.isEmpty()) {
             int[] numPoten = conn.getLastActivity().numActivePotential;
-            Comparator<DistalDendrite> cmp = (dd1,dd2) -> numPoten[dd1.getIndex()] - numPoten[dd2.getIndex()]; 
+            Comparator<DistalDendrite> cmp = Comparator.comparingInt(dd -> numPoten[dd.getIndex()]);
             
             DistalDendrite bestSegment = matchingSegments.stream().max(cmp).get();
             bestCell = bestSegment.getParentCell();

@@ -171,11 +171,11 @@ public class FileSensor implements Sensor<File>, Serializable {
         return retVal;
     }
     public static void main(String[] args) {
-        String filepart = System.getProperty("user.home") + "/git/htm.java/src/test/resources/pathtest.jar";
+        String filepart = System.getProperty("java.io.tmpdir") + "/git/htm.java/src/test/resources/pathtest.jar";
         File f = new File(filepart);
         System.out.println("file exists ? " + f.exists());
         String path = filepart + "!rec-center-hourly.csv";
         Stream<String> stream = getJarEntryStream(path);
-        stream.forEach(l -> System.out.println(l));
+        stream.forEach(System.out::println);
     }
 }

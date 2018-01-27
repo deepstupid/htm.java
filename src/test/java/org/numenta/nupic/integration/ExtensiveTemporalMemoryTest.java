@@ -777,7 +777,7 @@ public class ExtensiveTemporalMemoryTest extends AbstractTemporalMemoryTest {
         // predicted but inactive columns
         int i = 0;
         for(Set<Integer> s : tm.mmGetTracePredictedInactiveColumns().items) {
-            System.out.println("" + (i++) + "  " + s);
+            System.out.println((i++) + "  " + s);
         }
         assertTrue(tm.mmGetTracePredictedInactiveColumns().items.get(4).size() > 0);
         assertTrue(tm.mmGetTracePredictedInactiveColumns().items.get(23).size() > 0);

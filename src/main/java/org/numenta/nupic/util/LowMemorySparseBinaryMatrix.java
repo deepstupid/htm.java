@@ -60,8 +60,7 @@ public class LowMemorySparseBinaryMatrix extends AbstractSparseBinaryMatrix impl
         int sliceDimensionsLength = dimensions.length - coordinates.length;
         int[] sliceDimensions = (int[]) Array.newInstance(int.class, sliceDimensionsLength);
 
-        for (int i = coordinates.length ; i < dimensions.length; i++) 
-            sliceDimensions[i - coordinates.length] = dimensions[i];
+        System.arraycopy(dimensions, coordinates.length, sliceDimensions, coordinates.length - coordinates.length, dimensions.length - coordinates.length);
 
         int[] elementCoordinates = Arrays.copyOf(coordinates, coordinates.length + 1);
         Object slice = Array.newInstance(int.class, sliceDimensions);
@@ -95,7 +94,7 @@ public class LowMemorySparseBinaryMatrix extends AbstractSparseBinaryMatrix impl
         }
         else {
             for(int i = 0; i < this.dimensions[0]; i++) {
-                results[0] += (inputVector[i] * (int) get(i));
+                results[0] += (inputVector[i] * get(i));
             }
 
             for (int i = 0; i < this.dimensions[0]; i++) {
@@ -121,7 +120,7 @@ public class LowMemorySparseBinaryMatrix extends AbstractSparseBinaryMatrix impl
         }
         else {
             for(int i = 0; i < this.dimensions[0]; i++) {
-                results[0] += (inputVector[i] * (int) get(i));
+                results[0] += (inputVector[i] * get(i));
             }
 
             for (int i = 0; i < this.dimensions[0]; i++) {
@@ -207,11 +206,8 @@ public class LowMemorySparseBinaryMatrix extends AbstractSparseBinaryMatrix impl
             return false;
         LowMemorySparseBinaryMatrix other = (LowMemorySparseBinaryMatrix)obj;
         if(sparseSet == null) {
-            if(other.sparseSet != null)
-                return false;
-        } else if(!sparseSet.equals(other.sparseSet))
-            return false;
-        return true;
+            return other.sparseSet == null;
+        } else return sparseSet.equals(other.sparseSet);
     }
 
 }

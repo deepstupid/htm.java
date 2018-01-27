@@ -75,7 +75,7 @@ public class Column implements Comparable<Column>, Serializable {
             cells[i] = new Cell(this, i);
         }
         
-        cellList = Collections.unmodifiableList(Arrays.asList(cells));
+        cellList = List.of(cells);
         
         proximalDendrite = new ProximalDendrite(index);
     }
@@ -202,7 +202,7 @@ public class Column implements Comparable<Column>, Serializable {
      * {@inheritDoc}
      */
     public String toString() {
-        return "" + index;
+        return String.valueOf(index);
     }
 
     /**
@@ -235,8 +235,6 @@ public class Column implements Comparable<Column>, Serializable {
         if(getClass() != obj.getClass())
             return false;
         Column other = (Column)obj;
-        if(index != other.index)
-            return false;
-        return true;
+        return index == other.index;
     }
 }

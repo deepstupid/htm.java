@@ -212,8 +212,8 @@ public strictfp class MersenneTwisterFast implements Persistable, Cloneable
         try
             {
             MersenneTwisterFast f = (MersenneTwisterFast)(super.clone());
-            f.mt = (int[])(mt.clone());
-            f.mag01 = (int[])(mag01.clone());
+            f.mt = mt.clone();
+            f.mag01 = mag01.clone();
             return f;
             }
         catch (CloneNotSupportedException e) { throw new InternalError(); } // should never happen
@@ -505,7 +505,7 @@ public strictfp class MersenneTwisterFast implements Persistable, Cloneable
         y ^= (y << 15) & TEMPERING_MASK_C;    // TEMPERING_SHIFT_T(y)
         y ^= (y >>> 18);                        // TEMPERING_SHIFT_L(y)
 
-        return (boolean)((y >>> 31) != 0);
+        return (y >>> 31) != 0;
         }
 
 
@@ -766,7 +766,7 @@ public strictfp class MersenneTwisterFast implements Persistable, Cloneable
         z ^= (z << 15) & TEMPERING_MASK_C;    // TEMPERING_SHIFT_T(z)
         z ^= (z >>> 18);                        // TEMPERING_SHIFT_L(z)
         
-        return (((long)y) << 32) + (long)z;
+        return (((long)y) << 32) + z;
         }
 
 
@@ -840,7 +840,7 @@ public strictfp class MersenneTwisterFast implements Persistable, Cloneable
             z ^= (z << 15) & TEMPERING_MASK_C;    // TEMPERING_SHIFT_T(z)
             z ^= (z >>> 18);                        // TEMPERING_SHIFT_L(z)
             
-            bits = (((((long)y) << 32) + (long)z) >>> 1);
+            bits = (((((long)y) << 32) + z) >>> 1);
             val = bits % n;
             } while (bits - val + (n-1) < 0);
         return val;

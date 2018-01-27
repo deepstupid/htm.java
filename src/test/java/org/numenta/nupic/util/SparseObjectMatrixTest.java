@@ -174,7 +174,7 @@ public class SparseObjectMatrixTest {
     /**
      * Test object for instantiation tests
      */
-    public class TestObject {
+    public static class TestObject {
         private int arg0;
         private int arg1;
         public TestObject(int arg0, int arg1) {

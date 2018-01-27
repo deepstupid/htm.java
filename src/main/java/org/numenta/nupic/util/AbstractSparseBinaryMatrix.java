@@ -108,9 +108,7 @@ public abstract class AbstractSparseBinaryMatrix extends AbstractSparseMatrix im
         int sliceDimensionsLength = dimensions.length - coordinates.length;
         int[] sliceDimensions = (int[]) Array.newInstance(int.class, sliceDimensionsLength);
 
-        for (int i = coordinates.length ; i < dimensions.length; i++) { 
-            sliceDimensions[i - coordinates.length] = dimensions[i];
-        }
+        System.arraycopy(dimensions, coordinates.length, sliceDimensions, coordinates.length - coordinates.length, dimensions.length - coordinates.length);
 
         int[] elementCoordinates = Arrays.copyOf(coordinates, coordinates.length + 1);
         int sliceSize = Arrays.stream(sliceDimensions).reduce((n,i) -> n*i).getAsInt();
@@ -452,8 +450,6 @@ public abstract class AbstractSparseBinaryMatrix extends AbstractSparseMatrix im
         if(getClass() != obj.getClass())
             return false;
         AbstractSparseBinaryMatrix other = (AbstractSparseBinaryMatrix)obj;
-        if(!Arrays.equals(trueCounts, other.trueCounts))
-            return false;
-        return true;
+        return Arrays.equals(trueCounts, other.trueCounts);
     }
 }

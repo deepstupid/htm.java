@@ -49,7 +49,7 @@ public class SparsePassThroughEncoder extends PassThroughEncoder<int[]> {
 
     public SparsePassThroughEncoder(int outputWidth, Integer outputBitsOnCount) {
         super(outputWidth, outputBitsOnCount);
-        LOGGER.info("Building new SparsePassThroughEncoder instance, outputWidth: {} outputBitsOnCount: {}", outputWidth);
+        LOGGER.info("Building new SparsePassThroughEncoder instance, outputWidth: {} outputBitsOnCount: {}", outputWidth, outputBitsOnCount);
     }
 
     /**

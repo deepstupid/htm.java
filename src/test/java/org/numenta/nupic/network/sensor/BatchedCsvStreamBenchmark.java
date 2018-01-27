@@ -62,7 +62,7 @@ public class BatchedCsvStreamBenchmark
     static double jdkTotalTime;
     static double batchTotalTime;
 
-    public static void main(String[] args) throws IOException, URISyntaxException {
+    public static void main(String[] args) throws IOException {
         System.out.println("path = " + ResourceLocator.path("rec-center-hourly.csv"));
         final Path inputPath = Paths.get(ResourceLocator.uri("rec-center-hourly.csv"));
 
@@ -83,7 +83,7 @@ public class BatchedCsvStreamBenchmark
         System.out.println("Batch Total Computations: " + batchTotal + ", Total Time: " + batchTotalTime/SECONDS.toNanos(1) + " s");
     }
 
-    private static void timeJDKParallelStream(Stream<String> input) throws IOException {
+    private static void timeJDKParallelStream(Stream<String> input) {
         final long start = System.nanoTime();
         try (Stream<String> lines = input) {
             final long totalTime = lines.parallel().mapToLong(BatchedCsvStreamBenchmark::processLine).sum();
@@ -97,7 +97,7 @@ public class BatchedCsvStreamBenchmark
         }
     }
 
-    private static void timeBatchedParallelStream(Stream<String[]> input) throws IOException {
+    private static void timeBatchedParallelStream(Stream<String[]> input) {
         final long start = System.nanoTime();
         try (Stream<String[]> lines = input) {
             final long totalTime = lines.mapToLong(BatchedCsvStreamBenchmark::processLine2).sum();

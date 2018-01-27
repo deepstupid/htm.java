@@ -42,7 +42,7 @@ public class GeneratorTest {
         Generator<Integer> bg = getGenerator();
         assertEquals(bg, bg.iterator());
         assertTrue(bg.hasNext());
-        assertEquals((Integer)42, (Integer)bg.next());
+        assertEquals((Integer)42, bg.next());
         
         // Test other interface methods
         assertEquals(-1, bg.get());

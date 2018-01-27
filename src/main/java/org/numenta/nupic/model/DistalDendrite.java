@@ -163,11 +163,8 @@ public class DistalDendrite extends Segment implements Persistable {
             return false;
         DistalDendrite other = (DistalDendrite)obj;
         if(cell == null) {
-            if(other.cell != null)
-                return false;
-        } else if(!cell.equals(other.cell))
-            return false;
-        return true;
+            return other.cell == null;
+        } else return cell.equals(other.cell);
     }
     
     

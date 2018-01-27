@@ -64,7 +64,7 @@ public interface Sensor<T> extends Persistable {
      * @param t     the {@link SensorParams} which hold the configuration and data source details.
      * @return
      */
-    public static <T> Sensor<T> create(SensorFactory<T> sf, SensorParams t) {
+    static <T> Sensor<T> create(SensorFactory<T> sf, SensorParams t) {
         if(sf == null) {
             throw new IllegalArgumentException("Factory cannot be null");
         }
@@ -82,7 +82,7 @@ public interface Sensor<T> extends Persistable {
      * 
      * @return a {@link SensorParams} object.
      */
-    public SensorParams getSensorParams();
+    SensorParams getSensorParams();
     
     /**
      * Returns the configured {@link Stream} if this is of
@@ -90,13 +90,13 @@ public interface Sensor<T> extends Persistable {
      * 
      * @return the constructed Stream
      */
-    public <K> MetaStream<K> getInputStream();
+    <K> MetaStream<K> getInputStream();
     
     /**
      * Returns the inner Stream's meta information.
      * @return
      */
-    public ValueList getMetaInfo();
+    ValueList getMetaInfo();
     
     
 }

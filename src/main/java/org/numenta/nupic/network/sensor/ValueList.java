@@ -12,11 +12,11 @@ public interface ValueList {
      * Returns a collection of values in the form of a {@link Tuple}
      * @return Tuple of values 
      */
-    public Tuple getRow(int row);
+    Tuple getRow(int row);
     /**
      * Returns the number of rows.
      * @return the number of rows
      */
-    public int size();
+    int size();
     
 }

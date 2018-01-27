@@ -15,7 +15,7 @@ public class BitHistoryTest {
         BitHistory history = new BitHistory(null, 1, 1);
         Method m = null;
         try {
-            m = BitHistory.class.getDeclaredMethod("pFormatArray", new Class[] {double[].class});
+            m = BitHistory.class.getDeclaredMethod("pFormatArray", double[].class);
             m.setAccessible(true);
             double[] da = { 2.0, 4.0 };
             String output = (String)m.invoke(history, da);

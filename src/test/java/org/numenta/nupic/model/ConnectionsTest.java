@@ -52,7 +52,7 @@ public class ConnectionsTest {
         List<DistalDendrite> segments = Arrays.asList(segment3, segment2, segment0, segment4, segment1);
         assertFalse(DeepEquals.deepEquals(expected, segments));
         
-        Collections.sort(segments, connections.segmentPositionSortKey);
+        segments.sort(connections.segmentPositionSortKey);
         assertTrue(DeepEquals.deepEquals(expected, segments));
     }
 
@@ -94,7 +94,7 @@ public class ConnectionsTest {
         assertEquals(1, segment2.getIndex());
         assertEquals(10, segment2.getParentCell().getIndex());
 
-        List<DistalDendrite> expected = Arrays.asList(new DistalDendrite[] { segment1, segment2 });
+        List<DistalDendrite> expected = Arrays.asList(segment1, segment2);
         assertEquals(expected, connections.getSegments(cell10));
         assertEquals(2, connections.numSegments());
     }
@@ -142,25 +142,25 @@ public class ConnectionsTest {
         assertEquals(2, segments.size());
 
         // Verify first segment is there with same synapses.
-        Set<Cell> expected = IntStream.range(1, 3).mapToObj(i -> connections.getCell(i)).collect(Collectors.toSet());
+        Set<Cell> expected = IntStream.range(1, 3).mapToObj(connections::getCell).collect(Collectors.toSet());
         assertTrue(DeepEquals.deepEquals(expected, 
             connections.getSynapses(segments.get(0))
                 .stream()
-                .map(s -> s.getPresynapticCell())
+                .map(Synapse::getPresynapticCell)
                 .collect(Collectors.toSet())));
 
         // Verify second segment has been replaced.
-        expected = IntStream.range(1, 2).mapToObj(i -> connections.getCell(i)).collect(Collectors.toSet());
+        expected = IntStream.range(1, 2).mapToObj(connections::getCell).collect(Collectors.toSet());
         System.out.println("expected = " + expected);
         System.out.println("actual = " + connections.getSynapses(segments.get(1))
             .stream()
-            .map(s -> s.getPresynapticCell())
+            .map(Synapse::getPresynapticCell)
             .collect(Collectors.toSet()));
 
         assertTrue(DeepEquals.deepEquals(expected, 
             connections.getSynapses(segments.get(1))
                 .stream()
-                .map(s -> s.getPresynapticCell())
+                .map(Synapse::getPresynapticCell)
                 .collect(Collectors.toSet())));
 
         // Verify the flatIdxs were properly reused.
@@ -200,11 +200,11 @@ public class ConnectionsTest {
         connections.createSynapse(segment1, connections.getCell(52), .52);
         
         // Ensure lower permanence synapse was removed.
-        Set<Cell> expected = IntStream.range(51, 53).mapToObj(i -> connections.getCell(i)).collect(Collectors.toSet());
+        Set<Cell> expected = IntStream.range(51, 53).mapToObj(connections::getCell).collect(Collectors.toSet());
         assertTrue(DeepEquals.deepEquals(expected, 
             connections.getSynapses(segment1)
                 .stream()
-                .map(s -> s.getPresynapticCell())
+                .map(Synapse::getPresynapticCell)
                 .collect(Collectors.toSet())));
     }
     
@@ -238,7 +238,7 @@ public class ConnectionsTest {
         
         Activity activity = connections.computeActivity(
             IntStream.rangeClosed(80, 82)
-                .mapToObj(i -> connections.getCell(i)).collect(Collectors.toList()),
+                .mapToObj(connections::getCell).collect(Collectors.toList()),
                     0.5D);
         
         assertEquals(0, activity.numActiveConnected[segment2.getIndex()]);
@@ -275,7 +275,7 @@ public class ConnectionsTest {
             connections.getSynapses(segment));
         
         Activity activity = connections.computeActivity(
-            IntStream.rangeClosed(80, 82).mapToObj(i -> connections.getCell(i)).collect(Collectors.toList()),
+            IntStream.rangeClosed(80, 82).mapToObj(connections::getCell).collect(Collectors.toList()),
                 0.5D);
         
         assertEquals(1, activity.numActiveConnected[segment.getIndex()]);
@@ -519,7 +519,7 @@ public class ConnectionsTest {
         
         Connections c = connections;
         List<Cell> inputVec = IntStream.of(50, 52, 53, 80, 81, 82, 150, 151)
-            .mapToObj(i -> c.getCell(i))
+            .mapToObj(c::getCell)
             .collect(Collectors.toList());
         
         Activity activity = c.computeActivity(inputVec, .5);
@@ -666,7 +666,7 @@ public class ConnectionsTest {
         assertTrue(output.length() > 1000);
         
         Set<String> fieldSet = Parameters.getEncoderDefaultParameters().keys().stream().
-            map(k -> k.getFieldName()).collect(Collectors.toCollection(LinkedHashSet::new));
+            map(KEY::getFieldName).collect(Collectors.toCollection(LinkedHashSet::new));
         
         for(KEY k : p.keys()) {
             // Exclude Encoder fields

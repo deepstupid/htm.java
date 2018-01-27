@@ -87,30 +87,29 @@ import gnu.trove.list.array.TDoubleArrayList;
  */
 public abstract class Anomaly implements Persistable {
     
-    private static final long serialVersionUID = 1L;
 
     /** Modes to use for factory creation method */
-    public enum Mode { PURE, LIKELIHOOD, WEIGHTED };
-    
+    public enum Mode { PURE, LIKELIHOOD, WEIGHTED }
+
     // Instantiation keys
     public static final int VALUE_NONE = -1;
-    public static final String KEY_MODE = "mode".intern();
+    public static final String KEY_MODE = "mode";
     public static final String KEY_LEARNING_PERIOD = "claLearningPeriod";
     public static final String KEY_ESTIMATION_SAMPLES = "estimationSamples";
     public static final String KEY_USE_MOVING_AVG = "useMovingAverage";
-    public static final String KEY_WINDOW_SIZE = "windowSize".intern();
+    public static final String KEY_WINDOW_SIZE = "windowSize";
     public static final String KEY_IS_WEIGHTED = "isWeighted";
     // Configs
-    public static final String KEY_DIST = "distribution".intern();
-    public static final String KEY_MVG_AVG = "movingAverage".intern();
-    public static final String KEY_HIST_LIKE = "historicalLikelihoods".intern();
-    public static final String KEY_HIST_VALUES = "historicalValues".intern();
-    public static final String KEY_TOTAL = "total".intern();
+    public static final String KEY_DIST = "distribution";
+    public static final String KEY_MVG_AVG = "movingAverage";
+    public static final String KEY_HIST_LIKE = "historicalLikelihoods";
+    public static final String KEY_HIST_VALUES = "historicalValues";
+    public static final String KEY_TOTAL = "total";
     
     // Computational argument keys
-    public final static String KEY_MEAN = "mean".intern();
-    public final static String KEY_STDEV = "stdev".intern();
-    public final static String KEY_VARIANCE = "variance".intern();
+    public final static String KEY_MEAN = "mean";
+    public final static String KEY_STDEV = "stdev";
+    public final static String KEY_VARIANCE = "variance";
     
     protected MovingAverage movingAverage;
     
@@ -147,10 +146,10 @@ public abstract class Anomaly implements Persistable {
      * @return
      */
     public static Anomaly create() {
-        Map<String, Object> params = new HashMap<>();
-        params.put(KEY_MODE, Mode.PURE);
-        
-        return create(params);
+//        Map<String, Object> params = new HashMap<>();
+//        params.put();
+//
+        return create(Map.of(KEY_MODE, Mode.PURE));
     }
     
     /**
@@ -219,7 +218,7 @@ public abstract class Anomaly implements Persistable {
             score = ArrayUtils.in1d(activeColumns, prevPredictedColumns).length;
             // Get the percent of active columns that were NOT predicted, that is
             // our anomaly score.
-            score = (nActiveColumns - score) / (double)nActiveColumns;
+            score = (nActiveColumns - score) / nActiveColumns;
         } else {
             score = 0.0d;
         }
@@ -253,12 +252,11 @@ public abstract class Anomaly implements Persistable {
      * @see AnomalyLikelihood
      * @see MovingAverage
      */
-    public class AveragedAnomalyRecordList implements Persistable {
-        private static final long serialVersionUID = 1L;
-        
-        public List<Sample> averagedRecords;
-        public TDoubleList historicalValues;
-        public double total;
+    public static class AveragedAnomalyRecordList implements Persistable {
+
+        public final List<Sample> averagedRecords;
+        public final TDoubleList historicalValues;
+        public final double total;
         
         /**
          * Constructs a new {@code AveragedAnomalyRecordList}
@@ -338,9 +336,7 @@ public abstract class Anomaly implements Persistable {
                     return false;
             } else if(!historicalValues.equals(other.historicalValues))
                 return false;
-            if(Double.doubleToLongBits(total) != Double.doubleToLongBits(other.total))
-                return false;
-            return true;
+            return Double.doubleToLongBits(total) == Double.doubleToLongBits(other.total);
         }
     }
     

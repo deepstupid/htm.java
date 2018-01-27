@@ -36,16 +36,16 @@ import org.numenta.nupic.model.Persistable;
  * 
  * @author David Ray
  */
-public class Tuple implements Persistable, Comparable<Tuple> {
+public class Tuple implements Persistable/*, Comparable<Tuple>*/ {
     
-    private static final long serialVersionUID = 1L;
+//    private static final long serialVersionUID = 1L;
 
     /** The internal container array */
 	protected Object[] container;
 	
-	private int hashcode;
+//	private int hashcode;
 	
-	private Comparator<Tuple> comparator;
+//	private Comparator<Tuple> comparator;
 	
 	public Tuple() {}
 	
@@ -57,18 +57,18 @@ public class Tuple implements Persistable, Comparable<Tuple> {
 		remake(objects);
 	}
 	
-	/**
-	 * Constructs a {@code Tuple} that will use the supplied
-	 * {@link Comparator} to implement the {@link Comparable}
-	 * interface.
-	 * @param c            the Comparator function to use to compare the
-	 *                     contents of the is {@code Tuple}
-	 * @param objects      the objects contained within
-	 */
-	public Tuple(Comparator<Tuple> c, Object...objects) {
-	    this.comparator = c;
-	    remake(objects);
-	}
+//	/**
+//	 * Constructs a {@code Tuple} that will use the supplied
+//	 * {@link Comparator} to implement the {@link Comparable}
+//	 * interface.
+//	 * @param c            the Comparator function to use to compare the
+//	 *                     contents of the is {@code Tuple}
+//	 * @param objects      the objects contained within
+//	 */
+//	public Tuple(Comparator<Tuple> c, Object...objects) {
+//	    this.comparator = c;
+//	    remake(objects);
+//	}
 	
 	/**
 	 * Remakes the internals for this Tuple.
@@ -76,8 +76,8 @@ public class Tuple implements Persistable, Comparable<Tuple> {
 	 */
 	protected void remake(Object...objects) {
 	    container = new Object[objects.length];
-        for(int i = 0;i < objects.length;i++) container[i] = objects[i];
-        this.hashcode = hashCode();
+		System.arraycopy(objects, 0, container, 0, objects.length);
+//        this.hashcode = hashCode();
 	}
 	
 	/**
@@ -105,7 +105,7 @@ public class Tuple implements Persistable, Comparable<Tuple> {
 	 * @return
 	 */
 	public  List<Object> all() {
-	    return Collections.unmodifiableList(Arrays.asList(container));
+	    return List.of(container);
 	}
 	
 	/**
@@ -131,10 +131,11 @@ public class Tuple implements Persistable, Comparable<Tuple> {
      */
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + Arrays.hashCode(container);
-		return result;
+//		final int prime = 31;
+//		int result = 1;
+//		result = prime * result + Arrays.hashCode(container);
+//		return result;
+		return Arrays.hashCode(container);
 	}
 
 	/**
@@ -144,27 +145,26 @@ public class Tuple implements Persistable, Comparable<Tuple> {
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		if (obj == null)
-			return false;
+//		if (obj == null)
+//			return false;
 		if (getClass() != obj.getClass())
 			return false;
 		Tuple other = (Tuple) obj;
-		if (this.hashcode != other.hashcode)
-			return false;
-		return true;
-	}
-
-	/**
-	 * Uses the supplied {@link Comparator} to compare this {@code Tuple}
-	 * with the specified {@link Tuple}
-	 */
-    @Override
-    public int compareTo(Tuple t) {
-        if(comparator == null) {
-            throw new IllegalStateException("Tuples used for comparison should be " +
-                "instantiated using the constructor taking a Comparator");
-        }
-        
-        return comparator.compare(this, t);
+//        return this.hashcode == other.hashcode;
+		return Arrays.equals(container, ((Tuple)other).container);
     }
+
+//	/**
+//	 * Uses the supplied {@link Comparator} to compare this {@code Tuple}
+//	 * with the specified {@link Tuple}
+//	 */
+//    @Override
+//    public int compareTo(Tuple t) {
+//        if(comparator == null) {
+//            throw new IllegalStateException("Tuples used for comparison should be " +
+//                "instantiated using the constructor taking a Comparator");
+//        }
+//
+//        return comparator.compare(this, t);
+//    }
 }

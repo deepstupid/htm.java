@@ -23,6 +23,7 @@ package org.numenta.nupic.network;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -108,7 +109,7 @@ public class PublisherSupplier implements Persistable, Supplier<Publisher> {
             Publisher.Builder<PublishSubject<String>> builder = 
                 Publisher.builder(network == null ? null : p -> network.setPublisher(p));
             
-            headers.stream().forEach(line -> builder.addHeader(line));
+            headers.stream().forEach(builder::addHeader);
             
             suppliedInstance = builder.build();
             suppliedInstance.setNetwork(network);
@@ -164,7 +165,20 @@ public class PublisherSupplier implements Persistable, Supplier<Publisher> {
         return new Builder();
     }
 
-    
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PublisherSupplier that = (PublisherSupplier) o;
+        return Objects.equals(headers, that.headers);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(headers);
+    }
+
     /**
      * Follows "builder pattern" for building new {@link PublisherSupplier}s.
      * 

@@ -31,5 +31,5 @@ public interface CoordinateOrder {
 	 * @return	A value in the interval [0, 1), representing the
      *          order of the coordinate
 	 */
-	public double orderForCoordinate(int[] coordinate);
+    double orderForCoordinate(int[] coordinate);
 }

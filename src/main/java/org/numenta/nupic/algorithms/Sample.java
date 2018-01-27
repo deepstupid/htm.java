@@ -93,9 +93,7 @@ public class Sample implements Persistable {
             return false;
         if(Double.doubleToLongBits(score) != Double.doubleToLongBits(other.score))
             return false;
-        if(Double.doubleToLongBits(value) != Double.doubleToLongBits(other.value))
-            return false;
-        return true;
+        return Double.doubleToLongBits(value) == Double.doubleToLongBits(other.value);
     }
 
     

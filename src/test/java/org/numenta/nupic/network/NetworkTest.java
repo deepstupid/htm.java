@@ -211,12 +211,9 @@ public class NetworkTest extends ObservableTestBase {
         Parameters p = NetworkTestHarness.getParameters();
         p = p.union(NetworkTestHarness.getNetworkDemoTestEncoderParams());
         p.set(KEY.RANDOM, new MersenneTwister(42));
-<<<<<<< HEAD
-        
-=======
+
         p.set(KEY.INFERRED_FIELDS, getInferredFieldsMap("consumption", CLAClassifier.class));
 
->>>>>>> 8fc6b596461a879fdf3e8936833c9a972d858b57
         // Create a Network
         Network network = Network.create("test network", p)
             .add(Network.createRegion("r1")
@@ -277,12 +274,9 @@ public class NetworkTest extends ObservableTestBase {
         Parameters p = NetworkTestHarness.getParameters();
         p = p.union(NetworkTestHarness.getNetworkDemoTestEncoderParams());
         p.set(KEY.RANDOM, new MersenneTwister(42));
-<<<<<<< HEAD
-        
-=======
+
         p.set(KEY.INFERRED_FIELDS, getInferredFieldsMap("consumption", CLAClassifier.class));
 
->>>>>>> 8fc6b596461a879fdf3e8936833c9a972d858b57
         // Create a Network
         Network network = Network.create("test network", p)
             .add(Network.createRegion("r1")
@@ -414,7 +408,7 @@ public class NetworkTest extends ObservableTestBase {
         int cycleCount = 0;
         for(;cycleCount < NUM_CYCLES;cycleCount++) {
             for(double j = 0;j < INPUT_GROUP_COUNT;j++) {
-                pub.onNext("" + j);
+                pub.onNext(String.valueOf(j));
             }
             
             network.reset();
@@ -476,7 +470,7 @@ public class NetworkTest extends ObservableTestBase {
         
         for(;cycleCount < NUM_CYCLES;cycleCount++) {
             for(double j = 0;j < INPUT_GROUP_COUNT;j++) {
-                newPub.onNext("" + j);
+                newPub.onNext(String.valueOf(j));
             }
             network.reset();
         }
@@ -502,12 +496,9 @@ public class NetworkTest extends ObservableTestBase {
         Parameters p = NetworkTestHarness.getParameters();
         p = p.union(NetworkTestHarness.getNetworkDemoTestEncoderParams());
         p.set(KEY.RANDOM, new MersenneTwister(42));
-<<<<<<< HEAD
-        
-=======
+
         p.set(KEY.INFERRED_FIELDS, getInferredFieldsMap("consumption", CLAClassifier.class));
 
->>>>>>> 8fc6b596461a879fdf3e8936833c9a972d858b57
         // Create a Network
         Network network = Network.create("test network", p)
             .add(Network.createRegion("r1")
@@ -572,11 +563,9 @@ public class NetworkTest extends ObservableTestBase {
         p.setPotentialRadius(16);
         p = p.union(NetworkTestHarness.getNetworkDemoTestEncoderParams());
         p.set(KEY.RANDOM, new MersenneTwister(42));
-<<<<<<< HEAD
-=======
+
         p.set(KEY.INFERRED_FIELDS, getInferredFieldsMap("consumption", CLAClassifier.class));
->>>>>>> 8fc6b596461a879fdf3e8936833c9a972d858b57
-        
+
         Network network = Network.create("test network", p)
             .add(Network.createRegion("r1")
                 .add(Network.createLayer("2", p)
@@ -715,11 +704,9 @@ public class NetworkTest extends ObservableTestBase {
         p.set(KEY.MAX_BOOST, 1.0);
         p.set(KEY.DUTY_CYCLE_PERIOD, 7);
         p.set(KEY.RANDOM, new MersenneTwister(42));
-<<<<<<< HEAD
-=======
+
         p.set(KEY.INFERRED_FIELDS, getInferredFieldsMap("dayOfWeek", CLAClassifier.class));
->>>>>>> 8fc6b596461a879fdf3e8936833c9a972d858b57
-        
+
         Map<String, Object> params = new HashMap<>();
         params.put(KEY_MODE, Mode.PURE);
         
@@ -796,11 +783,9 @@ public class NetworkTest extends ObservableTestBase {
         p.set(KEY.MAX_BOOST, 10.0);
         p.set(KEY.DUTY_CYCLE_PERIOD, 7);
         p.set(KEY.RANDOM, new MersenneTwister(42));
-<<<<<<< HEAD
-=======
+
         p.set(KEY.INFERRED_FIELDS, getInferredFieldsMap("dayOfWeek", CLAClassifier.class));
->>>>>>> 8fc6b596461a879fdf3e8936833c9a972d858b57
-        
+
         Map<String, Object> params = new HashMap<>();
         params.put(KEY_MODE, Mode.PURE);
         
@@ -848,11 +833,9 @@ public class NetworkTest extends ObservableTestBase {
         p.set(KEY.MAX_BOOST, 10.0);
         p.set(KEY.DUTY_CYCLE_PERIOD, 7);
         p.set(KEY.RANDOM, new MersenneTwister(42));
-<<<<<<< HEAD
-=======
+
         p.set(KEY.INFERRED_FIELDS, getInferredFieldsMap("consumption", CLAClassifier.class));
->>>>>>> 8fc6b596461a879fdf3e8936833c9a972d858b57
-        
+
         Map<String, Object> params = new HashMap<>();
         params.put(KEY_MODE, Mode.PURE);
         
@@ -1000,10 +983,8 @@ public class NetworkTest extends ObservableTestBase {
         Parameters p = NetworkTestHarness.getParameters().copy();
         p = p.union(NetworkTestHarness.getGeospatialTestEncoderParams());
         p.set(KEY.RANDOM, new MersenneTwister(42));
-<<<<<<< HEAD
-=======
+
         p.set(KEY.INFERRED_FIELDS, getInferredFieldsMap("", CLAClassifier.class));
->>>>>>> 8fc6b596461a879fdf3e8936833c9a972d858b57
 
         HTMSensor<ObservableSensor<String[]>> htmSensor = (HTMSensor<ObservableSensor<String[]>>)sensor;
 
@@ -1089,12 +1070,9 @@ public class NetworkTest extends ObservableTestBase {
         Parameters p = NetworkTestHarness.getParameters();
         p = p.union(NetworkTestHarness.getNetworkDemoTestEncoderParams());
         p.set(KEY.RANDOM, new MersenneTwister(42));
-<<<<<<< HEAD
-        
-=======
+
         p.set(KEY.INFERRED_FIELDS, getInferredFieldsMap("consumption", CLAClassifier.class));
 
->>>>>>> 8fc6b596461a879fdf3e8936833c9a972d858b57
         Network network = Network.create("test network", p)
             .add(Network.createRegion("r1")
                 .add(Network.createLayer("2", p)
@@ -1122,12 +1100,9 @@ public class NetworkTest extends ObservableTestBase {
         Parameters p = NetworkTestHarness.getParameters();
         p = p.union(NetworkTestHarness.getNetworkDemoTestEncoderParams());
         p.set(KEY.RANDOM, new MersenneTwister(42));
-<<<<<<< HEAD
-        
-=======
+
         p.set(KEY.INFERRED_FIELDS, getInferredFieldsMap("consumption", CLAClassifier.class));
 
->>>>>>> 8fc6b596461a879fdf3e8936833c9a972d858b57
         Network network = Network.create("test network", p)
             .add(Network.createRegion("r1")
                 .add(Network.createLayer("2", p)
@@ -1327,18 +1302,15 @@ public class NetworkTest extends ObservableTestBase {
         Parameters p = NetworkTestHarness.getParameters().copy();
         p = p.union(NetworkTestHarness.getDayDemoTestEncoderParams());
         p.set(KEY.RANDOM, new FastRandom(42));
-<<<<<<< HEAD
-        
-=======
+
         p.set(KEY.INFERRED_FIELDS, getInferredFieldsMap("dayOfWeek", CLAClassifier.class));
 
->>>>>>> 8fc6b596461a879fdf3e8936833c9a972d858b57
         Sensor<ObservableSensor<String[]>> sensor = Sensor.create(
-            ObservableSensor::create, SensorParams.create(Keys::obs, new Object[] {"name", 
-                PublisherSupplier.builder()
-                    .addHeader("dayOfWeek")
-                    .addHeader("number")
-                    .addHeader("B").build() }));
+            ObservableSensor::create, SensorParams.create(Keys::obs, "name",
+                        PublisherSupplier.builder()
+                            .addHeader("dayOfWeek")
+                            .addHeader("number")
+                            .addHeader("B").build()));
         
         Network network = Network.create("test network", p).add(Network.createRegion("r1")
             .add(Network.createLayer("1", p)

@@ -70,7 +70,7 @@ public class SparseObjectMatrix<T> extends AbstractSparseMatrix<T> implements Pe
      */
     @Override
     public SparseObjectMatrix<T> set(int index, T object) {
-        sparseMap.put(index, (T)object);
+        sparseMap.put(index, object);
         return this;
     }
 
@@ -160,11 +160,8 @@ public class SparseObjectMatrix<T> extends AbstractSparseMatrix<T> implements Pe
             return false;
         SparseObjectMatrix other = (SparseObjectMatrix)obj;
         if(sparseMap == null) {
-            if(other.sparseMap != null)
-                return false;
-        } else if(!sparseMap.equals(other.sparseMap))
-            return false;
-        return true;
+            return other.sparseMap == null;
+        } else return sparseMap.equals(other.sparseMap);
     }
 
 }

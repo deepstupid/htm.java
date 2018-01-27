@@ -30,10 +30,8 @@ import static org.junit.Assert.fail;
 import static org.numenta.nupic.algorithms.Anomaly.KEY_MODE;
 import static org.numenta.nupic.algorithms.Anomaly.KEY_USE_MOVING_AVG;
 import static org.numenta.nupic.algorithms.Anomaly.KEY_WINDOW_SIZE;
-<<<<<<< HEAD
-=======
+
 import static org.numenta.nupic.network.NetworkTestHarness.*;
->>>>>>> 8fc6b596461a879fdf3e8936833c9a972d858b57
 
 import java.io.File;
 import java.math.BigDecimal;
@@ -52,10 +50,7 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import org.junit.AfterClass;
-<<<<<<< HEAD
-=======
 import org.junit.BeforeClass;
->>>>>>> 8fc6b596461a879fdf3e8936833c9a972d858b57
 import org.junit.Test;
 import org.numenta.nupic.FieldMetaType;
 import org.numenta.nupic.Parameters;
@@ -104,22 +99,19 @@ public class PersistenceAPITest extends ObservableTestBase {
     /** Printer to visualize DayOfWeek printouts - SET TO TRUE FOR PRINTOUT */
     private BiFunction<Inference, Integer, Integer> dayOfWeekPrintout = createDayOfWeekInferencePrintout(false);
     
-<<<<<<< HEAD
-=======
-    
+
     @BeforeClass
     public static void beforeClass(){
     	// Sample data contains datetimes that are invalid in some timezones due to DST.
     	// If UTC is forced, then test runs should yield the same result regardless of timezone
     	System.setProperty("user.timezone", "UTC");
     }
->>>>>>> 8fc6b596461a879fdf3e8936833c9a972d858b57
 
     @AfterClass
     public static void cleanUp() {
         System.out.println("cleaning up...");
         try {
-            File serialDir = new File(System.getProperty("user.home") + File.separator + SerialConfig.SERIAL_TEST_DIR);
+            File serialDir = new File(System.getProperty("java.io.tmpdir") + File.separator + SerialConfig.SERIAL_TEST_DIR);
             if(serialDir.exists()) {
                 Files.list(serialDir.toPath()).forEach(
                     f ->  { 
@@ -127,11 +119,9 @@ public class PersistenceAPITest extends ObservableTestBase {
                         catch(Exception io) { throw new RuntimeException(io); } 
                     }
                 );
-<<<<<<< HEAD
-                
+
                 Files.delete(serialDir.toPath());
-=======
->>>>>>> 8fc6b596461a879fdf3e8936833c9a972d858b57
+
             }
         }catch(Exception e) {
             e.printStackTrace();
@@ -148,7 +138,7 @@ public class PersistenceAPITest extends ObservableTestBase {
             ((PersistenceAccess)persist).ensurePathExists(config);
         }catch(Exception e) { fail(); }
         
-        File f1 = new File(System.getProperty("user.home") + File.separator + config.getFileDir() + File.separator + "testEnsurePathExists");
+        File f1 = new File(System.getProperty("java.io.tmpdir") + File.separator + config.getFileDir() + File.separator + "testEnsurePathExists");
         assertTrue(f1.exists());
     }
     
@@ -482,7 +472,7 @@ public class PersistenceAPITest extends ObservableTestBase {
             .addHeader("darr")
             .addHeader("B").build();
         
-        ObservableSensor<String[]> oSensor = new ObservableSensor<>(SensorParams.create(Keys::obs, new Object[] {"name", supplier}));
+        ObservableSensor<String[]> oSensor = new ObservableSensor<>(SensorParams.create(Keys::obs, "name", supplier));
         
         SerialConfig config = new SerialConfig("testSerializeObservableSensor", SerialConfig.SERIAL_TEST_DIR);
         PersistenceAPI api = Persistence.get(config);
@@ -697,10 +687,8 @@ public class PersistenceAPITest extends ObservableTestBase {
     public void testSerializeLayer() {
         Parameters p = NetworkTestHarness.getParameters().copy();
         p.set(KEY.RANDOM, new MersenneTwister(42));
-<<<<<<< HEAD
-=======
+
         p.set(KEY.INFERRED_FIELDS, getInferredFieldsMap("dayOfWeek", CLAClassifier.class));
->>>>>>> 8fc6b596461a879fdf3e8936833c9a972d858b57
         Map<String, Map<String, Object>> settings = NetworkTestHarness.setupMap(
             null, // map
             8,    // n
@@ -719,11 +707,11 @@ public class PersistenceAPITest extends ObservableTestBase {
         p.set(KEY.FIELD_ENCODING_MAP, settings);
 
         Sensor<ObservableSensor<String[]>> sensor = Sensor.create(
-            ObservableSensor::create, SensorParams.create(Keys::obs, new Object[] {"name", 
-                PublisherSupplier.builder()
-                .addHeader("dayOfWeek")
-                .addHeader("darr")
-                .addHeader("B").build() }));
+            ObservableSensor::create, SensorParams.create(Keys::obs, "name",
+                        PublisherSupplier.builder()
+                        .addHeader("dayOfWeek")
+                        .addHeader("darr")
+                        .addHeader("B").build()));
 
         Layer<?> layer = Network.createLayer("1", p)
             .alterParameter(KEY.AUTO_CLASSIFY, true)
@@ -811,7 +799,7 @@ public class PersistenceAPITest extends ObservableTestBase {
         int cycleCount = 0;
         for(;cycleCount < NUM_CYCLES;cycleCount++) {
             for(double j = 0;j < INPUT_GROUP_COUNT;j++) {
-                pub.onNext("" + j);
+                pub.onNext(String.valueOf(j));
             }
             
             serializedNetwork.reset();
@@ -995,7 +983,7 @@ public class PersistenceAPITest extends ObservableTestBase {
             @Override
             public void onNext(Inference inf) {
                 if(inf.getRecordNum() > 1105 && inf.getRecordNum() <= 1115) {
-                    sampleExpectedOutput.add("" + inf.getRecordNum() + ":  " + Arrays.toString((int[])inf.getLayerInput()) + ", " + inf.getAnomalyScore());
+                    sampleExpectedOutput.add(inf.getRecordNum() + ":  " + Arrays.toString((int[]) inf.getLayerInput()) + ", " + inf.getAnomalyScore());
                 }
             }
         });
@@ -1021,7 +1009,7 @@ public class PersistenceAPITest extends ObservableTestBase {
             @Override
             public void onNext(Inference inf) {
                 if(inf.getRecordNum() > 1105 && inf.getRecordNum() <= 1115) {
-                    actualOutputs.add("" + inf.getRecordNum() + ":  " + Arrays.toString((int[])inf.getLayerInput()) + ", " + inf.getAnomalyScore());
+                    actualOutputs.add(inf.getRecordNum() + ":  " + Arrays.toString((int[]) inf.getLayerInput()) + ", " + inf.getAnomalyScore());
                 }
                 
                 if(inf.getRecordNum() == 1109) {
@@ -1053,7 +1041,7 @@ public class PersistenceAPITest extends ObservableTestBase {
             @Override
             public void onNext(Inference inf) {
                 if(inf.getRecordNum() > 1105 && inf.getRecordNum() <= 1115) {
-                    actualOutputs.add("" + inf.getRecordNum() + ":  " + Arrays.toString((int[])inf.getLayerInput()) + ", " + inf.getAnomalyScore());
+                    actualOutputs.add(inf.getRecordNum() + ":  " + Arrays.toString((int[]) inf.getLayerInput()) + ", " + inf.getAnomalyScore());
                 }
             }
         });
@@ -1709,11 +1697,8 @@ public class PersistenceAPITest extends ObservableTestBase {
         Parameters p = NetworkTestHarness.getParameters();
         p = p.union(NetworkTestHarness.getDayDemoTestEncoderParams());
         p.set(KEY.RANDOM, new FastRandom(42));
-<<<<<<< HEAD
-=======
         p.set(KEY.INFERRED_FIELDS, getInferredFieldsMap("dayOfWeek", CLAClassifier.class));
->>>>>>> 8fc6b596461a879fdf3e8936833c9a972d858b57
-        
+
         Layer<?> l2 = null;
         Network network = Network.create("test network", p)
             .add(Network.createRegion("r1")
@@ -1740,17 +1725,15 @@ public class PersistenceAPITest extends ObservableTestBase {
         Parameters p = NetworkTestHarness.getParameters().copy();
         p = p.union(NetworkTestHarness.getDayDemoTestEncoderParams());
         p.set(KEY.RANDOM, new FastRandom(42));
-<<<<<<< HEAD
-=======
+
         p.set(KEY.INFERRED_FIELDS, getInferredFieldsMap("dayOfWeek", CLAClassifier.class));
->>>>>>> 8fc6b596461a879fdf3e8936833c9a972d858b57
 
         Sensor<ObservableSensor<String[]>> sensor = Sensor.create(
-            ObservableSensor::create, SensorParams.create(Keys::obs, new Object[] {"name", 
-                PublisherSupplier.builder()
-                .addHeader("dayOfWeek")
-                .addHeader("number")
-                .addHeader("B").build() }));
+            ObservableSensor::create, SensorParams.create(Keys::obs, "name",
+                        PublisherSupplier.builder()
+                        .addHeader("dayOfWeek")
+                        .addHeader("number")
+                        .addHeader("B").build()));
 
         Network network = Network.create("test network", p).add(Network.createRegion("r1")
             .add(Network.createLayer("1", p)
@@ -1767,10 +1750,7 @@ public class PersistenceAPITest extends ObservableTestBase {
         Parameters p = NetworkTestHarness.getParameters();
         p = p.union(NetworkTestHarness.getNetworkDemoTestEncoderParams());
         p.set(KEY.RANDOM, new MersenneTwister(42));
-<<<<<<< HEAD
-=======
         p.set(KEY.INFERRED_FIELDS, getInferredFieldsMap("consumption", CLAClassifier.class));
->>>>>>> 8fc6b596461a879fdf3e8936833c9a972d858b57
 
         Network network = Network.create("test network", p)
             .add(Network.createRegion("r1")
@@ -1796,17 +1776,14 @@ public class PersistenceAPITest extends ObservableTestBase {
         Parameters p = NetworkTestHarness.getParameters().copy();
         p = p.union(NetworkTestHarness.getHotGymTestEncoderParams());
         p.set(KEY.RANDOM, new FastRandom(42));
-<<<<<<< HEAD
-=======
         p.set(KEY.INFERRED_FIELDS, getInferredFieldsMap("consumption", CLAClassifier.class));
->>>>>>> 8fc6b596461a879fdf3e8936833c9a972d858b57
 
         Sensor<ObservableSensor<String[]>> sensor = Sensor.create(
-            ObservableSensor::create, SensorParams.create(Keys::obs, new Object[] {"name", 
-                PublisherSupplier.builder()
-                .addHeader("timestamp, consumption")
-                .addHeader("datetime, float")
-                .addHeader("B").build() }));
+            ObservableSensor::create, SensorParams.create(Keys::obs, "name",
+                        PublisherSupplier.builder()
+                        .addHeader("timestamp, consumption")
+                        .addHeader("datetime, float")
+                        .addHeader("B").build()));
 
         Network network = Network.create("test network", p).add(Network.createRegion("r1")
             .add(Network.createLayer("1", p)
@@ -1823,12 +1800,9 @@ public class PersistenceAPITest extends ObservableTestBase {
         Parameters p = NetworkTestHarness.getParameters().copy();
         p = p.union(NetworkTestHarness.getHotGymTestEncoderParams());
         p.set(KEY.RANDOM, new FastRandom(42));
-<<<<<<< HEAD
-        
-=======
+
         p.set(KEY.INFERRED_FIELDS, getInferredFieldsMap("consumption", CLAClassifier.class));
 
->>>>>>> 8fc6b596461a879fdf3e8936833c9a972d858b57
         Network network = Network.create("test network", p).add(Network.createRegion("r1")
             .add(Network.createLayer("1", p)
                 .alterParameter(KEY.AUTO_CLASSIFY, true)
@@ -1843,10 +1817,8 @@ public class PersistenceAPITest extends ObservableTestBase {
         Parameters p = NetworkTestHarness.getParameters().copy();
         p = p.union(NetworkTestHarness.getHotGymTestEncoderParams());
         p.set(KEY.RANDOM, new FastRandom(42));
-<<<<<<< HEAD
-=======
+
         p.set(KEY.INFERRED_FIELDS, getInferredFieldsMap("consumption", CLAClassifier.class));
->>>>>>> 8fc6b596461a879fdf3e8936833c9a972d858b57
 
         Object[] n = { "some name", ResourceLocator.path("rec-center-hourly.csv") };
         HTMSensor<File> sensor = (HTMSensor<File>)Sensor.create(
@@ -1870,14 +1842,11 @@ public class PersistenceAPITest extends ObservableTestBase {
             .addHeader("B").build();
 
         Sensor<ObservableSensor<String[]>> sensor = Sensor.create(
-            ObservableSensor::create, SensorParams.create(Keys::obs, new Object[] {"name", manual}));
+            ObservableSensor::create, SensorParams.create(Keys::obs, "name", manual));
 
         Parameters p = NetworkTestHarness.getParameters().copy();
         p.set(KEY.RANDOM, new MersenneTwister(42));
-<<<<<<< HEAD
-=======
         p.set(KEY.INFERRED_FIELDS, getInferredFieldsMap("dayOfWeek", CLAClassifier.class));
->>>>>>> 8fc6b596461a879fdf3e8936833c9a972d858b57
 
         Map<String, Map<String, Object>> settings = NetworkTestHarness.setupMap(
             null, // map
@@ -1962,13 +1931,11 @@ public class PersistenceAPITest extends ObservableTestBase {
             .addHeader("B").build();
 
         Sensor<ObservableSensor<String[]>> sensor = Sensor.create(
-            ObservableSensor::create, SensorParams.create(Keys::obs, new Object[] {"name", manual}));
+            ObservableSensor::create, SensorParams.create(Keys::obs, "name", manual));
 
         Parameters p = getParameters();
-<<<<<<< HEAD
-=======
+
         p.set(KEY.INFERRED_FIELDS, getInferredFieldsMap("dayOfWeek", CLAClassifier.class));
->>>>>>> 8fc6b596461a879fdf3e8936833c9a972d858b57
 
         Map<String, Map<String, Object>> settings = NetworkTestHarness.setupMap(
             null, // map
@@ -2141,7 +2108,7 @@ public class PersistenceAPITest extends ObservableTestBase {
                     System.out.println("TemporalMemory Actives = " + Arrays.toString(SDR.asColumnIndices(inf.getSDR(), cellsPerColumn)));
 
                     System.out.print("CLAClassifier prediction = " + 
-                        stringValue((Double)result.getMostProbableValue(1)) + " --> " + ((Double)result.getMostProbableValue(1)));
+                        stringValue((Double)result.getMostProbableValue(1)) + " --> " + result.getMostProbableValue(1));
 
                     System.out.println("  |  CLAClassifier 1 step prob = " + Arrays.toString(result.getStats(1)) + "\n");
                 }

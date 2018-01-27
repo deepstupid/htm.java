@@ -198,7 +198,7 @@ public class MultiEncoder extends Encoder<Object> {
             case "ScalarEncoder":
                 return ScalarEncoder.builder();
             case "AdaptiveScalarEncoder":
-                return AdaptiveScalarEncoder.builder();
+                return ScalarEncoder.builder();
             case "SparsePassThroughEncoder":
                 return SparsePassThroughEncoder.sparseBuilder();
             case "SDRCategoryEncoder":
@@ -255,7 +255,7 @@ public class MultiEncoder extends Encoder<Object> {
                     if(strVal.indexOf(CATEGORY_DELIMITER) == -1) {
                         throw new IllegalArgumentException("Category field not delimited with '" + CATEGORY_DELIMITER + "' character.");
                     }
-                    value = Arrays.<String>asList(strVal.split("[\\s]*\\" + CATEGORY_DELIMITER + "[\\s]*"));
+                    value = Arrays.asList(strVal.split("[\\s]*\\" + CATEGORY_DELIMITER + "[\\s]*"));
                 }
                 if(builder instanceof CategoryEncoder.Builder) {
                     ((CategoryEncoder.Builder) builder).categoryList((List<String>) value);

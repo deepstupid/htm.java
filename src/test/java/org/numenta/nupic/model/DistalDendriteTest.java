@@ -41,7 +41,7 @@ public class DistalDendriteTest {
         p.apply(cn);
         TemporalMemory.init(cn);
         
-        Set<Cell> prevWinnerCells = cn.getCellSet(new int[] { 0, 1, 2, 3 });
+        Set<Cell> prevWinnerCells = cn.getCellSet(0, 1, 2, 3);
         
         DistalDendrite matchingSegment = cn.createSegment(cn.getCell(4));
         cn.createSynapse(matchingSegment, cn.getCell(0), 0.5);

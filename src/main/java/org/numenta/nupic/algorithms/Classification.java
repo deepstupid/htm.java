@@ -48,7 +48,7 @@ public class Classification<T> implements Persistable {
         if(actualValues == null || actualValues.length < bucketIndex + 1) {
             return null;
         }
-        return (T)actualValues[bucketIndex];
+        return actualValues[bucketIndex];
     }
 
     /**
@@ -191,8 +191,7 @@ public class Classification<T> implements Persistable {
         if(!Arrays.equals(actualValues, other.actualValues))
             return false;
         if(probabilities == null) {
-            if(other.probabilities != null)
-                return false;
+            return other.probabilities == null;
         } else {
             for(int key : probabilities.keys()) {
                 if(!Arrays.equals(probabilities.get(key), (double[])other.probabilities.get(key))) {

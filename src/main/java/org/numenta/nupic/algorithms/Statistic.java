@@ -84,8 +84,6 @@ public class Statistic implements Persistable {
             return false;
         if(Double.doubleToLongBits(stdev) != Double.doubleToLongBits(other.stdev))
             return false;
-        if(Double.doubleToLongBits(variance) != Double.doubleToLongBits(other.variance))
-            return false;
-        return true;
+        return Double.doubleToLongBits(variance) == Double.doubleToLongBits(other.variance);
     }
 }

@@ -8,7 +8,7 @@ import org.nustaq.serialization.FSTConfiguration;
 import org.nustaq.serialization.FSTObjectInput;
 
 public class HTMObjectInput extends FSTObjectInput {
-    public HTMObjectInput(InputStream in, FSTConfiguration config) throws IOException {
+    public HTMObjectInput(InputStream in, FSTConfiguration config) {
         super(in, config);
     }
     

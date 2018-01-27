@@ -33,12 +33,12 @@ public interface Condition<T> {
      * @author metaware
      *
      */
-    public class Adapter<T> implements Condition<T> {
+    class Adapter<T> implements Condition<T> {
         public boolean eval(int n) { return false; }
         public boolean eval(double d) { return false; }
         public boolean eval(T t) { return false; }
     }
-    public boolean eval(int n);
-    public boolean eval(double d);
-    public boolean eval(T t);
+    boolean eval(int n);
+    boolean eval(double d);
+    boolean eval(T t);
 }

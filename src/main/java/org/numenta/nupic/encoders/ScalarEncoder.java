@@ -25,13 +25,7 @@ package org.numenta.nupic.encoders;
 import gnu.trove.list.TDoubleList;
 import gnu.trove.list.array.TDoubleArrayList;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import org.numenta.nupic.FieldMetaType;
 import org.numenta.nupic.model.Connections;
@@ -159,37 +153,6 @@ import org.slf4j.LoggerFactory;
  */
 public class ScalarEncoder extends Encoder<Double> {
 
-<<<<<<< HEAD
-	private static final long serialVersionUID = 1L;
-    
-	private static final Logger LOGGER = LoggerFactory.getLogger(ScalarEncoder.class);
-
-	/**
-	 * Constructs a new {@code ScalarEncoder}
-	 */
-	ScalarEncoder() {}
-
-	/**
-	 * Returns a builder for building ScalarEncoders.
-	 * This builder may be reused to produce multiple builders
-	 *
-	 * @return a {@code ScalarEncoder.Builder}
-	 */
-	public static Encoder.Builder<ScalarEncoder.Builder, ScalarEncoder> builder() {
-		return new ScalarEncoder.Builder();
-	}
-
-	/**
-	 * Returns true if the underlying encoder works on deltas
-	 */
-	@Override
-	public boolean isDelta() {
-		return false;
-	}
-
-	/**
-	 * w -- number of bits to set in output
-=======
     private static final long serialVersionUID = 1L;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ScalarEncoder.class);
@@ -219,7 +182,6 @@ public class ScalarEncoder extends Encoder<Double> {
 
     /**
      * w -- number of bits to set in output
->>>>>>> 8fc6b596461a879fdf3e8936833c9a972d858b57
      * minval -- minimum input value
      * maxval -- maximum input value (input is strictly less if periodic == True)
      *
@@ -242,7 +204,7 @@ public class ScalarEncoder extends Encoder<Double> {
     public void init() {
         if(getW() % 2 == 0) {
             throw new IllegalStateException(
-                "W must be an odd number (to eliminate centering difficulty)");
+                    "W must be an odd number (to eliminate centering difficulty)");
         }
 
         setHalfWidth((getW() - 1) / 2);
@@ -269,7 +231,7 @@ public class ScalarEncoder extends Encoder<Double> {
 
         if(getName() == null) {
             if((getMinVal() % ((int)getMinVal())) > 0 ||
-                (getMaxVal() % ((int)getMaxVal())) > 0) {
+                    (getMaxVal() % ((int)getMaxVal())) > 0) {
                 setName("[" + getMinVal() + ":" + getMaxVal() + "]");
             }else{
                 setName("[" + (int)getMinVal() + ":" + (int)getMaxVal() + "]");
@@ -318,7 +280,7 @@ public class ScalarEncoder extends Encoder<Double> {
                 setRadius(getResolution() * w);
             }else{
                 throw new IllegalStateException(
-                    "One of n, radius, resolution must be specified for a ScalarEncoder");
+                        "One of n, radius, resolution must be specified for a ScalarEncoder");
             }
 
             if(isPeriodic()) {
@@ -337,117 +299,6 @@ public class ScalarEncoder extends Encoder<Double> {
      * For periodic encoders, this can be a negative number when the encoded output
      * wraps around.
      *
-<<<<<<< HEAD
-	 * @param c			the memory
-	 * @param input		the input data
-	 * @return			an encoded array
-	 */
-	public Integer getFirstOnBit(double input) {
-		if(Double.isNaN(input)) {
-			return null;
-		}else{
-			if(input < getMinVal()) {
-				if(clipInput() && !isPeriodic()) {
-				    if(LOGGER.isTraceEnabled()) {
-				        LOGGER.info("Clipped input " + getName() + "=" + input + " to minval " + getMinVal());
-				    }
-					input = getMinVal();
-				}else{
-					throw new IllegalStateException("input (" + input +") less than range (" +
-						getMinVal() + " - " + getMaxVal() + ")");
-				}
-			}
-		}
-
-		if(isPeriodic()) {
-			if(input >= getMaxVal()) {
-				throw new IllegalStateException("input (" + input +") greater than periodic range (" +
-					getMinVal() + " - " + getMaxVal() + ")");
-			}
-		}else{
-			if(input > getMaxVal()) {
-				if(clipInput()) {
-				    if(LOGGER.isTraceEnabled()) {
-				        LOGGER.info("Clipped input " + getName() + "=" + input + " to maxval " + getMaxVal());
-				    }
-					input = getMaxVal();
-				}else{
-					throw new IllegalStateException("input (" + input +") greater than periodic range (" +
-						getMinVal() + " - " + getMaxVal() + ")");
-				}
-			}
-		}
-
-		int centerbin;
-		if(isPeriodic()) {
-			centerbin = ((int)((input - getMinVal()) *  getNInternal() / getRange())) + getPadding();
-		}else{
-			centerbin = ((int)(((input - getMinVal()) + getResolution()/2) / getResolution())) + getPadding();
-		}
-
-		return centerbin - getHalfWidth();
-	}
-
-	/**
-	 * Check if the settings are reasonable for the SpatialPooler to work
-	 * @param c
-	 */
-	public void checkReasonableSettings() {
-		if(getW() < 21) {
-			throw new IllegalStateException(
-				"Number of bits in the SDR (%d) must be greater than 2, and recommended >= 21 (use forced=True to override)");
-		}
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public Set<FieldMetaType> getDecoderOutputFieldTypes() {
-		return new LinkedHashSet<>(Arrays.asList(FieldMetaType.FLOAT, FieldMetaType.INTEGER));
-	}
-
-	/**
-	 * Should return the output width, in bits.
-	 */
-	@Override
-	public int getWidth() {
-		return getN();
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * NO-OP
-	 */
-	@Override
-	public int[] getBucketIndices(String input) { return null; }
-
-	/**
-	 * Returns the bucket indices.
-	 *
-	 * @param	input
-	 */
-	@Override
-	public int[] getBucketIndices(double input) {
-		int minbin = getFirstOnBit(input);
-
-		//For periodic encoders, the bucket index is the index of the center bit
-		int bucketIdx;
-		if(isPeriodic()) {
-			bucketIdx = minbin + getHalfWidth();
-			if(bucketIdx < 0) {
-				bucketIdx += getN();
-			}
-		}else{//for non-periodic encoders, the bucket index is the index of the left bit
-			bucketIdx = minbin;
-		}
-
-		return new int[] { bucketIdx };
-	}
-
-	/**
-	 * Encodes inputData and puts the encoded value into the output array,
-=======
      * @param c			the memory
      * @param input		the input data
      * @return			an encoded array
@@ -459,12 +310,12 @@ public class ScalarEncoder extends Encoder<Double> {
             if(input < getMinVal()) {
                 if(clipInput() && !isPeriodic()) {
                     if(LOGGER.isTraceEnabled()) {
-                        LOGGER.info("Clipped input " + getName() + "=" + input + " to minval " + getMinVal());
+                        LOGGER.info("Clipped input {}={} to minval {}", getName(), input, getMinVal());
                     }
                     input = getMinVal();
                 }else{
                     throw new IllegalStateException("input (" + input +") less than range (" +
-                        getMinVal() + " - " + getMaxVal() + ")");
+                            getMinVal() + " - " + getMaxVal() + ")");
                 }
             }
         }
@@ -472,18 +323,18 @@ public class ScalarEncoder extends Encoder<Double> {
         if(isPeriodic()) {
             if(input >= getMaxVal()) {
                 throw new IllegalStateException("input (" + input +") greater than periodic range (" +
-                    getMinVal() + " - " + getMaxVal() + ")");
+                        getMinVal() + " - " + getMaxVal() + ")");
             }
         }else{
             if(input > getMaxVal()) {
                 if(clipInput()) {
                     if(LOGGER.isTraceEnabled()) {
-                        LOGGER.info("Clipped input " + getName() + "=" + input + " to maxval " + getMaxVal());
+                        LOGGER.info("Clipped input {}={} to maxval {}", getName(), input, getMaxVal());
                     }
                     input = getMaxVal();
                 }else{
                     throw new IllegalStateException("input (" + input +") greater than periodic range (" +
-                        getMinVal() + " - " + getMaxVal() + ")");
+                            getMinVal() + " - " + getMaxVal() + ")");
                 }
             }
         }
@@ -505,7 +356,7 @@ public class ScalarEncoder extends Encoder<Double> {
     public void checkReasonableSettings() {
         if(getW() < 21) {
             throw new IllegalStateException(
-                "Number of bits in the SDR (%d) must be greater than 2, and recommended >= 21 (use forced=True to override)");
+                    "Number of bits in the SDR (%d) must be greater than 2, and recommended >= 21 (use forced=True to override)");
         }
     }
 
@@ -557,7 +408,6 @@ public class ScalarEncoder extends Encoder<Double> {
 
     /**
      * Encodes inputData and puts the encoded value into the output array,
->>>>>>> 8fc6b596461a879fdf3e8936833c9a972d858b57
      * which is a 1-D array of length returned by {@link Connections#getW()}.
      *
      * Note: The output array is reused, so clear it before updating it.
@@ -597,12 +447,11 @@ public class ScalarEncoder extends Encoder<Double> {
         // Added guard against immense string concatenation
         if(LOGGER.isTraceEnabled()) {
             LOGGER.trace("");
-            LOGGER.trace("input: " + input);
-            LOGGER.trace("range: " + getMinVal() + " - " + getMaxVal());
-            LOGGER.trace("n:" + getN() + "w:" + getW() + "resolution:" + getResolution() +
-                            "radius:" + getRadius() + "periodic:" + isPeriodic());
-            LOGGER.trace("output: " + Arrays.toString(output));
-            LOGGER.trace("input desc: " + decode(output, ""));
+            LOGGER.trace("input: {}", input);
+            LOGGER.trace("range: {} - {}", getMinVal(), getMaxVal());
+            LOGGER.trace("n:{}w:{}resolution:{}radius:{}periodic:{}", getN(), getW(), getResolution(), getRadius(), isPeriodic());
+            LOGGER.trace("output: {}", Arrays.toString(output));
+            LOGGER.trace("input desc: {}", decode(output, ""));
         }
     }
 
@@ -656,9 +505,9 @@ public class ScalarEncoder extends Encoder<Double> {
             }
         }
 
-        LOGGER.trace("raw output:" + Arrays.toString(
-                        ArrayUtils.sub(encoded, ArrayUtils.range(0, getN()))));
-        LOGGER.trace("filtered output:" + Arrays.toString(tmpOutput));
+        LOGGER.trace("raw output:{}", Arrays.toString(
+                ArrayUtils.sub(encoded, ArrayUtils.range(0, getN()))));
+        LOGGER.trace("filtered output:{}", Arrays.toString(tmpOutput));
 
         // ------------------------------------------------------------------------
         // Find each run of 1's.
@@ -688,8 +537,8 @@ public class ScalarEncoder extends Encoder<Double> {
         if(isPeriodic() && runs.size() > 1) {
             int l = runs.size() - 1;
             if(((Integer)runs.get(0).get(0)) == 0 && ((Integer)runs.get(l).get(0)) + ((Integer)runs.get(l).get(1)) == getN()) {
-                runs.set(l, new Tuple((Integer)runs.get(l).get(0),
-                    ((Integer)runs.get(l).get(1)) + ((Integer)runs.get(0).get(1)) ));
+                runs.set(l, new Tuple(runs.get(l).get(0),
+                        ((Integer)runs.get(l).get(1)) + ((Integer)runs.get(0).get(1)) ));
                 runs = runs.subList(1, runs.size());
             }
         }
@@ -767,7 +616,7 @@ public class ScalarEncoder extends Encoder<Double> {
         Map<String, RangeList> fieldsDict = new HashMap<String, RangeList>();
         fieldsDict.put(fieldName, inner);
 
-        return new DecodeResult(fieldsDict, Arrays.asList(fieldName));
+        return new DecodeResult(fieldsDict, Collections.singletonList(fieldName));
     }
 
     /**
@@ -806,13 +655,13 @@ public class ScalarEncoder extends Encoder<Double> {
             //The input scalar value corresponding to each possible output encoding
             if(isPeriodic()) {
                 setTopDownValues(
-                    ArrayUtils.arange(getMinVal() + getResolution() / 2.0,
-                        getMaxVal(), getResolution()));
+                        ArrayUtils.arange(getMinVal() + getResolution() / 2.0,
+                                getMaxVal(), getResolution()));
             }else{
                 //Number of values is (max-min)/resolutions
                 setTopDownValues(
-                    ArrayUtils.arange(getMinVal(), getMaxVal() + getResolution() / 2.0,
-                        getResolution()));
+                        ArrayUtils.arange(getMinVal(), getMaxVal() + getResolution() / 2.0,
+                                getResolution()));
             }
         }
 
@@ -820,8 +669,8 @@ public class ScalarEncoder extends Encoder<Double> {
         int numCategories = getTopDownValues().length;
         SparseObjectMatrix<int[]> topDownMapping;
         setTopDownMapping(
-            topDownMapping = new SparseObjectMatrix<int[]>(
-                new int[] { numCategories }));
+                topDownMapping = new SparseObjectMatrix<int[]>(
+                        new int[] { numCategories }));
 
         double[] topDownValues = getTopDownValues();
         int[] outputSpace = new int[getN()];
@@ -866,119 +715,6 @@ public class ScalarEncoder extends Encoder<Double> {
      *
      * @return list of items, each item representing the bucket value for that
      *        bucket.
-<<<<<<< HEAD
-	 */
-	@SuppressWarnings("unchecked")
-	@Override
-	public <S> List<S> getBucketValues(Class<S> t) {
-		if(bucketValues == null) {
-			SparseObjectMatrix<int[]> topDownMapping = getTopDownMapping();
-			int numBuckets = topDownMapping.getMaxIndex() + 1;
-			bucketValues = new ArrayList<Double>();
-			for(int i = 0;i < numBuckets;i++) {
-				((List<Double>)bucketValues).add((Double)getBucketInfo(new int[] { i }).get(0).get(1));
-			}
-		}
-		return (List<S>)bucketValues;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public List<Encoding> getBucketInfo(int[] buckets) {
-		SparseObjectMatrix<int[]> topDownMapping = getTopDownMapping();
-
-		//The "category" is simply the bucket index
-		int category = buckets[0];
-		int[] encoding = topDownMapping.getObject(category);
-
-		//Which input value does this correspond to?
-		double inputVal;
-		if(isPeriodic()) {
-			inputVal = getMinVal() + getResolution() / 2 + category * getResolution();
-		}else{
-			inputVal = getMinVal() + category * getResolution();
-		}
-
-		return Arrays.asList(new Encoding(inputVal, inputVal, encoding));
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public List<Encoding> topDownCompute(int[] encoded) {
-		//Get/generate the topDown mapping table
-		SparseObjectMatrix<int[]> topDownMapping = getTopDownMapping();
-
-		// See which "category" we match the closest.
-		int category = ArrayUtils.argmax(rightVecProd(topDownMapping, encoded));
-
-		return getBucketInfo(new int[]{category});
-	}
-
-	/**
-	 * Returns a list of {@link Tuple}s which in this case is a list of
-	 * key value parameter values for this {@code ScalarEncoder}
-	 *
-	 * @return	a list of {@link Tuple}s
-	 */
-	public List<Tuple> dict() {
-		List<Tuple> l = new ArrayList<Tuple>();
-		l.add(new Tuple("maxval", getMaxVal()));
-		l.add(new Tuple("bucketValues", getBucketValues(Double.class)));
-		l.add(new Tuple("nInternal", getNInternal()));
-		l.add(new Tuple("name", getName()));
-		l.add(new Tuple("minval", getMinVal()));
-		l.add(new Tuple("topDownValues", Arrays.toString(getTopDownValues())));
-		l.add(new Tuple("clipInput", clipInput()));
-		l.add(new Tuple("n", getN()));
-		l.add(new Tuple("padding", getPadding()));
-		l.add(new Tuple("range", getRange()));
-		l.add(new Tuple("periodic", isPeriodic()));
-		l.add(new Tuple("radius", getRadius()));
-		l.add(new Tuple("w", getW()));
-		l.add(new Tuple("topDownMappingM", getTopDownMapping()));
-		l.add(new Tuple("halfwidth", getHalfWidth()));
-		l.add(new Tuple("resolution", getResolution()));
-		l.add(new Tuple("rangeInternal", getRangeInternal()));
-
-		return l;
-	}
-
-	/**
-	 * Returns a {@link EncoderBuilder} for constructing {@link ScalarEncoder}s
-	 *
-	 * The base class architecture is put together in such a way where boilerplate
-	 * initialization can be kept to a minimum for implementing subclasses, while avoiding
-	 * the mistake-proneness of extremely long argument lists.
-	 *
-	 * @see ScalarEncoder.Builder#setStuff(int)
-	 */
-	public static class Builder extends Encoder.Builder<ScalarEncoder.Builder, ScalarEncoder> {
-		private Builder() {}
-
-		@Override
-		public ScalarEncoder build() {
-			//Must be instantiated so that super class can initialize
-			//boilerplate variables.
-			encoder = new ScalarEncoder();
-
-			//Call super class here
-			super.build();
-
-			////////////////////////////////////////////////////////
-			//  Implementing classes would do setting of specific //
-			//  vars here together with any sanity checking       //
-			////////////////////////////////////////////////////////
-
-			((ScalarEncoder)encoder).init();
-
-			return (ScalarEncoder)encoder;
-		}
-	}
-=======
      */
     @SuppressWarnings("unchecked")
     @Override
@@ -1013,7 +749,7 @@ public class ScalarEncoder extends Encoder<Double> {
             inputVal = getMinVal() + category * getResolution();
         }
 
-        return Arrays.asList(new Encoding(inputVal, inputVal, encoding));
+        return Collections.singletonList(new Encoding(inputVal, inputVal, encoding));
     }
 
     /**
@@ -1090,5 +826,4 @@ public class ScalarEncoder extends Encoder<Double> {
             return (ScalarEncoder)encoder;
         }
     }
->>>>>>> 8fc6b596461a879fdf3e8936833c9a972d858b57
 }

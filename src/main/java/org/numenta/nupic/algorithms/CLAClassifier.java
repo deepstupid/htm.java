@@ -64,11 +64,8 @@ import gnu.trove.list.array.TIntArrayList;
  * @author David Ray
  * @see BitHistory
  */
-<<<<<<< HEAD
-public class CLAClassifier implements Persistable {
-=======
+
 public class CLAClassifier implements Persistable, Classifier {
->>>>>>> 8fc6b596461a879fdf3e8936833c9a972d858b57
     private static final long serialVersionUID = 1L;
 
     int verbosity = 0;
@@ -252,7 +249,7 @@ public class CLAClassifier implements Persistable, Classifier {
                     // buckets equally likely. There is no actual prediction for this
                     // timestep so any of the possible predictions are just as good.
                     if(sumVotes.length > 0) {
-                        Arrays.fill(sumVotes, 1.0 / (double)sumVotes.length);
+                        Arrays.fill(sumVotes, 1.0 / sumVotes.length);
                     }
                 }
 
@@ -271,7 +268,7 @@ public class CLAClassifier implements Persistable, Classifier {
             Object actValue = classification.get("actValue");
 
             // Update maxBucketIndex
-            maxBucketIdx = (int) Math.max(maxBucketIdx, bucketIdx);
+            maxBucketIdx = Math.max(maxBucketIdx, bucketIdx);
 
             // Update rolling average of actual values if it's a scalar. If it's
             // not, it must be a category, in which case each bucket only ever
@@ -328,12 +325,12 @@ public class CLAClassifier implements Persistable, Classifier {
 
         if(infer && verbosity >= 1) {
             System.out.println(" inference: combined bucket likelihoods:");
-            System.out.println("   actual bucket values: " + Arrays.toString((T[])retVal.getActualValues()));
+            System.out.println("   actual bucket values: " + Arrays.toString(retVal.getActualValues()));
 
             for(int key : retVal.stepSet()) {
                 if(retVal.getActualValue(key) == null) continue;
 
-                Object[] actual = new Object[] { (T)retVal.getActualValue(key) };
+                Object[] actual = new Object[] {retVal.getActualValue(key)};
                 System.out.println(String.format("  %d steps: ", key, pFormatArray(actual)));
                 int bestBucketIdx = retVal.getMostProbableBucketIndex(key);
                 System.out.println(String.format("   most likely bucket idx: %d, value: %s ", bestBucketIdx, 

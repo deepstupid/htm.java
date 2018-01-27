@@ -22,12 +22,7 @@
 
 package org.numenta.nupic.encoders;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
@@ -395,11 +390,9 @@ public class RandomDistributedScalarEncoder extends Encoder<Double> {
 	public boolean overlapOK(int i, int j, int overlap) {
 		if (Math.abs(i - j) < getW() && overlap == (getW() - Math.abs(i - j)))
 			return true;
-		if (Math.abs(i - j) >= getW() && overlap <= getMaxOverlap())
-			return true;
+        return Math.abs(i - j) >= getW() && overlap <= getMaxOverlap();
 
-		return false;
-	}
+    }
 
 	/**
 	 * Check if the overlap between the buckets at indices i and j are
@@ -534,8 +527,8 @@ public class RandomDistributedScalarEncoder extends Encoder<Double> {
 			setName("[" + getResolution() + "]");
 		name = getName();
 
-		return new ArrayList<Tuple>(Arrays.asList(new Tuple[] { new Tuple(name,
-				0) }));
+		return new ArrayList<Tuple>(Collections.singletonList(new Tuple(name,
+                0)));
 	}
 
 	/**

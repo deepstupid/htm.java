@@ -72,7 +72,7 @@ public class Header implements ValueList, Serializable {
             throw new IllegalArgumentException("Input did not have 3 rows");           
         }
         this.rawTupleList = input;
-        this.fieldNames = input.getRow(0).all().stream().map(o -> o.toString()).collect(Collectors.toList());
+        this.fieldNames = input.getRow(0).all().stream().map(Object::toString).collect(Collectors.toList());
         this.fieldMeta = input.getRow(1).all().stream().map(FieldMetaType::fromString).collect(Collectors.toList());
         this.sensorFlags = input.getRow(2).all().stream().map(SensorFlags::fromString).collect(Collectors.toList());
     

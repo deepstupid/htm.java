@@ -110,10 +110,10 @@ public class MovingAverage implements Persistable {
         total += newVal;
         
         if(calc == null) {
-            return new Calculation(slidingWindow, total / (double)slidingWindow.size(), total);
+            return new Calculation(slidingWindow, total / slidingWindow.size(), total);
         }
         
-        return copyInto(calc, slidingWindow, total / (double)slidingWindow.size(), total);
+        return copyInto(calc, slidingWindow, total / slidingWindow.size(), total);
     }
     
     /**
@@ -176,9 +176,7 @@ public class MovingAverage implements Persistable {
                 return false;
         } else if(!calc.equals(other.calc))
             return false;
-        if(windowSize != other.windowSize)
-            return false;
-        return true;
+        return windowSize == other.windowSize;
     }
 
     /**
@@ -272,9 +270,7 @@ public class MovingAverage implements Persistable {
                     return false;
             } else if(!historicalValues.equals(other.historicalValues))
                 return false;
-            if(Double.doubleToLongBits(total) != Double.doubleToLongBits(other.total))
-                return false;
-            return true;
+            return Double.doubleToLongBits(total) == Double.doubleToLongBits(other.total);
         }
         
     }

@@ -49,7 +49,7 @@ public class MatrixTest {
         }
 
         assertArrayEquals(expected, asDense(bsm));
-        assertEquals(Arrays.toString(expected), FlatArrayMatrix.print1DArray(asDense(bsm)));
+        assertEquals(Arrays.toString(expected), AbstractFlatMatrix.print1DArray(asDense(bsm)));
     }
 
     @Test
@@ -63,7 +63,7 @@ public class MatrixTest {
         }
 
         assertArrayEquals(expected, asDense(fam));
-        assertEquals(Arrays.toString(expected), FlatArrayMatrix.print1DArray(asDense(fam)));
+        assertEquals(Arrays.toString(expected), AbstractFlatMatrix.print1DArray(asDense(fam)));
     }
 
     private Object[] asDense(FlatMatrix<?> matrix) {

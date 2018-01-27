@@ -93,14 +93,14 @@ public interface PersistenceAPI extends Serializable {
      * @return      a NetworkSerializer
      * @see SerialConfig
      */
-    public <T extends Persistable> SerializerCore serializer();
+    <T extends Persistable> SerializerCore serializer();
     /**
      * Convenience method to load a {@code Network} from the default or previously configured
      * location and serial file, and returns it. 
      * @return the deserialized Network
      * @see SerialConfig
      */
-    public Network load();
+    Network load();
     /**
      * Convenience method to load a {@code Network} from the specified serialized file name and
      * returns it.
@@ -110,13 +110,13 @@ public interface PersistenceAPI extends Serializable {
      * @return  returns the specified Network
      * @see SerialConfig
      */
-    public Network load(String fileName) throws IOException;
+    Network load(String fileName) throws IOException;
     /**
      * Convenience method to store the specified {@link Network} to the pre-configured 
      * (with {@link SerialConfig}) location and filename.
      * @param network   the {@code Network} to store
      */
-    public void store(Network network);
+    void store(Network network);
     /**
      * Stores the specified {@link Network} at the pre-configured location, after
      * halting and shutting down the Network. To store the Network but keep it up
@@ -131,7 +131,7 @@ public interface PersistenceAPI extends Serializable {
      * @return the serialized Network in the format is either a byte[] or String (json),
      *          where byte[] is the default of type &lt;R&gt;
      */
-    public <R> R storeAndGet(Network network);
+    <R> R storeAndGet(Network network);
     /**
      * Returns an {@link rx.Observable} operator that when subscribed to, invokes an operation
      * that stores the state of this {@code Network} while keeping the Network up and running.
@@ -141,14 +141,14 @@ public interface PersistenceAPI extends Serializable {
      * @param network   the {@link Network} to check point
      * @return the {@link CheckPointOp} operator of type &lt;T&gt;
      */
-    public CheckPointOp<byte[]> checkPointer(Network network);
+    CheckPointOp<byte[]> checkPointer(Network network);
     /**
      * Reifies a {@link Persistable} from the specified file in the location and file name
      * configured by the {@link SerialConfig} passed in at construction time.
      * 
      * @return  the reified type &lt;R&gt;
      */
-    public <R extends Persistable> R read();
+    <R extends Persistable> R read();
     /**
      * Reifies a {@link Persistable} from the specified file in the location
      * configured by the {@link SerialConfig} passed in at construction time.
@@ -157,7 +157,7 @@ public interface PersistenceAPI extends Serializable {
      * @param fileName  the name of the file from which to get the serialized object.
      * @return  the reified type &lt;R&gt;
      */
-    public <R extends Persistable> R read(String fileName);    
+    <R extends Persistable> R read(String fileName);
     /**
      * Loads a {@code Persistable} from the specified serialized byte array and
      * returns the de-serialized Persistable.
@@ -167,7 +167,7 @@ public interface PersistenceAPI extends Serializable {
      *    
      * @return  the reified type &lt;R&gt;
      */
-    public <R extends Persistable> R read(byte[] serializedBytes);
+    <R extends Persistable> R read(byte[] serializedBytes);
     /**
      * Persists the {@link Persistable} subclass to the file system using the 
      * pre-configured {@link SerialConfig} specified at the time this object was
@@ -178,7 +178,7 @@ public interface PersistenceAPI extends Serializable {
      * @param instance  the subclass of Persistable to persist.
      * @return  a byte array containing the serialized object of type &lt;R&gt;
      */
-    public <T extends Persistable, R> R write(T instance);
+    <T extends Persistable, R> R write(T instance);
     /**
      * Persists the {@link Persistable} subclass to the file system using the 
      * pre-configured {@link SerialConfig} specified at the time this object was
@@ -190,19 +190,19 @@ public interface PersistenceAPI extends Serializable {
      * @param fileName  the name of the file to which the object is stored.
      * @return  a byte array containing the serialized object of type &lt;R&gt;
      */
-    public <T extends Persistable, R> R write(T instance, String fileName);
+    <T extends Persistable, R> R write(T instance, String fileName);
     /**
      * (optional)
      * Sets the {@link SerialConfig} for detailed control. In common practice
      * this object is initialized with a default that is fine.
      * @param config    
      */
-    public void setConfig(SerialConfig config);
+    void setConfig(SerialConfig config);
     /**
      * Returns the {@link SerialConfig} in use
      * @return  the SerialConfig in current use
      */
-    public SerialConfig getConfig();
+    SerialConfig getConfig();
     
     /////////////////////////////////////////
     //        Convenience Methods          //
@@ -212,17 +212,17 @@ public interface PersistenceAPI extends Serializable {
      * 
      * @return  a byte array
      */
-    public byte[] getLastCheckPoint();
+    byte[] getLastCheckPoint();
     /**
      * Returns the name of the most recently checkpointed {@code Network} file.
      * @return  the name of the most recently checkpointed {@code Network} file.
      */
-    public String getLastCheckPointFileName();
+    String getLastCheckPointFileName();
     /**
      * Returns a {@code List} of check pointed file names.
      * @return a {@code List} of check pointed file names.
      */
-    public List<String> listCheckPointFiles();
+    List<String> listCheckPointFiles();
     /**
      * Returns the checkpointed file previous to the specified file (older), or
      * null if one doesn't exist. The file name may be the entire filename (as
@@ -235,11 +235,11 @@ public interface PersistenceAPI extends Serializable {
      * @return  the full filename of the file checkpointed immediately previous
      *          to the file specified.
      */
-    public String getPreviousCheckPoint(String checkPointFileName);
+    String getPreviousCheckPoint(String checkPointFileName);
     /**
      * Convenience method which returns the store file fully qualified path. 
      * @return
      */
-    public String currentPath();
+    String currentPath();
     
 }

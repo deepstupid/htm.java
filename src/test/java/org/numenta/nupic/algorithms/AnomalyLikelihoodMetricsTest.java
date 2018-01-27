@@ -30,14 +30,7 @@ public class AnomalyLikelihoodMetricsTest {
         TDoubleList d = new TDoubleArrayList();
         d.add(0.5);
         double total = 0.4;
-        AveragedAnomalyRecordList avges = (
-                new Anomaly() {
-                    @Override
-                    public double compute(int[] activeColumns, int[] predictedColumns, double inputValue, long timestamp) {
-                        return 0;
-                    }
-                }
-        ).new AveragedAnomalyRecordList(samples, d, total);
+        AveragedAnomalyRecordList avges = new AveragedAnomalyRecordList(samples, d, total);
 
         Statistic stat = new Statistic(0.1, 0.1, 0.1);
         MovingAverage ma = new MovingAverage(new TDoubleArrayList(), 1);
@@ -77,14 +70,7 @@ public class AnomalyLikelihoodMetricsTest {
         TDoubleList d = new TDoubleArrayList();
         d.add(0.5);
         double total = 0.4;
-        AveragedAnomalyRecordList avges = (
-                new Anomaly() {
-                    @Override
-                    public double compute(int[] activeColumns, int[] predictedColumns, double inputValue, long timestamp) {
-                        return 0;
-                    }
-                }
-        ).new AveragedAnomalyRecordList(samples, d, total);
+        AveragedAnomalyRecordList avges = new AveragedAnomalyRecordList(samples, d, total);
 
         Statistic stat = new Statistic(0.1, 0.1, 0.1);
         MovingAverage ma = new MovingAverage(new TDoubleArrayList(), 1);
@@ -107,15 +93,7 @@ public class AnomalyLikelihoodMetricsTest {
         TDoubleList d = new TDoubleArrayList();
         d.add(0.5);
         double total = 0.4;
-        AveragedAnomalyRecordList avges = (
-                new Anomaly() {
-                    private static final long serialVersionUID = 1L;
-                    @Override
-                    public double compute(int[] activeColumns, int[] predictedColumns, double inputValue, long timestamp) {
-                        return 0;
-                    }
-                }
-        ).new AveragedAnomalyRecordList(samples, d, total);
+        AveragedAnomalyRecordList avges = new AveragedAnomalyRecordList(samples, d, total);
 
         Statistic stat = new Statistic(0.1, 0.1, 0.1);
         MovingAverage ma = new MovingAverage(new TDoubleArrayList(), 1);
@@ -133,15 +111,7 @@ public class AnomalyLikelihoodMetricsTest {
         samples = new ArrayList<Sample>();
         Sample s2 = new Sample(new DateTime(), 0.1, 0.1); // Different date
         samples.add(s2);
-        avges = (
-                new Anomaly() {
-                    private static final long serialVersionUID = 1L;
-                    @Override
-                    public double compute(int[] activeColumns, int[] predictedColumns, double inputValue, long timestamp) {
-                        return 0;
-                    }
-                }
-        ).new AveragedAnomalyRecordList(samples, d, total);
+        avges = new AveragedAnomalyRecordList(samples, d, total);
 
         Statistic stat2 = new Statistic(0.1, 0.1, 0.1);
         MovingAverage ma2 = new MovingAverage(new TDoubleArrayList(), 1);
@@ -158,15 +128,7 @@ public class AnomalyLikelihoodMetricsTest {
         samples = new ArrayList<Sample>();
         Sample s3 = new Sample(s2.date, 0.2, 0.1); // Different Value
         samples.add(s3);
-        avges = (
-                new Anomaly() {
-                    private static final long serialVersionUID = 1L;
-                    @Override
-                    public double compute(int[] activeColumns, int[] predictedColumns, double inputValue, long timestamp) {
-                        return 0;
-                    }
-                }
-        ).new AveragedAnomalyRecordList(samples, d, total);
+        avges = new AveragedAnomalyRecordList(samples, d, total);
 
         Statistic stat3 = new Statistic(0.1, 0.1, 0.1);
         MovingAverage ma3 = new MovingAverage(new TDoubleArrayList(), 1);
@@ -183,15 +145,7 @@ public class AnomalyLikelihoodMetricsTest {
         samples = new ArrayList<Sample>();
         Sample s4 = new Sample(s2.date, 0.1, 0.9); // Different Value
         samples.add(s4);
-        avges = (
-                new Anomaly() {
-                    private static final long serialVersionUID = 1L;
-                    @Override
-                    public double compute(int[] activeColumns, int[] predictedColumns, double inputValue, long timestamp) {
-                        return 0;
-                    }
-                }
-        ).new AveragedAnomalyRecordList(samples, d, total);
+        avges = new AveragedAnomalyRecordList(samples, d, total);
 
         Statistic stat4 = new Statistic(0.1, 0.1, 0.1);
         MovingAverage ma4 = new MovingAverage(new TDoubleArrayList(), 1);
@@ -203,15 +157,7 @@ public class AnomalyLikelihoodMetricsTest {
         ///////////////////////////
         // Test with different Samples / Different Params
 
-        avges = (
-                new Anomaly() {
-                    private static final long serialVersionUID = 1L;
-                    @Override
-                    public double compute(int[] activeColumns, int[] predictedColumns, double inputValue, long timestamp) {
-                        return 0;
-                    }
-                }
-        ).new AveragedAnomalyRecordList(samples, d, total);
+        avges = new AveragedAnomalyRecordList(samples, d, total);
 
         Statistic stat5 = new Statistic(0.5, 0.1, 0.1);
         AnomalyParams params5 = new AnomalyParams(new String[] { Anomaly.KEY_DIST, Anomaly.KEY_MVG_AVG, Anomaly.KEY_HIST_LIKE}, stat5, ma4, likelihoods4);
@@ -229,15 +175,7 @@ public class AnomalyLikelihoodMetricsTest {
         d = new TDoubleArrayList();
         d.add(0.5);
         total = 0.4;
-        avges = (
-                new Anomaly() {
-                    private static final long serialVersionUID = 1L;
-                    @Override
-                    public double compute(int[] activeColumns, int[] predictedColumns, double inputValue, long timestamp) {
-                        return 0;
-                    }
-                }
-        ).new AveragedAnomalyRecordList(samples, d, total);
+        avges = new AveragedAnomalyRecordList(samples, d, total);
         
         Statistic stat6 = new Statistic(0.1, 0.1, 0.1);
         MovingAverage ma6 = new MovingAverage(new TDoubleArrayList(), 1);

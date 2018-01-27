@@ -518,7 +518,7 @@ public class ArrayUtils {
     public static List<Tuple> zip(List<?>... args) {
         List<Tuple> tuples = new ArrayList<Tuple>();
         
-        int min = Arrays.stream(args).mapToInt(i -> i.size()).min().orElse(0);
+        int min = Arrays.stream(args).mapToInt(List::size).min().orElse(0);
         
         int len = args.length;
         for(int j = 0;j < min;j++) {
@@ -797,7 +797,7 @@ public class ArrayUtils {
         double denom = 1;
         for (int i = 0; i < dividend.length; i++) {
             quotient[i] = (dividend[i]) /
-                          (double)((denom = divisor[i]) == 0 ? 1 : denom); //Protect against division by 0
+                    ((denom = divisor[i]) == 0 ? 1 : denom); //Protect against division by 0
         }
         return quotient;
     }
@@ -819,7 +819,7 @@ public class ArrayUtils {
         double denom = 1;
         for (int i = 0; i < dividend.length; i++) {
             quotient[i] = (dividend[i]) /
-                          (double)((denom = divisor) == 0 ? 1 : denom); //Protect against division by 0
+                    ((denom = divisor) == 0 ? 1 : denom); //Protect against division by 0
         }
         return quotient;
     }
@@ -987,7 +987,7 @@ public class ArrayUtils {
         for (int i = 0; i < arr.length; i++) {
             sum += arr[i];
         }
-        return sum / (double)arr.length;
+        return sum / arr.length;
     }
     
     /**

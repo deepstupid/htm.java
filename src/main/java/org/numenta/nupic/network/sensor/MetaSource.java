@@ -45,13 +45,13 @@ public interface MetaSource {
 	 * </pre>
 	 * @return
 	 */
-	public List<String[]> getHeader();
+    List<String[]> getHeader();
 	/**
 	 * The line by line (array of columnated Strings) content
 	 * of a given file.
 	 * @return
 	 */
-	public List<String[]> getBody();
+    List<String[]> getBody();
 	/**
 	 * Returns a Map adhering to the input format of a
 	 * MultiEncoder, namely:
@@ -64,5 +64,5 @@ public interface MetaSource {
 	 * 
 	 * @return
 	 */
-	public Iterator<Map<String, Object>> multiIterator();
+    Iterator<Map<String, Object>> multiIterator();
 }

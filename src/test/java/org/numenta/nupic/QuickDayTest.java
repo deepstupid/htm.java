@@ -155,10 +155,10 @@ public class QuickDayTest {
     ////////////////// Preliminary Network API Toy ///////////////////
 
     interface Layer<T> {
-        public void input(T value, int recordNum, int iteration);
-        public int[] getPredicted();
-        public Connections getMemory();
-        public int[] getActual();
+        void input(T value, int recordNum, int iteration);
+        int[] getPredicted();
+        Connections getMemory();
+        int[] getActual();
     }
 
     /**

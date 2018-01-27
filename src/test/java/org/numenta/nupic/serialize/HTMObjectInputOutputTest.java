@@ -1,10 +1,7 @@
 package org.numenta.nupic.serialize;
 
-<<<<<<< HEAD
-=======
 import static org.numenta.nupic.network.NetworkTestHarness.getInferredFieldsMap;
 
->>>>>>> 8fc6b596461a879fdf3e8936833c9a972d858b57
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -16,10 +13,8 @@ import org.junit.Test;
 import org.numenta.nupic.Parameters;
 import org.numenta.nupic.Parameters.KEY;
 import org.numenta.nupic.algorithms.Anomaly;
-<<<<<<< HEAD
-=======
+
 import org.numenta.nupic.algorithms.CLAClassifier;
->>>>>>> 8fc6b596461a879fdf3e8936833c9a972d858b57
 import org.numenta.nupic.algorithms.SpatialPooler;
 import org.numenta.nupic.algorithms.TemporalMemory;
 import org.numenta.nupic.network.Network;
@@ -67,17 +62,15 @@ public class HTMObjectInputOutputTest {
         Parameters p = NetworkTestHarness.getParameters().copy();
         p = p.union(NetworkTestHarness.getHotGymTestEncoderParams());
         p.set(KEY.RANDOM, new FastRandom(42));
-<<<<<<< HEAD
-=======
+
         p.set(KEY.INFERRED_FIELDS, getInferredFieldsMap("consumption", CLAClassifier.class));
->>>>>>> 8fc6b596461a879fdf3e8936833c9a972d858b57
 
         Sensor<ObservableSensor<String[]>> sensor = Sensor.create(
-            ObservableSensor::create, SensorParams.create(Keys::obs, new Object[] {"name", 
-                PublisherSupplier.builder()
-                .addHeader("timestamp, consumption")
-                .addHeader("datetime, float")
-                .addHeader("B").build() }));
+            ObservableSensor::create, SensorParams.create(Keys::obs, "name",
+                        PublisherSupplier.builder()
+                        .addHeader("timestamp, consumption")
+                        .addHeader("datetime, float")
+                        .addHeader("B").build()));
 
         Network network = Network.create("test network", p).add(Network.createRegion("r1")
             .add(Network.createLayer("1", p)

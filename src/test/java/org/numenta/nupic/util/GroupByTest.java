@@ -36,14 +36,12 @@ public class GroupByTest {
 
     @Test
     public void testIntegerGroup() {
-        List<Integer> l = Arrays.asList(new Integer[] { 7, 12, 16 });
+        List<Integer> l = Arrays.asList(7, 12, 16);
         @SuppressWarnings("unchecked")
         List<Pair<Integer, Integer>> expected = Arrays.asList(
-            new Pair[] { 
                 new Pair<Integer, Integer>(7, 7),
                 new Pair<Integer, Integer>(12, 12),
-                new Pair<Integer, Integer>(16, 16)
-            });
+                new Pair<Integer, Integer>(16, 16));
         GroupBy<Integer, Integer> grouper = GroupBy.of(l, i -> i); 
         
         int i = 0;
@@ -58,15 +56,13 @@ public class GroupByTest {
         //////
         
         pairCount = 0;
-        l = Arrays.asList(new Integer[] { 2, 4, 4, 5 });
+        l = Arrays.asList(2, 4, 4, 5);
         @SuppressWarnings("unchecked")
         List<Pair<Integer, Integer>> expected2 = Arrays.asList(
-            new Pair[] { 
                 new Pair<Integer, Integer>(2, 6),
                 new Pair<Integer, Integer>(4, 12),
                 new Pair<Integer, Integer>(4, 12),
-                new Pair<Integer, Integer>(5, 15)
-            });
+                new Pair<Integer, Integer>(5, 15));
         grouper = GroupBy.of(l, in -> in * 3); 
         
         i = 0;
@@ -93,15 +89,13 @@ public class GroupByTest {
         DistalDendrite dd2 = new DistalDendrite(c1.getCell(7/* Col 1's Cells start at 9 */), 2, 0, 2);
         
         List<DistalDendrite> l = Arrays.asList(
-            new DistalDendrite[] { dd0, dd1, dd2 });
+                dd0, dd1, dd2);
         
         @SuppressWarnings("unchecked")
         List<Pair<DistalDendrite, Column>> expected = Arrays.asList(
-            new Pair[] { 
                 new Pair<DistalDendrite, Column>(dd0, c0),
                 new Pair<DistalDendrite, Column>(dd1, c1),
-                new Pair<DistalDendrite, Column>(dd2, c1)
-            });
+                new Pair<DistalDendrite, Column>(dd2, c1));
         
         GroupBy<DistalDendrite, Column> grouper = GroupBy.of(l, i -> i.getParentCell().getColumn()); 
         

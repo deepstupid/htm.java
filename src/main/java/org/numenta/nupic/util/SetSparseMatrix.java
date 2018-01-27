@@ -14,7 +14,7 @@ public class SetSparseMatrix extends AbstractSparseMatrix<Integer> implements Pe
     /** keep it simple */
     private static final long serialVersionUID = 1L;
     
-    private TreeSet<Integer> indexes = new TreeSet<>();
+    private final TreeSet<Integer> indexes = new TreeSet<>();
 
     public SetSparseMatrix(int[] dimensions) {
         this(dimensions, false);
@@ -67,10 +67,7 @@ public class SetSparseMatrix extends AbstractSparseMatrix<Integer> implements Pe
             return false;
         SetSparseMatrix other = (SetSparseMatrix)obj;
         if(indexes == null) {
-            if(other.indexes != null)
-                return false;
-        } else if(!indexes.equals(other.indexes))
-            return false;
-        return true;
-    }	
+            return other.indexes == null;
+        } else return indexes.equals(other.indexes);
+    }
 }

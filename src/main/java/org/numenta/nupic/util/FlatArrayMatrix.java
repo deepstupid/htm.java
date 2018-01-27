@@ -90,9 +90,7 @@ public class FlatArrayMatrix<T> extends AbstractFlatMatrix<T> implements Persist
         if(getClass() != obj.getClass())
             return false;
         FlatArrayMatrix other = (FlatArrayMatrix)obj;
-        if(!Arrays.equals(data, other.data))
-            return false;
-        return true;
+        return Arrays.equals(data, other.data);
     }
 
 }

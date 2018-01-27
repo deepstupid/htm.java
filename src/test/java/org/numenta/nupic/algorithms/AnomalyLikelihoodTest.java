@@ -90,10 +90,7 @@ public class AnomalyLikelihoodTest {
     }
     
     public static boolean assertWithinEpsilon(double a, double b, double epsilon) {
-        if(Math.abs(a - b) <= epsilon) {
-            return true;
-        }
-        return false;
+        return Math.abs(a - b) <= epsilon;
     }
 
 	/**
@@ -222,10 +219,10 @@ public class AnomalyLikelihoodTest {
         }
         
         // Check that the estimated mean is correct
-        Statistic statistic = (Statistic)metrics.getParams().distribution();
+        Statistic statistic = metrics.getParams().distribution();
         assertTrue(
             assertWithinEpsilon(
-                statistic.mean, (total / (double)metrics.getAvgRecordList().averagedRecords.size())
+                statistic.mean, (total / metrics.getAvgRecordList().averagedRecords.size())
             )
         );
         
@@ -275,7 +272,7 @@ public class AnomalyLikelihoodTest {
         
         // skipRecords = 200
         AnomalyLikelihoodMetrics metrics = an.estimateAnomalyLikelihoods(data, 10, 200);
-        Statistic stats = (Statistic)metrics.getParams().distribution();
+        Statistic stats = metrics.getParams().distribution();
         // Check results are correct, i.e. we are actually skipping the first 50
         assertWithinEpsilon(stats.mean, 0.9, 0.1);
         

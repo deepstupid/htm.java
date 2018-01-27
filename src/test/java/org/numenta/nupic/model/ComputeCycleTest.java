@@ -38,11 +38,11 @@ public class ComputeCycleTest {
         Connections cnx = new Connections();
         cnx.setActiveCells(new LinkedHashSet<Cell>(
             Arrays.asList(
-                new Cell[] { cells.get(0), cells.get(1), cells.get(2), cells.get(3) })));
+                    cells.get(0), cells.get(1), cells.get(2), cells.get(3))));
         
         cnx.setWinnerCells(new LinkedHashSet<Cell>(
             Arrays.asList(
-                new Cell[] { cells.get(1), cells.get(3), })));
+                    cells.get(1), cells.get(3))));
         
         ComputeCycle cc = new ComputeCycle(cnx);
         assertNotNull(cc.activeCells);
@@ -59,7 +59,7 @@ public class ComputeCycleTest {
         // Now test negative equality
         cnx.setWinnerCells(new LinkedHashSet<Cell>(
             Arrays.asList(
-                new Cell[] { cells.get(4), cells.get(3), })));
+                    cells.get(4), cells.get(3))));
         ComputeCycle cc2 = new ComputeCycle(cnx);
         assertNotEquals(cc1, cc2);
         assertFalse(cc1.hashCode() == cc2.hashCode());
@@ -78,7 +78,7 @@ public class ComputeCycleTest {
         TemporalMemory.init(cn);
         
         int[] previousActiveColumns = { 0, 1, 2, 3 };
-        Set<Cell> prevWinnerCells = cn.getCellSet(new int[] { 0, 1, 2, 3 });
+        Set<Cell> prevWinnerCells = cn.getCellSet(0, 1, 2, 3);
         int[] activeColumnsIndices = { 4 };
         
         DistalDendrite matchingSegment = cn.createSegment(cn.getCell(4));
@@ -93,7 +93,7 @@ public class ComputeCycleTest {
         
         List<Column> activeColumns = Arrays.stream(activeColumnsIndices)
                 .sorted()
-                .mapToObj(i -> cn.getColumn(i))
+                .mapToObj(cn::getColumn)
                 .collect(Collectors.toList());
         
         GroupBy2<Column> grouper = GroupBy2.<Column>of(

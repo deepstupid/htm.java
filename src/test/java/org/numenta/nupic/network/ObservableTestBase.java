@@ -12,7 +12,7 @@ public class ObservableTestBase {
     
     protected <T> void checkObserver(TestObserver<T> obs) {
         if(obs.getOnErrorEvents().size() > 0) {
-            Throwable e = (Throwable) obs.getOnErrorEvents().get(0);
+            Throwable e = obs.getOnErrorEvents().get(0);
             e.printStackTrace();
             throw new RuntimeException(e);
         }

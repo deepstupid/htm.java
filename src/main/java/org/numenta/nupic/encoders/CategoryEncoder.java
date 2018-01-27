@@ -36,11 +36,7 @@ import org.numenta.nupic.util.Tuple;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Encodes a list of discrete categories (described by strings), that aren't
@@ -244,7 +240,7 @@ public class CategoryEncoder extends Encoder<String> {
 		Map<String, RangeList> retVal = new HashMap<String, RangeList>();
 		retVal.put(fieldName, new RangeList(outRanges, desc.toString()));
 
-		return new DecodeResult(retVal, Arrays.asList(new String[] { fieldName }));
+		return new DecodeResult(retVal, Collections.singletonList(fieldName));
 	}
 
 	/**
@@ -298,7 +294,7 @@ public class CategoryEncoder extends Encoder<String> {
 	@Override
 	public List<Encoding> getBucketInfo(int[] buckets) {
 		// For the category encoder, the bucket index is the category index
-		List<Encoding> bucketInfo = scalarEncoder.getBucketInfo(buckets);
+		List<Encoding> bucketInfo = new ArrayList(scalarEncoder.getBucketInfo(buckets));
 
 		int categoryIndex = (int)Math.round((double)bucketInfo.get(0).getValue());
 		String category = indexToCategory.get(categoryIndex);

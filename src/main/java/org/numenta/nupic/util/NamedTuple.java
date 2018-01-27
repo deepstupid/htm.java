@@ -226,9 +226,7 @@ public class NamedTuple extends Tuple {
         if(!super.equals(obj))
             return false;
         NamedTuple other = (NamedTuple)obj;
-        if(this.thisHashcode != other.thisHashcode)
-            return false;
-        return true;
+        return this.thisHashcode == other.thisHashcode;
     }
 
     /**
@@ -297,11 +295,8 @@ public class NamedTuple extends Tuple {
             } else if(!key.equals(other.key))
                 return false;
             if(value == null) {
-                if(other.value != null)
-                    return false;
-            } else if(!value.equals(other.value))
-                return false;
-            return true;
+                return other.value == null;
+            } else return value.equals(other.value);
         }
     }
     
@@ -400,11 +395,8 @@ public class NamedTuple extends Tuple {
             if(idx != other.idx)
                 return false;
             if(last == null) {
-                if(other.last != null)
-                    return false;
-            } else if(!last.equals(other.last))
-                return false;
-            return true;
+                return other.last == null;
+            } else return last.equals(other.last);
         }
     }
 

@@ -2,6 +2,8 @@ package org.numenta.nupic.util;
 
 import org.numenta.nupic.model.Persistable;
 
+import java.util.Arrays;
+
 
 /**
  * Implementation of George Marsaglia's elegant Xorshift random generator
@@ -85,6 +87,6 @@ public strictfp class FastRandom extends java.util.Random implements Persistable
     synchronized public void setSeed(int[] array) {
         if (array.length == 0)
             throw new IllegalArgumentException("Array length must be greater than zero");
-        setSeed(array.hashCode());
+        setSeed(Arrays.hashCode(array));
     }
 }

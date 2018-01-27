@@ -97,8 +97,8 @@ public class ObservableSensor<T> implements Sensor<Observable<T>> {
     
     @SuppressWarnings("unchecked")
     public static <T> Sensor<T> create(SensorParams p) {
-        ObservableSensor<String[]> sensor = 
-            (ObservableSensor<String[]>)new ObservableSensor<String[]>(p);
+        ObservableSensor<String[]> sensor =
+                new ObservableSensor<String[]>(p);
         
         return (Sensor<T>)sensor;
     }

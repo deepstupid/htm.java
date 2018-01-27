@@ -111,9 +111,7 @@ public abstract class Segment implements Comparable<Segment>, Serializable {
         if(getClass() != obj.getClass())
             return false;
         Segment other = (Segment)obj;
-        if(index != other.index)
-            return false;
-        return true;
+        return index == other.index;
     }
     
     

@@ -93,7 +93,7 @@ public class AbstractTemporalMemoryTest {
             if(pattern == SequenceMachine.NONE) {
                 tm.resetSequences(connections);
             }else{
-                tm.compute(connections, ArrayUtils.toPrimitive(pattern.toArray(new Integer[0])), label, learn);
+                tm.compute(connections, ArrayUtils.toPrimitive(pattern.toArray(new Integer[pattern.size()])), label, learn);
             }
         }
     }

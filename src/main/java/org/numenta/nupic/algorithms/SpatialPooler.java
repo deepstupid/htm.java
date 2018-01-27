@@ -190,7 +190,7 @@ public class SpatialPooler implements Persistable {
         if(inputVector.length != c.getNumInputs()) {
             throw new InvalidSPParamValueException(
                     "Input array must be same size as the defined number of inputs: From Params: " + c.getNumInputs() +
-                    ", From Input Vector: " + inputVector.length);
+                            ", From Input Vector: " + inputVector.length);
         }
 
         updateBookeepingVars(c, learn);
@@ -811,7 +811,7 @@ public class SpatialPooler implements Persistable {
         int[] sortedWinnerIndices = IntStream.range(0,overlaps.length)
             .mapToObj(i-> new Pair<>(i,overlaps[i]))
             .sorted(c.inhibitionComparator)
-            .mapToInt(Pair<Integer,Double>::getFirst)
+            .mapToInt(Pair::getFirst)
             .toArray();
         
         // Enforce the stimulus threshold
@@ -899,7 +899,6 @@ public class SpatialPooler implements Persistable {
      *         minActiveDutyCycle
      */
     public void updateBoostFactors(Connections c) {
-<<<<<<< HEAD:src/main/java/org/numenta/nupic/research/SpatialPooler.java
     	double[] activeDutyCycles = c.getActiveDutyCycles();
     	final double[] minActiveDutyCycles = c.getMinActiveDutyCycles();
     	
@@ -923,31 +922,31 @@ public class SpatialPooler implements Persistable {
     	}), 1.0d);
     	
     	c.setBoostFactors(boostInterim);
-=======
-        double[] activeDutyCycles = c.getActiveDutyCycles();
-        double[] minActiveDutyCycles = c.getMinActiveDutyCycles();
-
-        //Indexes of values > 0
-        int[] mask = ArrayUtils.where(minActiveDutyCycles, ArrayUtils.GREATER_THAN_0);
-
-        double[] boostInterim;
-        if(mask.length < 1) {
-            boostInterim = c.getBoostFactors();
-        }else{
-            double[] numerator = new double[c.getNumColumns()];
-            Arrays.fill(numerator, 1 - c.getMaxBoost());
-            boostInterim = ArrayUtils.divide(numerator, minActiveDutyCycles, 0, 0);
-            boostInterim = ArrayUtils.multiply(boostInterim, activeDutyCycles, 0, 0);
-            boostInterim = ArrayUtils.d_add(boostInterim, c.getMaxBoost());
-        }
-
-        ArrayUtils.setIndexesTo(boostInterim, ArrayUtils.where(activeDutyCycles, new Condition.Adapter<Object>() {
-            int i = 0;
-            @Override public boolean eval(double d) { return d > minActiveDutyCycles[i++]; }
-        }), 1.0d);
-
-        c.setBoostFactors(boostInterim);
->>>>>>> upstream/master:src/main/java/org/numenta/nupic/algorithms/SpatialPooler.java
+//=======
+//        double[] activeDutyCycles = c.getActiveDutyCycles();
+//        double[] minActiveDutyCycles = c.getMinActiveDutyCycles();
+//
+//        //Indexes of values > 0
+//        int[] mask = ArrayUtils.where(minActiveDutyCycles, ArrayUtils.GREATER_THAN_0);
+//
+//        double[] boostInterim;
+//        if(mask.length < 1) {
+//            boostInterim = c.getBoostFactors();
+//        }else{
+//            double[] numerator = new double[c.getNumColumns()];
+//            Arrays.fill(numerator, 1 - c.getMaxBoost());
+//            boostInterim = ArrayUtils.divide(numerator, minActiveDutyCycles, 0, 0);
+//            boostInterim = ArrayUtils.multiply(boostInterim, activeDutyCycles, 0, 0);
+//            boostInterim = ArrayUtils.d_add(boostInterim, c.getMaxBoost());
+//        }
+//
+//        ArrayUtils.setIndexesTo(boostInterim, ArrayUtils.where(activeDutyCycles, new Condition.Adapter<Object>() {
+//            int i = 0;
+//            @Override public boolean eval(double d) { return d > minActiveDutyCycles[i++]; }
+//        }), 1.0d);
+//
+//        c.setBoostFactors(boostInterim);
+//>>>>>>> upstream/master:src/main/java/org/numenta/nupic/algorithms/SpatialPooler.java
     }
     
     /**
@@ -1108,7 +1107,7 @@ public class SpatialPooler implements Persistable {
     /**
      * Thrown for basic sanity violations
      */
-    class InvalidSPParamValueException extends RuntimeException {
+    static class InvalidSPParamValueException extends RuntimeException {
         /** Default Serial Version */
         private static final long serialVersionUID = 1L;
         public InvalidSPParamValueException(String message) { super(message); }

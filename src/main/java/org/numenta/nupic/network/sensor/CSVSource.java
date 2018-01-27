@@ -32,6 +32,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -56,6 +57,7 @@ import org.numenta.nupic.encoders.MultiEncoder;
  *
  */
 public class CSVSource  implements MetaSource {
+    private static final Pattern SPLIT = Pattern.compile("[\\s]*\\,[\\s]*");
     private List<String[]> header;
     private List<String[]> body;
     private List<List<String[]>> file;
@@ -129,7 +131,7 @@ public class CSVSource  implements MetaSource {
             int headerIdx = 0;
             while((line = br.readLine()) != null) {
                 if(headerIdx++ < HEADER_SIZE) {
-                    header.add(line.split("[\\s]*\\,[\\s]*"));
+                    header.add(SPLIT.split(line));
                 }else{
                     body.add(line.split("[\\s]*\\,[\\s]*"));
                 }

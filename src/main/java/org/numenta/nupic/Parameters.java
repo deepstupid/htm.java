@@ -23,10 +23,7 @@
 package org.numenta.nupic;
 
 import java.io.IOException;
-<<<<<<< HEAD
-import java.util.Arrays;
-=======
->>>>>>> 8fc6b596461a879fdf3e8936833c9a972d858b57
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -151,7 +148,7 @@ public class Parameters implements Persistable {
     /**
      * Constant values representing configuration parameters for the {@link TemporalMemory}
      */
-    public static enum KEY {
+    public enum KEY {
         /////////// Universal Parameters ///////////
         /**
          * Total number of columns
@@ -460,7 +457,7 @@ public class Parameters implements Persistable {
          * @param fieldName
          * @param fieldType
          */
-        private KEY(String fieldName, Class<?> fieldType) {
+        KEY(String fieldName, Class<?> fieldType) {
             this(fieldName, fieldType, null, null);
         }
 
@@ -472,7 +469,7 @@ public class Parameters implements Persistable {
          * @param min
          * @param max
          */
-        private KEY(String fieldName, Class<?> fieldType, Number min, Number max) {
+        KEY(String fieldName, Class<?> fieldType, Number min, Number max) {
             this.fieldName = fieldName;
             this.fieldType = fieldType;
             this.min = min;
@@ -802,29 +799,18 @@ public class Parameters implements Persistable {
      * The maximum number of synapses added to a segment during learning.
      *
      * @param maxSynapsesPerSegment
-<<<<<<< HEAD
      */
     public void setMaxSynapsesPerSegment(int maxSynapsesPerSegment) {
         paramMap.put(KEY.MAX_SYNAPSES_PER_SEGMENT, maxSynapsesPerSegment);
     }
+    
+
     
     /**
      * The maximum number of {@link Segment}s a {@link Cell} can have.
      *
      * @param maxSegmentsPerCell
      */
-=======
-     */
-    public void setMaxSynapsesPerSegment(int maxSynapsesPerSegment) {
-        paramMap.put(KEY.MAX_SYNAPSES_PER_SEGMENT, maxSynapsesPerSegment);
-    }
-    
-    /**
-     * The maximum number of {@link Segment}s a {@link Cell} can have.
-     *
-     * @param maxSegmentsPerCell
-     */
->>>>>>> 8fc6b596461a879fdf3e8936833c9a972d858b57
     public void setMaxSegmentsPerCell(int maxSegmentsPerCell) {
         paramMap.put(KEY.MAX_SEGMENTS_PER_CELL, maxSegmentsPerCell);
     }
@@ -1225,8 +1211,7 @@ public class Parameters implements Persistable {
             return false;
         Parameters other = (Parameters)obj;
         if(paramMap == null) {
-            if(other.paramMap != null)
-                return false;
+            return other.paramMap == null;
         } else {
             Class<?>[] classArray = new Class[] { Object.class };
             try {
@@ -1264,11 +1249,7 @@ public class Parameters implements Persistable {
      * @return
      */
     private boolean isSpecial(KEY key, Class<?> klazz) {
-        if(int[].class.isAssignableFrom(klazz) ||
-            key == KEY.FIELD_ENCODING_MAP) {
-            
-            return true;
-        }
-        return false;
+        return int[].class.isAssignableFrom(klazz) ||
+                key == KEY.FIELD_ENCODING_MAP;
     }
 }

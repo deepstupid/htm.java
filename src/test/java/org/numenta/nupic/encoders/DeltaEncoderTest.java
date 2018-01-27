@@ -18,15 +18,15 @@ public class DeltaEncoderTest {
 	private DeltaEncoder.Builder deBuilder;
 
 	@BeforeClass
-	public static void setUpBeforeClass() throws Exception {
+	public static void setUpBeforeClass() {
 	}
 
 	@AfterClass
-	public static void tearDownAfterClass() throws Exception {
+	public static void tearDownAfterClass() {
 	}
 
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
 		aseBuilder = AdaptiveScalarEncoder.adaptiveBuilder().n(100).w(21).minVal(1)
 				.maxVal(8).radius(1.5).resolution(0.5).periodic(false)
 				.forced(true);
@@ -36,7 +36,7 @@ public class DeltaEncoderTest {
 	}
 
 	@After
-	public void tearDown() throws Exception {
+	public void tearDown() {
 	}
 
 	@Test

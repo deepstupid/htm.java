@@ -27,11 +27,6 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
-<<<<<<< HEAD
-import org.numenta.nupic.algorithms.CLAClassifier;
-=======
-import org.numenta.nupic.algorithms.Classifier;
->>>>>>> 8fc6b596461a879fdf3e8936833c9a972d858b57
 import org.numenta.nupic.algorithms.Classification;
 import org.numenta.nupic.algorithms.SpatialPooler;
 import org.numenta.nupic.algorithms.TemporalMemory;
@@ -351,11 +346,9 @@ public class ManualInput implements Inference {
      */
     @Override
     public Classification<Object> getClassification(String fieldName) {
-<<<<<<< HEAD
-=======
+
         if(classification == null)
             return null;
->>>>>>> 8fc6b596461a879fdf3e8936833c9a972d858b57
         return classification.get(fieldName);
     }
     
@@ -571,9 +564,7 @@ public class ManualInput implements Inference {
             return false;
         if(recordNum != other.recordNum)
             return false;
-        if(!Arrays.equals(sdr, other.sdr))
-            return false;
-        return true;
+        return Arrays.equals(sdr, other.sdr);
     }
 
 }

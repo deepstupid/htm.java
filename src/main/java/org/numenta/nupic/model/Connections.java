@@ -227,8 +227,8 @@ public class Connections implements Persistable {
     
     /** Sorting Lambda used for sorting active and matching segments */
     public Comparator<DistalDendrite> segmentPositionSortKey = (Comparator<DistalDendrite> & Serializable)(s1,s2) -> {
-        double c1 = s1.getParentCell().getIndex() + ((double)(s1.getOrdinal() / (double)nextSegmentOrdinal));
-        double c2 = s2.getParentCell().getIndex() + ((double)(s2.getOrdinal() / (double)nextSegmentOrdinal));
+        double c1 = s1.getParentCell().getIndex() + s1.getOrdinal() / (double)nextSegmentOrdinal;
+        double c2 = s2.getParentCell().getIndex() + s2.getOrdinal() / (double)nextSegmentOrdinal;
         return c1 == c2 ? 0 : c1 > c2 ? 1 : -1;
     };
 
@@ -1326,7 +1326,7 @@ public class Connections implements Persistable {
     	// Remove the synapses from all data structures outside this Segment.
     	List<Synapse> synapses = getSynapses(segment);
     	int len = synapses.size();
-    	getSynapses(segment).stream().forEach(s -> removeSynapseFromPresynapticMap(s));
+    	getSynapses(segment).stream().forEach(this::removeSynapseFromPresynapticMap);
     	numSynapses -= len;
     	
     	// Remove the segment from the cell's list.
@@ -2501,10 +2501,7 @@ public class Connections implements Persistable {
         if(Double.doubleToLongBits(version) != Double.doubleToLongBits(other.version))
             return false;
         if(winnerCells == null) {
-            if(other.winnerCells != null)
-                return false;
-        } else if(!winnerCells.equals(other.winnerCells))
-            return false;
-        return true;
+            return other.winnerCells == null;
+        } else return winnerCells.equals(other.winnerCells);
     }
 }

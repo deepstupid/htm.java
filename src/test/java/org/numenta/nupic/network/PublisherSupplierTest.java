@@ -57,7 +57,7 @@ public class PublisherSupplierTest {
         // This line invokes all the Publisher creation underneath
         @SuppressWarnings("unused")
         Sensor<ObservableSensor<String[]>> sensor = Sensor.create(
-            ObservableSensor::create, SensorParams.create(Keys::obs, new Object[] {"name", supplier}));
+            ObservableSensor::create, SensorParams.create(Keys::obs, "name", supplier));
         
         
         ///////////////////////////////////////

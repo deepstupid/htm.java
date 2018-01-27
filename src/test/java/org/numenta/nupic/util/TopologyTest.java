@@ -30,40 +30,40 @@ public class TopologyTest {
 
     @Test
     public void testIndexFromCoordinates() {
-        Topology t = new Topology(new int[] { 100 });
-        assertEquals(0, t.indexFromCoordinates(new int[] { 0 }));
-        assertEquals(50, t.indexFromCoordinates(new int[] { 50 }));
-        assertEquals(99, t.indexFromCoordinates(new int[] { 99 }));
+        Topology t = new Topology(100);
+        assertEquals(0, t.indexFromCoordinates(0));
+        assertEquals(50, t.indexFromCoordinates(50));
+        assertEquals(99, t.indexFromCoordinates(99));
         
-        t = new Topology(new int[] { 100, 80 });
-        assertEquals(0, t.indexFromCoordinates(new int[] { 0, 0 }));
-        assertEquals(10, t.indexFromCoordinates(new int[] { 0, 10 }));
-        assertEquals(80, t.indexFromCoordinates(new int[] { 1, 0 }));
-        assertEquals(90, t.indexFromCoordinates(new int[] { 1, 10 }));
+        t = new Topology(100, 80);
+        assertEquals(0, t.indexFromCoordinates(0, 0));
+        assertEquals(10, t.indexFromCoordinates(0, 10));
+        assertEquals(80, t.indexFromCoordinates(1, 0));
+        assertEquals(90, t.indexFromCoordinates(1, 10));
         
-        t = new Topology(new int[] { 100, 10, 8 });
-        assertEquals(0, t.indexFromCoordinates(new int[] { 0, 0, 0 }));
-        assertEquals(7, t.indexFromCoordinates(new int[] { 0, 0, 7 }));
-        assertEquals(8, t.indexFromCoordinates(new int[] { 0, 1, 0 }));
-        assertEquals(80, t.indexFromCoordinates(new int[] { 1, 0, 0 }));
-        assertEquals(88, t.indexFromCoordinates(new int[] { 1, 1, 0 }));
-        assertEquals(89, t.indexFromCoordinates(new int[] { 1, 1, 1 }));
+        t = new Topology(100, 10, 8);
+        assertEquals(0, t.indexFromCoordinates(0, 0, 0));
+        assertEquals(7, t.indexFromCoordinates(0, 0, 7));
+        assertEquals(8, t.indexFromCoordinates(0, 1, 0));
+        assertEquals(80, t.indexFromCoordinates(1, 0, 0));
+        assertEquals(88, t.indexFromCoordinates(1, 1, 0));
+        assertEquals(89, t.indexFromCoordinates(1, 1, 1));
     }
     
     @Test
     public void testCoordinateFromIndex() {
-        Topology t = new Topology(new int[] { 100 });
+        Topology t = new Topology(100);
         assertArrayEquals(new int[] { 0 }, t.coordinatesFromIndex(0));
         assertArrayEquals(new int[] { 50 }, t.coordinatesFromIndex(50));
         assertArrayEquals(new int[] { 99 }, t.coordinatesFromIndex(99));
         
-        t = new Topology(new int[] { 100, 80 });
+        t = new Topology(100, 80);
         assertArrayEquals(new int[] { 0, 0 }, t.coordinatesFromIndex(0));
         assertArrayEquals(new int[] { 0, 10 }, t.coordinatesFromIndex(10));
         assertArrayEquals(new int[] { 1, 0 }, t.coordinatesFromIndex(80));
         assertArrayEquals(new int[] { 1, 10 }, t.coordinatesFromIndex(90));
         
-        t = new Topology(new int[] { 100, 10, 8 });
+        t = new Topology(100, 10, 8);
         assertArrayEquals(new int[] { 0, 0, 0 }, t.coordinatesFromIndex(0));
         assertArrayEquals(new int[] { 0, 0, 7 }, t.coordinatesFromIndex(7));
         assertArrayEquals(new int[] { 0, 1, 0 }, t.coordinatesFromIndex(8));

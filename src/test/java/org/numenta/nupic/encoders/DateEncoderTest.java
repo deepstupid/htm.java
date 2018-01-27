@@ -232,7 +232,7 @@ public class DateEncoderTest {
         DateEncoder e = DateEncoder.builder().customDays(21, Arrays.asList(
                 "sat", "sun", "fri"
         )).forced(true).build();
-        DateEncoder mon = DateEncoder.builder().customDays(21, Arrays.asList(
+        DateEncoder mon = DateEncoder.builder().customDays(21, Collections.singletonList(
                 "Monday"
         )).forced(true).build();
         DateEncoder e2 = DateEncoder.builder().weekend(21, 1).forced(true).build();

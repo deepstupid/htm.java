@@ -405,9 +405,9 @@ public class ArrayUtilsTest {
     public void testZip_ArrayOfLists() {
         Cell cell0 = new Cell(new Column(1, 0), 0);
         Cell cell1 = new Cell(new Column(1, 1), 1);
-        List<?> o1 = Arrays.asList(new Cell[] { cell0, cell1 });
-        List<?> o2 = Arrays.asList(new Integer[] { new Integer(1), new Integer(2) });
-        List<?> o3 = Arrays.asList(new Double[] { 2.3, 4.5 });
+        List<?> o1 = Arrays.asList(cell0, cell1);
+        List<?> o2 = Arrays.asList(new Integer(1), new Integer(2));
+        List<?> o3 = Arrays.asList(2.3, 4.5);
         
         List<Tuple> zipped = ArrayUtils.zip(o1, o2, o3);
         assertEquals(2, zipped.size());
@@ -428,8 +428,8 @@ public class ArrayUtilsTest {
         
         List<Tuple> zipped = ArrayUtils.zip(o1, o2, o3);
         assertEquals(2, zipped.size());
-        assertTrue(Arrays.equals((int[])zipped.get(0).all().stream().mapToInt(i -> (int)i).toArray(), new int[] { 3, 5, -1 }));
-        assertTrue(Arrays.equals((int[])zipped.get(1).all().stream().mapToInt(i -> (int)i).toArray(), new int[] { 4, 5, 7 }));
+        assertTrue(Arrays.equals(zipped.get(0).all().stream().mapToInt(i -> (int)i).toArray(), new int[] { 3, 5, -1 }));
+        assertTrue(Arrays.equals(zipped.get(1).all().stream().mapToInt(i -> (int)i).toArray(), new int[] { 4, 5, 7 }));
     }
     
     @Test
@@ -482,16 +482,16 @@ public class ArrayUtilsTest {
     @Test
     public void testSubtract() {
         // minuend - subtrahend = difference
-        List<Integer> minuend = Arrays.asList(new Integer[] { 2, 2, 2 });
-        List<Integer> subtrahend = Arrays.asList(new Integer[] { 0, 1, 2 });
-        List<Integer> difference = Arrays.asList(new Integer[] { 2, 1, 0 });
+        List<Integer> minuend = Arrays.asList(2, 2, 2);
+        List<Integer> subtrahend = Arrays.asList(0, 1, 2);
+        List<Integer> difference = Arrays.asList(2, 1, 0);
         
         List<Integer> result = ArrayUtils.subtract(subtrahend, minuend);
         assertEquals(difference, result);
     }
 
     @Test
-    public void testRecursiveCoordinatesAssemble() throws InterruptedException {
+    public void testRecursiveCoordinatesAssemble() {
         /*Create huge 5 dimensional matrix*/
         int dimSize = 14, dimNumber = 5;
         int[] dimCoordinates = new int[dimSize];

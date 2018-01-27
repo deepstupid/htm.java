@@ -60,7 +60,7 @@ public enum FieldMetaType {
 	private String displayString;
 	
 	/** Private constructor */
-	private FieldMetaType(String s) {
+    FieldMetaType(String s) {
 		this.displayString = s;
 	}
 	

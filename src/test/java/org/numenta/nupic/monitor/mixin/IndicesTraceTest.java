@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.LinkedHashSet;
 
 import org.junit.Before;
@@ -19,7 +20,7 @@ public class IndicesTraceTest {
         
         trace.items.add(new LinkedHashSet<Integer>(Arrays.asList(1, 2, 3)));
         trace.items.add(new LinkedHashSet<Integer>(Arrays.asList(4, 5)));
-        trace.items.add(new LinkedHashSet<Integer>(Arrays.asList(6)));
+        trace.items.add(new LinkedHashSet<Integer>(Collections.singletonList(6)));
         trace.items.add(new LinkedHashSet<Integer>());
     }
     

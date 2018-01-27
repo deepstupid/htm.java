@@ -183,7 +183,7 @@ public class Persistence {
          * @return  the reified type &lt;R&gt;
          */
         public <R extends Persistable> R read() {
-            LOGGER.debug("PersistenceAccess reify() [serial config file name=" + serialConfig.getFileName() +"] called ...");
+            LOGGER.debug("PersistenceAccess reify() [serial config file name={}] called ...", serialConfig.getFileName());
             return read(serialConfig.getFileName());
         }
         
@@ -196,7 +196,7 @@ public class Persistence {
          * @return  the reified type &lt;R&gt;
          */
         public <R extends Persistable> R read(String fileName) {
-            LOGGER.debug("PersistenceAccess reify(" + fileName + ") called ...");
+            LOGGER.debug("PersistenceAccess reify({}) called ...", fileName);
             byte[] bytes;
             try {
                 bytes = readFile(fileName);
@@ -246,7 +246,7 @@ public class Persistence {
         
         @SuppressWarnings("unchecked")
         public <T extends Persistable, R> R write(T instance, String fileName) {
-            LOGGER.debug("PersistenceAccess persist(T, " + fileName + ") called ...");
+            LOGGER.debug("PersistenceAccess persist(T, {}) called ...", fileName);
             instance.preSerialize();
             
             byte[] bytes = serializer().serialize(instance);
@@ -293,7 +293,7 @@ public class Persistence {
          */
         @Override
         public Network load(String fileName) throws IOException {
-            LOGGER.debug("PersistenceAccess load(" + fileName + ") called ...");
+            LOGGER.debug("PersistenceAccess load({}) called ...", fileName);
             
             byte[] bytes = readFile(fileName);
             Network network = serializer().deSerialize(bytes);
@@ -424,7 +424,7 @@ public class Persistence {
             try {
                 readMonitor.lock();
                 
-                String path = System.getProperty("user.home") + File.separator + serialConfig.getFileDir();
+                String path = System.getProperty("java.io.tmpdir") + File.separator + serialConfig.getFileDir();
                 File customDir = new File(path);
                 
                 final DateTimeFormatter f = checkPointFormatter;
@@ -477,7 +477,7 @@ public class Persistence {
             String[] chkPntFiles = listCheckPointFiles().stream()
                 .map(n -> n.substring(defaultNamePortion.length()))
                 .filter(n -> f.parseDateTime(n).isBefore(f.parseDateTime(cpfn)))
-                .toArray(size -> new String[size]);
+                .toArray(String[]::new);
             
             if(chkPntFiles != null && chkPntFiles.length > 0) {
                 return defaultNamePortion.concat(chkPntFiles[chkPntFiles.length - 1]);
@@ -491,7 +491,7 @@ public class Persistence {
          * @return  the fully qualified store path
          */
         public String currentPath() {
-            return System.getProperty("user.home") + File.separator + serialConfig.getFileDir() +
+            return System.getProperty("java.io.tmpdir") + File.separator + serialConfig.getFileDir() +
                 File.separator + serialConfig.getFileName();
         }
             
@@ -526,7 +526,7 @@ public class Persistence {
             try {
                 writeMonitor.lock();
                 
-                String path = System.getProperty("user.home") + File.separator + serialConfig.getFileDir();
+                String path = System.getProperty("java.io.tmpdir") + File.separator + serialConfig.getFileDir();
                 File customDir = new File(path);
                 // Make sure container directory exists
                 customDir.mkdirs();
@@ -556,11 +556,11 @@ public class Persistence {
          * @return  the File if the operation is successful, otherwise an exception is thrown
          * @throws IOException      if the specified file is not found, or there's a problem loading it.
          */
-        File testFileExists(String fileName) throws IOException, FileNotFoundException {
+        File testFileExists(String fileName) throws IOException {
             try {
                 readMonitor.lock();
                 
-                String path = System.getProperty("user.home") + File.separator + serialConfig.getFileDir();
+                String path = System.getProperty("java.io.tmpdir") + File.separator + serialConfig.getFileDir();
                 File customDir = new File(path);
                 // Make sure container directory exists
                 customDir.mkdirs();

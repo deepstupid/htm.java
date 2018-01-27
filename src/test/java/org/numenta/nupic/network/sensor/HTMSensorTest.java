@@ -258,7 +258,7 @@ public class HTMSensorTest {
         
         // Cast the ValueList to the more complex type (Header)
         HTMSensor<File> htmSensor = (HTMSensor<File>)sensor;
-        Header meta = (Header)htmSensor.getMetaInfo();
+        Header meta = htmSensor.getMetaInfo();
         assertTrue(meta.getFieldTypes().stream().allMatch(
             l -> l.equals(FieldMetaType.DATETIME) || l.equals(FieldMetaType.FLOAT) || l.equals(FieldMetaType.LIST)));
         assertTrue(meta.getFieldNames().stream().allMatch(
@@ -492,7 +492,7 @@ public class HTMSensorTest {
         
         // Cast the ValueList to the more complex type (Header)
         HTMSensor<File> htmSensor = (HTMSensor<File>)sensor;
-        Header meta = (Header)htmSensor.getMetaInfo();
+        Header meta = htmSensor.getMetaInfo();
         assertTrue(meta.getFieldTypes().stream().allMatch(
             l -> l.equals(FieldMetaType.DATETIME) || l.equals(FieldMetaType.FLOAT)));
         assertTrue(meta.getFieldNames().stream().allMatch(
@@ -619,7 +619,7 @@ public class HTMSensorTest {
         
         // Ensure that the HTMSensor's output stream can be retrieved more than once.
         Stream<int[]> outputStream = htmSensor.getOutputStream();
-        assertEquals(884, ((int[])outputStream.findFirst().get()).length);
+        assertEquals(884, outputStream.findFirst().get().length);
     }
     
     @Test
@@ -645,7 +645,7 @@ public class HTMSensorTest {
         //////////////////////////////////////////////////////////////
         
         // Cast the ValueList to the more complex type (Header)
-        Header meta = (Header)htmSensor.getMetaInfo();
+        Header meta = htmSensor.getMetaInfo();
         assertTrue(meta.getFieldTypes().stream().allMatch(
             l -> l.equals(FieldMetaType.DATETIME) || l.equals(FieldMetaType.FLOAT) || l.equals(FieldMetaType.GEO)));
         
@@ -697,11 +697,9 @@ public class HTMSensorTest {
         
         Sensor<ObservableSensor<String[]>> finalSensor = sensor;
         
-        (new Thread() {
-        	public void run() {
-        		manual.onNext("7/12/10 13:10,35.3,40.6457;-73.7962;5"); //5 = meters per second
-        	}
-        }).start();
+        (new Thread(() -> {
+            manual.onNext("7/12/10 13:10,35.3,40.6457;-73.7962;5"); //5 = meters per second
+        })).start();
         
         
         int[] output = ((HTMSensor<ObservableSensor<String[]>>)finalSensor).getOutputStream().findFirst().get();

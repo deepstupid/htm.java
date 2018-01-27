@@ -25,12 +25,7 @@ package org.numenta.nupic.encoders;
 import gnu.trove.list.TDoubleList;
 import gnu.trove.list.array.TDoubleArrayList;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import org.numenta.nupic.FieldMetaType;
 import org.numenta.nupic.model.Connections;
@@ -245,9 +240,9 @@ public class LogEncoder extends Encoder<Double> {
 		} else {
 			encoder.encodeIntoArray(scaledVal, output);
 
-			LOG.trace("input: " + input);
-			LOG.trace(" scaledVal: " + scaledVal);
-			LOG.trace(" output: " + Arrays.toString(output));
+			LOG.trace("input: {}", input);
+			LOG.trace(" scaledVal: {}", scaledVal);
+			LOG.trace(" output: {}", Arrays.toString(output));
 		}
 	}
 
@@ -291,7 +286,7 @@ public class LogEncoder extends Encoder<Double> {
 		outRanges.setDescription(desc);
 
 		String fieldName;
-		if (!parentFieldName.equals("")) {
+		if (!parentFieldName.isEmpty()) {
 			fieldName = String.format("%s.%s", parentFieldName, getName());
 		} else {
 			fieldName = getName();
@@ -334,7 +329,7 @@ public class LogEncoder extends Encoder<Double> {
 		double scaledValue = (Double)scaledResult.getValue();
 		double value = Math.pow(10, scaledValue);
 
-		return Arrays.asList(new Encoding(value, value, scaledResult.getEncoding()));
+		return Collections.singletonList(new Encoding(value, value, scaledResult.getEncoding()));
 	}
 
 	/**
@@ -346,7 +341,7 @@ public class LogEncoder extends Encoder<Double> {
 		double scaledValue = (Double)scaledResult.getValue();
 		double value = Math.pow(10, scaledValue);
 
-		return Arrays.asList(new Encoding(value, value, scaledResult.getEncoding()));
+		return Collections.singletonList(new Encoding(value, value, scaledResult.getEncoding()));
 	}
 
 	/**
@@ -375,8 +370,8 @@ public class LogEncoder extends Encoder<Double> {
 			pctErr = Math.min(1.0,  pctErr);
 			closeness = 1.0 - pctErr;
 		} else {
-			closeness = Math.abs(expValue - actValue);;
-		}
+			closeness = Math.abs(expValue - actValue);
+        }
 
 		retVal.add(closeness);
 		return retVal;

@@ -82,7 +82,7 @@ public class MultiEncoderAssemblerTest {
         
         // Failure specifies additional fields which must be set
         String[] categories = new String[] { "ES", "GB", "US" };
-        settings.get("testfield").put("categoryList", Arrays.<String>asList(categories));
+        settings.get("testfield").put("categoryList", Arrays.asList(categories));
         try {
             MultiEncoder me = MultiEncoder.builder().name("").build();
             MultiEncoderAssembler.assemble(me, settings);
@@ -141,7 +141,7 @@ public class MultiEncoderAssemblerTest {
         // Failure specifies additional fields which must be set
         settings.get("testfield").put("n", 0);
         settings.get("testfield").put("w", 0);
-        settings.get("testfield").put("categoryList", Arrays.<String>asList(categories));
+        settings.get("testfield").put("categoryList", Arrays.asList(categories));
         try {
             MultiEncoder me = MultiEncoder.builder().name("").build();
             MultiEncoderAssembler.assemble(me, settings);

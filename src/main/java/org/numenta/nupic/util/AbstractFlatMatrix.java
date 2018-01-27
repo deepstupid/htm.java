@@ -278,9 +278,7 @@ public abstract class AbstractFlatMatrix<T> implements FlatMatrix<T>, Serializab
             return false;
         if(isColumnMajor != other.isColumnMajor)
             return false;
-        if(numDimensions != other.numDimensions)
-            return false;
-        return true;
+        return numDimensions == other.numDimensions;
     }
 
 }

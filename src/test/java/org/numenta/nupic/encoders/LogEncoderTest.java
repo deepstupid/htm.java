@@ -170,7 +170,7 @@ public class LogEncoderTest {
 			
 			// Verify out reconstructed value is the same as the bucket value
 			List<Double> bucketValues = le.getBucketValues(Double.class);
-			assertEquals((Double)topDown.getValue(), bucketValues.get(bucketIndices[0]));
+			assertEquals(topDown.getValue(), bucketValues.get(bucketIndices[0]));
 			
 			//Next value
 			scaledVal += le.getResolution() / 4.0;

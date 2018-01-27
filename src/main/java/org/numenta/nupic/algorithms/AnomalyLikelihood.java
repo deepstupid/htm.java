@@ -24,6 +24,7 @@ package org.numenta.nupic.algorithms;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.joda.time.DateTime;
@@ -167,7 +168,7 @@ public class AnomalyLikelihood extends Anomaly {
                 this.distribution = estimateAnomalyLikelihoods(
                     historicalScores, 10, claLearningPeriod).getParams();
             }
-            AnomalyLikelihoodMetrics metrics = updateAnomalyLikelihoods(Arrays.asList(dataPoint), this.distribution);
+            AnomalyLikelihoodMetrics metrics = updateAnomalyLikelihoods(Collections.singletonList(dataPoint), this.distribution);
             this.distribution = metrics.getParams();
             likelihoodRetval = 1.0 - metrics.getLikelihoods()[0];
         }
@@ -326,8 +327,8 @@ public class AnomalyLikelihood extends Anomaly {
                 historicalLikelihoods);
         
         return new AnomalyLikelihoodMetrics(
-            likelihoods, 
-            new AveragedAnomalyRecordList(aggRecordList, historicalValues, total), 
+            likelihoods,
+                new AveragedAnomalyRecordList(aggRecordList, historicalValues, total),
             newParams);  
     }
     
@@ -542,12 +543,9 @@ public class AnomalyLikelihood extends Anomaly {
         }
         
         Statistic stat = (Statistic)params.get("distribution");
-        if(stat.mean == 0 || 
-            stat.variance == 0 || 
-                stat.stdev == 0) {
-            return false;
-        }
-        return true;
+        return !(stat.mean == 0) &&
+                !(stat.variance == 0) &&
+                !(stat.stdev == 0);
     }
     
     
@@ -689,9 +687,7 @@ public class AnomalyLikelihood extends Anomaly {
                     return false;
             } else if(!movingAverage.equals(other.movingAverage))
                 return false;
-            if(windowSize != other.windowSize)
-                return false;
-            return true;
+            return windowSize == other.windowSize;
         }
     }
     

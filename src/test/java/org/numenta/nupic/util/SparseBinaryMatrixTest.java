@@ -282,7 +282,7 @@ public class SparseBinaryMatrixTest {
 
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 10; j++) {
-                sm.set(values[i][j], new int[] {i, j});
+                sm.set(values[i][j], i, j);
             }
         }
         
@@ -331,7 +331,7 @@ public class SparseBinaryMatrixTest {
         
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 10; j++) {
-                sm.set(values[i][j], new int[] {i, j});
+                sm.set(values[i][j], i, j);
             }
         }
         

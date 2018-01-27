@@ -21,13 +21,7 @@
  */
 package org.numenta.nupic.monitor.mixin;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -63,19 +57,19 @@ public interface TemporalMemoryMonitorMixin extends MonitorMixinBase {
      * @return
      */
     @SuppressWarnings("unchecked")
-    public ComputeDecorator getMonitor();
+    ComputeDecorator getMonitor();
     
     /**
      * Returns the resetActive flag
      * @return
      */
-    public boolean resetActive();
+    boolean resetActive();
     
     /**
      * Sets the resetActive flag
      * @param b
      */
-    public void setResetActive(boolean b);
+    void setResetActive(boolean b);
     
     /**
      * Returns the flag indicating whether the current traces 
@@ -83,7 +77,7 @@ public interface TemporalMemoryMonitorMixin extends MonitorMixinBase {
      * 
      * @return
      */
-    public boolean transitionTracesStale();
+    boolean transitionTracesStale();
     
     /**
      * Sets the flag indicating whether the current traces 
@@ -91,7 +85,7 @@ public interface TemporalMemoryMonitorMixin extends MonitorMixinBase {
      * 
      * @param b
      */
-    public void setTransitionTracesStale(boolean b);
+    void setTransitionTracesStale(boolean b);
     
     /**
      * Returns Trace of the active {@link Column} indexes.
@@ -280,7 +274,7 @@ public interface TemporalMemoryMonitorMixin extends MonitorMixinBase {
         
         for(Integer column : columns) {
             int[] cells = cnx.getColumn(column).getCells().
-                stream().map(c -> c.getIndex()).mapToInt(i->i).toArray();
+                stream().map(Cell::getIndex).mapToInt(i->i).toArray();
             
             for(int cell : cells) {
                 
@@ -296,7 +290,7 @@ public interface TemporalMemoryMonitorMixin extends MonitorMixinBase {
                     }
                     
                     Stream<Tuple> tupes = synapseList.stream().sorted(
-                        (Tuple t1, Tuple t2) -> ((Integer)t1.get(0)).compareTo((Integer)t2.get(0)));
+                            Comparator.comparing(t -> ((Integer) t.get(0))));
                     
                     List<String> synapseStringList = 
                         tupes.map(t -> String.format("%3d=%.2f", t.get(0), t.get(1))).collect(Collectors.toList());
@@ -366,7 +360,7 @@ public interface TemporalMemoryMonitorMixin extends MonitorMixinBase {
         
         // Sort the data
         int finalIndex = sortIndex;
-        Arrays.stream(data).sorted((sa1, sa2) -> sa1[finalIndex].compareTo(sa2[finalIndex]));
+        Arrays.stream(data).sorted(Comparator.comparing(sa -> sa[finalIndex]));
         
         String retVal = AsciiTableInstance.get().getTable(header, data, AsciiTable.ALIGN_CENTER);
         
@@ -423,12 +417,12 @@ public interface TemporalMemoryMonitorMixin extends MonitorMixinBase {
                     predictedActiveCells.add(predictedCell);
                     predictedActiveColumns.add(predictedColumn);
                     
-                    String sequenceLabel = (String)mmGetTraceSequenceLabels().items.get(i);
+                    String sequenceLabel = mmGetTraceSequenceLabels().items.get(i);
                     if(sequenceLabel != null && !sequenceLabel.isEmpty()) {
                         Set<Integer> sequencePredictedCells = null;
-                        if((sequencePredictedCells = (Set<Integer>)predActCells.get(sequenceLabel)) == null) {
+                        if((sequencePredictedCells = predActCells.get(sequenceLabel)) == null) {
                             
-                            ((Map<String, Set<Integer>>)predActCells).put(
+                            predActCells.put(
                                 sequenceLabel, sequencePredictedCells = new LinkedHashSet<Integer>());
                         }
                         

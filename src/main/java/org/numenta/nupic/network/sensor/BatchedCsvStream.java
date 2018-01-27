@@ -229,7 +229,7 @@ public class BatchedCsvStream<T> implements MetaStream<T>, Serializable {
         @Override 
         public Comparator<? super String[]> getComparator() {
             if (hasCharacteristics(Spliterator.SORTED) && csv.isBatchOp) {
-                return (i, j) -> { return Long.valueOf(i[0]).compareTo(Long.valueOf(j[0])); };
+                return Comparator.comparing(i -> Long.valueOf(i[0]));
             }else if(csv.isBatchOp) {
                 return null;
             }
@@ -388,7 +388,7 @@ public class BatchedCsvStream<T> implements MetaStream<T>, Serializable {
         if(LOGGER.isDebugEnabled()) {
             LOGGER.debug("Created Header:");
             for(String[] h : contents) {
-                LOGGER.debug("\t" + Arrays.toString(h));
+                LOGGER.debug("\t{}", Arrays.toString(h));
             }
             LOGGER.debug("Successfully created BatchedCsvHeader.");
         }
